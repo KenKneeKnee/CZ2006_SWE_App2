@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+
+class BouncingButton extends StatefulWidget {
+  BouncingButton(
+      {Key? key,
+      required this.bgColor,
+      required this.borderColor,
+      required this.buttonText,
+      required this.textColor,
+      required this.routeTo})
+      : super(key: key);
+
+  final Color bgColor;
+  final Color borderColor;
+  final String buttonText;
+  final Color textColor;
+  MaterialPageRoute routeTo;
+  //routeTo: MaterialPageRoute(builder: (context) => RegisterPage())
+
+  @override
+  _BouncingButtonState createState() => _BouncingButtonState();
+}
+
+class _BouncingButtonState extends State<BouncingButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late double _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this, //works only when this widget is in play on screen
+      duration: const Duration(
+        milliseconds: 100,
+      ),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    )..addListener(() {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _scale = 1 - _controller.value;
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, this.widget.routeTo);
+        },
+        onTapDown: _tapDown,
+        onTapUp: _tapUp,
+        child: Transform.scale(
+          scale: _scale,
+          child: _animatedButton(),
+        ),
+      ),
+    );
+  }
+
+  Widget _animatedButton() {
+    return Container(
+      height: 40,
+      width: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100.0),
+        border: Border.all(
+          color: this.widget.borderColor,
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 2.0,
+            offset: Offset(0.0, 5.0),
+          ),
+        ],
+        color: this.widget.bgColor,
+      ),
+      child: Center(
+        child: Text(
+          this.widget.buttonText,
+          style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: this.widget.textColor),
+        ),
+      ),
+    );
+  }
+
+  void _tapDown(TapDownDetails details) {
+    _controller.forward();
+  }
+
+  void _tapUp(TapUpDetails details) {
+    _controller.reverse();
+  }
+}

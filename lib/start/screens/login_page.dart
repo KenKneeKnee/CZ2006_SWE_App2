@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/screens/profile_page.dart';
-import 'package:my_app/screens/register_page.dart';
-import 'package:my_app/utils/fire_auth.dart';
-import 'package:my_app/utils/validator.dart';
+import 'package:my_app/profile_page.dart';
+import 'package:my_app/start/screens/register_page.dart';
+import '../../profile_page.dart';
+import '../utils/fire_auth.dart';
+import '../utils/validator.dart';
 
 class LoginPage extends StatefulWidget {
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/login_page.dart';
+import 'package:my_app/calendar/calendar.dart';
+import 'start/screens/login_page.dart';
 
 void main() {
   runApp(SportBuds());
@@ -31,7 +32,7 @@ class SportBuds extends StatelessWidget {
           bodyText1: TextStyle(fontSize: 18.0),
         ),
       ),
-      home: LoginPage(),
+      home: EventCalendar(),
     );
   }
 }
