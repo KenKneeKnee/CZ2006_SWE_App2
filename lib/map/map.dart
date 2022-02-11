@@ -8,19 +8,21 @@ const MAPBOX_TOKEN =
 const MAPBOX_URL =
     "https://api.mapbox.com/styles/v1/clarissajew/ckzcbywdr002o14p8zqjuwtvj/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY2xhcmlzc2FqZXciLCJhIjoiY2t6YzRmMnYzMmtoMjJzdHZlZmk0cDFyZyJ9.OyEroOyhNimfl1l4UrHTXA";
 
+const MAPBOX_TILESET_ID = "clarissajew.4njadghk";
+
 const MARKERSIZE_ENLARGED = 120.0;
 const MARKERSIZE_SHRINKED = 70.0;
 final LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
-class AnimatedMap extends StatefulWidget {
-  const AnimatedMap({Key? key}) : super(key: key);
+class EventMap extends StatefulWidget {
+  const EventMap({Key? key}) : super(key: key);
 
   @override
-  _AnimatedMapState createState() => _AnimatedMapState();
+  _EventMapState createState() => _EventMapState();
 }
 
-class _AnimatedMapState extends State<AnimatedMap> {
+class _EventMapState extends State<EventMap> {
   final _pageController = PageController();
   int _selectedIndex = 0;
 
@@ -82,7 +84,7 @@ class _AnimatedMapState extends State<AnimatedMap> {
             nonRotatedLayers: [
               TileLayerOptions(urlTemplate: MAPBOX_URL, additionalOptions: {
                 'accessToken': MAPBOX_TOKEN,
-                'id': 'mapbox.mapbox-streets-v8'
+                'id': MAPBOX_TILESET_ID,
               }),
               MarkerLayerOptions(
                 markers: _markers,

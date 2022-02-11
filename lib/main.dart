@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/calendar.dart';
+import 'package:my_app/map/map.dart';
+import 'package:my_app/start/screens/onboarding.dart';
+import 'package:my_app/start/screens/register_sucess.dart';
+import 'package:my_app/start/screens/welcome_page.dart';
 import 'start/screens/login_page.dart';
 
 void main() {
@@ -32,7 +36,7 @@ class SportBuds extends StatelessWidget {
           bodyText1: TextStyle(fontSize: 18.0),
         ),
       ),
-      home: EventCalendar(),
+      home: WelcomePage(),
     );
   }
 }

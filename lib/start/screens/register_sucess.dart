@@ -99,7 +99,7 @@ class _AnimatedImageState extends State<AnimatedImage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(seconds: 1),
+    duration: const Duration(milliseconds: 500),
   )..repeat(reverse: true);
 
   late Animation<Offset> _animation = Tween(
