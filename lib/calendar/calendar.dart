@@ -85,11 +85,9 @@ class _EventCalendarState extends State<EventCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('TableCalendar - Events'),
-      ),
-      body: Column(
+    return Card(
+      color: Colors.amber,
+      child: Column(
         children: [
           TableCalendar<GameEvent>(
             firstDay: kFirstDay,
@@ -119,13 +117,16 @@ class _EventCalendarState extends State<EventCalendar> {
               _focusedDay = focusedDay;
             },
           ),
-          const SizedBox(height: 38.0),
-          Expanded(
-            flex: 6,
+          Container(
             child: ValueListenableBuilder<List<GameEvent>>(
               valueListenable: _selectedEvents,
               builder: (context, value, _) {
+                // return Container(
+                //   height: 100,
+                //   color: Colors.black,
+                // );
                 return ListView.builder(
+                  shrinkWrap: true,
                   itemCount: value.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -146,21 +147,6 @@ class _EventCalendarState extends State<EventCalendar> {
                 );
               },
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: TextButton(
-                child: Text('Create Event'),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: CreateEventForm(),
-                      );
-                    },
-                  );
-                }),
           ),
         ],
       ),
