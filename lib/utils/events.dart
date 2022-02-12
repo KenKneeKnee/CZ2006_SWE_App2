@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Event{
+class Event {
   final String name;
-  late String id;
+  // late String id;
   final DateTime start;
   final DateTime end;
   final int maxCap;
   int curCap;
+  final String placeId;
 
-  Event(this.name,this.start,this.end,this.maxCap,this.curCap);
+  Event(
+      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId);
 
   factory Event.fromSnapshot(DocumentSnapshot snapshot) {
     final newEvent = Event.fromJson(snapshot.data() as Map<String, dynamic>);
-    newEvent.id = snapshot.reference.id;
+    //newEvent.id = snapshot.reference.id;
     return newEvent;
   }
 
@@ -34,16 +36,17 @@ Event _EventFromJson(Map<String, dynamic> json) {
     (json['end'] as Timestamp).toDate(),
     json['maxCap'] as int,
     json['curCap'] as int,
+    json['placeId'] as String,
   );
 }
+
 // 2
-Map<String, dynamic> _EventToJson(Event instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _EventToJson(Event instance) => <String, dynamic>{
       'name': instance.name,
-      'id': instance.id,
+      //'id': instance.id,
       'start': instance.start,
       'end': instance.end,
       'maxCap': instance.maxCap,
       'curCap': instance.curCap,
+      'placeId': instance.placeId
     };
-

@@ -27,7 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  table_calendar: ^3.0.3
+
   flutter:
     sdk: flutter
 
@@ -76,6 +76,8 @@ flutter:
     - ob1.png
     - background.png
     - create-event.png
+    - create-event-success.png
+    - create-event-fail.png
     - tick-circle.png
     - register-success.png
     - register-background.png

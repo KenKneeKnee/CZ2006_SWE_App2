@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/login_page.dart';
-import 'screens/eventPage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/calendar/create_event.dart';
+import 'package:my_app/eventPage.dart';
 import 'firebase_options.dart';
 import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/map/map.dart';
@@ -10,8 +10,7 @@ import 'package:my_app/start/screens/register_sucess.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'start/screens/login_page.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
