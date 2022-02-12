@@ -62,22 +62,28 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                 ),
                 SizedBox(height: 50),
                 BouncingButton(
-                  bgColor: Color(0xffE3663E),
-                  borderColor: Color(0xffE3663E),
-                  buttonText: 'Teach me',
-                  textColor: Color(0xffffffff),
-                  routeTo:
-                      MaterialPageRoute(builder: (context) => Onboarding()),
-                ),
+                    bgColor: Color(0xffE3663E),
+                    borderColor: Color(0xffE3663E),
+                    buttonText: 'Teach me',
+                    textColor: Color(0xffffffff),
+                    onClick: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Onboarding()),
+                      );
+                    }),
                 SizedBox(height: 20),
                 BouncingButton(
                   bgColor: Color(0xffffffff),
                   borderColor: Color(0xffffffff),
                   buttonText: 'I already know how',
                   textColor: Color(0xffE3663E),
-                  routeTo: MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
+                  onClick: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
                 ),
               ],
             ),
