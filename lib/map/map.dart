@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:my_app/calendar/calendar.dart';
+import 'package:my_app/calendar/create_event.dart';
+import 'package:my_app/widgets/bouncing_button.dart';
 import '../map/map_marker.dart';
 
 const MAPBOX_TOKEN =
@@ -23,7 +27,7 @@ class EventMap extends StatefulWidget {
 }
 
 class _EventMapState extends State<EventMap> {
-  final _pageController = PageController();
+  //final _pageController = PageController();
   int _selectedIndex = 0;
 
   List<Marker> _buildMarkers() {
@@ -37,16 +41,17 @@ class _EventMapState extends State<EventMap> {
             builder: (_) {
               return GestureDetector(
                 onTap: () {
-                  _selectedIndex = i;
                   setState(() {
-                    _pageController.animateToPage(i,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.elasticOut);
+                    _selectedIndex = i;
+                    // _pageController.animateToPage(i,
+                    //     duration: const Duration(milliseconds: 500),
+                    //     curve: Curves.elasticOut);
                     print(
                         'Selected location ${i} out of ${mapMarkers.length} places!');
                   });
                 },
                 child: _LocationMarker(
+                  index: i,
                   selected: _selectedIndex == i,
                   facilityType: mapMarkers[i].facilityType,
                 ),
@@ -91,21 +96,21 @@ class _EventMapState extends State<EventMap> {
               ),
             ],
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 50,
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: PageView.builder(
-              controller: _pageController,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final item = mapMarkers[index];
-                return _MapItemDetails(mapMarker: item);
-              },
-              itemCount: mapMarkers.length,
-            ),
-          ),
+          // Positioned(
+          //   left: 0,
+          //   right: 0,
+          //   bottom: 50,
+          //   height: MediaQuery.of(context).size.height * 0.3,
+          //   child: PageView.builder(
+          //     controller: _pageController,
+          //     physics: NeverScrollableScrollPhysics(),
+          //     itemBuilder: (context, index) {
+          //       final item = mapMarkers[index];
+          //       return _MapItemDetails(mapMarker: item);
+          //     },
+          //     itemCount: mapMarkers.length,
+          //   ),
+          // ),
         ],
       ),
     );
@@ -114,10 +119,14 @@ class _EventMapState extends State<EventMap> {
 
 class _LocationMarker extends StatelessWidget {
   const _LocationMarker(
-      {Key? key, this.selected = false, required this.facilityType})
+      {Key? key,
+      this.selected = false,
+      required this.facilityType,
+      required this.index})
       : super(key: key);
 
   final bool selected;
+  final int index;
   final String facilityType;
   @override
   Widget build(BuildContext context) {
@@ -127,7 +136,49 @@ class _LocationMarker extends StatelessWidget {
       height: size,
       width: size,
       duration: const Duration(milliseconds: 400),
-      child: _FindMarkerImage(facilityType),
+      child: IconButton(
+        icon: _FindMarkerImage(facilityType),
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (builder) {
+                return DraggableScrollableSheet(
+                    expand: false,
+                    builder: ((context, scrollController) {
+                      return SingleChildScrollView(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                        child: Column(
+                          children: <Widget>[
+                            _MapItemDetails(mapMarker: mapMarkers[index]),
+                            EventCalendar(),
+                            BouncingButton(
+                                bgColor: Color(0xffE96B46),
+                                borderColor: Color(0xffE96B46),
+                                buttonText: "Create Event",
+                                textColor: Color(0xffffffff),
+                                onClick: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        backgroundColor: Color(0xffE5E8E8),
+                                        child: CreateEventForm(),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20.0))),
+                                      );
+                                    },
+                                  );
+                                }),
+                          ],
+                        ),
+                      );
+                    }));
+              });
+        },
+      ),
     ));
   }
 }
@@ -162,50 +213,36 @@ class _MapItemDetails extends StatelessWidget {
       fontWeight: FontWeight.bold,
     );
 
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Container(
-        color: Colors.white,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.arrow_drop_down_circle),
-                    title: Text(
-                      mapMarker.facilityType,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
-                    // subtitle: Text(
-                    //   mapMarker.facilityType,
-                    //   style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    // ),
+    return Container(
+      color: Colors.white,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.arrow_drop_down_circle),
+                  title: Text(
+                    mapMarker.facilityType,
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      mapMarker.address,
-                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                    ),
+                  // subtitle: Text(
+                  //   mapMarker.facilityType,
+                  //   style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  // ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    mapMarker.address,
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.start,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          // Perform some action
-                        },
-                        child: const Text('View Schedule'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
