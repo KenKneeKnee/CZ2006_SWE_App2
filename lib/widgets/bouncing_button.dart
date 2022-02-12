@@ -7,14 +7,15 @@ class BouncingButton extends StatefulWidget {
       required this.borderColor,
       required this.buttonText,
       required this.textColor,
-      required this.routeTo})
+      required this.onClick})
       : super(key: key);
 
   final Color bgColor;
   final Color borderColor;
   final String buttonText;
   final Color textColor;
-  MaterialPageRoute routeTo;
+  void Function() onClick;
+  //MaterialPageRoute routeTo;
   //routeTo: MaterialPageRoute(builder: (context) => RegisterPage())
 
   @override
@@ -52,9 +53,7 @@ class _BouncingButtonState extends State<BouncingButton>
     _scale = 1 - _controller.value;
     return Center(
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(context, this.widget.routeTo);
-        },
+        onTap: widget.onClick,
         onTapDown: _tapDown,
         onTapUp: _tapUp,
         child: Transform.scale(
@@ -72,7 +71,7 @@ class _BouncingButtonState extends State<BouncingButton>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100.0),
         border: Border.all(
-          color: this.widget.borderColor,
+          color: widget.borderColor,
           width: 1,
         ),
         boxShadow: [
@@ -82,15 +81,15 @@ class _BouncingButtonState extends State<BouncingButton>
             offset: Offset(0.0, 5.0),
           ),
         ],
-        color: this.widget.bgColor,
+        color: widget.bgColor,
       ),
       child: Center(
         child: Text(
-          this.widget.buttonText,
+          widget.buttonText,
           style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
-              color: this.widget.textColor),
+              color: widget.textColor),
         ),
       ),
     );
