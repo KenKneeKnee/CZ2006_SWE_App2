@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                               : BouncingButton(
                                   bgColor: Color(0xffE3663E),
                                   borderColor: Color(0xffE3663E),
-                                  buttonText: 'Log In',
+                                  buttonText: 'LOG IN',
                                   textColor: Color(0xffffffff),
                                   onClick: () async {
                                     _focusEmail.unfocus();
@@ -160,19 +160,21 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ),
-                    RichText(
-                      //textAlign: TextAlign.justify,
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          const TextSpan(
-                            text: 'Don\'t have an account? ',
-                            style: _paraStyle,
-                          ),
-                          TextSpan(
-                              text: ' Sign Up',
-                              style: _paraStyleBold,
-                              recognizer: _textGestureRecognizer),
-                        ],
+                    Center(
+                      child: RichText(
+                        //textAlign: TextAlign.justify,
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text: 'Don\'t have an account? ',
+                              style: _paraStyle,
+                            ),
+                            TextSpan(
+                                text: ' Sign Up',
+                                style: _paraStyleBold,
+                                recognizer: _textGestureRecognizer),
+                          ],
+                        ),
                       ),
                     ),
                   ],
