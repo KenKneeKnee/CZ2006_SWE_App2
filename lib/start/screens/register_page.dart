@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_app/profile_page.dart';
+import 'package:my_app/user_profile/profile_page.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import '../../widgets/bouncing_button.dart';
 import '../utils/fire_auth.dart';
