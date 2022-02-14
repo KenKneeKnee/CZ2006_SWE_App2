@@ -38,28 +38,55 @@ class _eventPageState extends State<eventPage> {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
-        SportEvent e = SportEvent.fromSnapshot(snapshot.data!.docs[0]);
-        return Column(
-          children: [
-            Text("event name: " + e.name),
-            Text("start time: " + e.start.toString()),
-            Text("end time: " + e.end.toString()),
-            Text("max pax: " + e.maxCap.toString()),
-            Text("current pax: " + e.curCap.toString()),
-            FloatingActionButton(
-                onPressed: () {
-                  //join(e);
-                },
-                backgroundColor: Colors.green,
-                child: const Icon(Icons.add_circle_rounded)),
-            FloatingActionButton(
-                onPressed: () {
-                  //leave(e);
-                },
-                backgroundColor: Colors.red,
-                child: const Icon(Icons.remove)),
-          ],
-        );
+        List DocList = snapshot.data!.docs;
+        Map<String, SportEvent> EventMap = {};
+        for (DocumentSnapshot doc in DocList) {
+          if (doc['placeId'] == "hellohello") {
+            SportEvent e = SportEvent.fromSnapshot(doc);
+            EventMap[doc.id] = e;
+          }
+        }
+
+        return Scaffold(
+            body: ListView.builder(
+                shrinkWrap: true,
+                itemCount: EventMap.length,
+                padding: const EdgeInsets.only(top: 10.0),
+                itemBuilder: (context, index) {
+                  String key = EventMap.keys.elementAt(index);
+                  SportEvent curEvent = EventMap[key] as SportEvent;
+                  return Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(children: <Widget>[
+                      Container(
+                        child: Expanded(
+                          child: Text(
+                              'id: ${key} event: ${curEvent.name} at ${curEvent.placeId} curCap: ${curEvent.curCap} maxCap: ${curEvent.maxCap}'),
+                        ),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            join(curEvent,key);
+                          },
+                          color: Colors.green,
+                          icon: const Icon(
+                            Icons.add_circle_rounded,
+                          )),
+                      IconButton(
+                          onPressed: () {
+                            leave(curEvent,key);
+                            if (curEvent.curCap==0){
+                              repository.deleteEvent(curEvent, key);
+                            }
+                          },
+                          color: Colors.red,
+                          icon: const Icon(
+                              Icons.remove_circle_outline_rounded)),
+                    ]),
+                  );
+                }));
       },
     );
   }
