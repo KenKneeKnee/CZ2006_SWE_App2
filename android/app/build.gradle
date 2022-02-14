@@ -57,6 +57,12 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    // i added this, not sure if it will affect u guys one - clary 
+    packagingOptions {
+           
+            exclude "META-INF/INDEX.LIST"
+    }
 }
 
 flutter {
@@ -65,7 +71,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform('com.google.firebase:firebase-bom:28.0.0')
     implementation 'com.android.support:multidex:1.0.3'
 }
 

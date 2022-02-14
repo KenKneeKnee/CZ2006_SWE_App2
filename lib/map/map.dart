@@ -128,6 +128,7 @@ class _LocationMarker extends StatelessWidget {
   final bool selected;
   final int index;
   final String facilityType;
+
   @override
   Widget build(BuildContext context) {
     final size = selected ? MARKERSIZE_ENLARGED : MARKERSIZE_SHRINKED;
@@ -159,18 +160,44 @@ class _LocationMarker extends StatelessWidget {
                                 buttonText: "Create Event",
                                 textColor: Color(0xffffffff),
                                 onClick: () {
+                                  String _placeId = index.toString();
                                   showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return Dialog(
                                         backgroundColor: Color(0xffE5E8E8),
-                                        child: CreateEventForm(),
+                                        child: CreateEventForm(
+                                          date: DateTime.now(),
+                                          placeId: _placeId,
+                                          placeDetails:
+                                              mapMarkers[index].address,
+                                        ),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20.0))),
                                       );
                                     },
-                                  );
+                                  ).then((value) => {
+                                        if (value)
+                                          {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return _successDialog(
+                                                      context);
+                                                })
+                                          }
+                                        else
+                                          {
+                                            showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return _failDialog(context);
+                                                })
+                                          }
+                                      });
                                 }),
                           ],
                         ),
@@ -183,6 +210,101 @@ class _LocationMarker extends StatelessWidget {
   }
 }
 
+//----------------------------------------------------
+// UI widgets for the alert dialog of event creation
+Widget _okButton(BuildContext context) {
+  return BouncingButton(
+    bgColor: Colors.white,
+    textColor: Color(0xffD56F2F),
+    borderColor: Color(0xffD56F2F),
+    buttonText: "Got it!",
+    onClick: () {
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+    },
+  );
+}
+
+AlertDialog _successDialog(BuildContext context) {
+  return AlertDialog(
+      content: Container(
+        height: 350,
+        decoration: _successBackground,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+              Text(
+                'Event Created!',
+                style: _titleStyle,
+              ),
+              SizedBox(height: 15),
+              Text(
+                'Now all that\'s left is getting fellow SportBuddies to join your event!',
+                style: _paraStyleBold,
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        _okButton(context),
+      ]);
+}
+
+AlertDialog _failDialog(BuildContext context) {
+  return AlertDialog(
+      content: Container(
+        height: 240,
+        decoration: _failBackground,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+            Text(
+              'Error!',
+              style: _titleStyle,
+            ),
+            SizedBox(height: 15),
+            Text(
+              'Something went wrong. I\'m sorry :(',
+              style: _paraStyleBold,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        _okButton(context),
+      ]);
+}
+
+const BoxDecoration _successBackground = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('create-event-success.png'),
+    fit: BoxFit.fitWidth,
+    alignment: Alignment.topCenter,
+  ),
+);
+const BoxDecoration _failBackground = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('create-event-fail.png'),
+    fit: BoxFit.fitWidth,
+    alignment: Alignment.topCenter,
+  ),
+);
+//Text Styles
+const TextStyle _titleStyle = TextStyle(
+    fontWeight: FontWeight.bold, fontSize: 45, color: Color(0xffE3663E));
+
+const TextStyle _paraStyleBold = TextStyle(
+  color: Colors.black87,
+  fontSize: 15,
+  fontWeight: FontWeight.bold,
+);
+
+//-----------------------------------------------------
 Image _FindMarkerImage(String facilityType) {
   if (facilityType.contains("Gym")) {
     return Image.asset('gym-marker.png');
