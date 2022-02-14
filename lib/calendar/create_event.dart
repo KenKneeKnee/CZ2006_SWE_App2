@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_app/data/event_repository.dart';
-import 'package:my_app/utils/events.dart';
+import 'package:my_app/utils/sportevent.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
@@ -106,8 +106,13 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
                           if (isValid != null && isValid) {
                             formKey.currentState?.save();
-                            Event newEvent = new Event(title, startTime!,
-                                endTime!, maxCap, 0, widget.placeId);
+                            SportEvent newEvent = new SportEvent(
+                                title,
+                                startTime!,
+                                endTime!,
+                                maxCap,
+                                0,
+                                widget.placeId);
 
                             repository.addEvent(newEvent);
                             Navigator.pop(context, true);

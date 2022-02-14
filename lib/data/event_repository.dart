@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_app/utils/events.dart';
+import 'package:my_app/utils/sportevent.dart';
 
 class EventRepository {
   // 1
@@ -11,17 +11,17 @@ class EventRepository {
   }
 
   // 3
-  Future<DocumentReference> addEvent(Event e) {
+  Future<DocumentReference> addEvent(SportEvent e) {
     return collection.add(e.toJson());
   }
 
   // 4
-  void updateEvent(Event e, String key) async {
+  void updateEvent(SportEvent e, String key) async {
     await collection.doc(key).update(e.toJson());
   }
 
   // 5
-  void deleteEvent(Event e, String key) async {
+  void deleteEvent(SportEvent e, String key) async {
     await collection.doc(key).delete();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/create_event.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'game_event.dart';
+import 'temp_event.dart';
 
 class EventCalendar extends StatefulWidget {
   @override
