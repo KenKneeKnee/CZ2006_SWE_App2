@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/utils/sportevent.dart';
+import 'package:my_app/events/sportevent.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_app/data/event_repository.dart';
+import 'package:my_app/events/event_repository.dart';
 
 class eventPage extends StatefulWidget {
   eventPage({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_app/utils/sportevent.dart';
+import 'package:my_app/events/sportevent.dart';
 
 class EventRepository {
   // 1

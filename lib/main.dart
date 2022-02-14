@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_app/calendar/create_event.dart';
+import 'package:my_app/events/create_event.dart';
 import 'package:my_app/temp_fetchEvents.dart';
-import 'firebase_options.dart';
+import 'firebase_utils/firebase_options.dart';
 import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/map/map.dart';
 import 'package:my_app/start/screens/onboarding.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:my_app/calendar/calendar.dart';
-import 'package:my_app/calendar/create_event.dart';
+import 'package:my_app/events/create_event.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import '../map/map_marker.dart';
 
