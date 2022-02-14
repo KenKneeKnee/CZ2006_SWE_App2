@@ -46,7 +46,7 @@ class BookingRepository {
       });
     });
   }
-
+/*
   void retrieveUsers(String key) async{
     collection.where("EventId", isEqualTo: key).get().then((value){
       value.docs.forEach((element) {
@@ -71,4 +71,6 @@ class BookingRepository {
       });
     });
   }
+
+ */
 }

@@ -1,4 +1,4 @@
-class User {
+/*class User {
   final String userid;
   final String username;
   final int points;
