@@ -37,4 +37,38 @@ class BookingRepository {
     });
     // await collection.doc(key).delete();
   }
+
+
+  void completeBooking(String key) async{
+    collection.where("EventId", isEqualTo: key).get().then((value){
+      value.docs.forEach((result) {
+        collection.doc(result.id).update({"active" : false});
+      });
+    });
+  }
+
+  void retrieveUsers(String key) async{
+    collection.where("EventId", isEqualTo: key).get().then((value){
+      value.docs.forEach((element) {
+        print(element.data()["userid"]);
+      });
+
+    });
+  }
+
+  void retrieveActiveEvents(String key) async{
+    collection.where("active", isEqualTo: true).get().then((value){
+      value.docs.forEach((result) {
+        print(result.data()["key"]);
+      });
+    });
+  }
+
+  void retrievePastEvents(String key) async{
+    collection.where("active", isEqualTo: false).get().then((value){
+      value.docs.forEach((result) {
+       print(result.data()["key"]);
+      });
+    });
+  }
 }

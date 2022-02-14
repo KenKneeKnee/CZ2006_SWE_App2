@@ -7,7 +7,7 @@ import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-final uid = FirebaseAuth.instance.currentUser.email;
+final uid = FirebaseAuth.instance.currentUser?.email;
 
 
 class eventPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _eventPageState extends State<eventPage> {
   void join(SportEvent e, String key) {
     if (e.curCap < e.maxCap) {
       e.curCap += 1;
-      booking.addBooking(uid, key);
+      booking.addBooking(uid!, key);
     }
     repository.updateEvent(e, key);
   }
@@ -29,7 +29,7 @@ class _eventPageState extends State<eventPage> {
   void leave(SportEvent e, String key) {
     if (e.curCap > 0) {
       e.curCap -= 1;
-      booking.deleteBooking(uid, key);
+      booking.deleteBooking(uid!, key);
     }
 
     repository.updateEvent(e, key);
