@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_app/data/event_repository.dart';
-import 'package:my_app/utils/sportevent.dart';
+import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
