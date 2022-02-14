@@ -1,3 +1,4 @@
+///////just ignore this file for now
 import 'dart:collection';
 
 import 'package:table_calendar/table_calendar.dart';
@@ -23,17 +24,16 @@ final kEvents = LinkedHashMap<DateTime, List<GameEvent>>(
   hashCode: getHashCode,
 )..addAll(_kEventSource);
 
-final _kEventSource = Map.fromIterable(
-  List.generate(50, (index) => index),
-  key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
-  value: (item) => List.generate(
-    item % 4 + 1,
-    (index) => GameEvent('Event $item | ${index + 1}', 0, 0),
-  ),
-)..addAll({
+final _kEventSource = {
+  for (var item in List.generate(50, (index) => index))
+    DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5): List.generate(
+      item % 4 + 1,
+      (index) => GameEvent('Event $item | ${index + 1}', 0, 0),
+    )
+}..addAll({
     kToday: [
-      GameEvent('Today\'s Event 1', 1, 10),
-      GameEvent('Today\'s Event 2', 1, 10),
+      const GameEvent('Today\'s Event 1', 1, 10),
+      const GameEvent('Today\'s Event 2', 1, 10),
     ],
   });
 
