@@ -75,11 +75,11 @@ class _LoginPageState extends State<LoginPage> {
         email: value,
       ),
       decoration: InputDecoration(
-        label: Text(
+        label: const Text(
           "EMAIL",
         ),
         errorBorder: _errorBorder,
-        icon: Icon(
+        icon: const Icon(
           Icons.email_outlined,
           color: Colors.grey,
         ),
@@ -123,8 +123,8 @@ class _LoginPageState extends State<LoginPage> {
                           _isProcessing
                               ? const CircularProgressIndicator()
                               : BouncingButton(
-                                  bgColor: Color(0xffE3663E),
-                                  borderColor: Color(0xffE3663E),
+                                  bgColor: const Color(0xffE3663E),
+                                  borderColor: const Color(0xffE3663E),
                                   buttonText: 'LOG IN',
                                   textColor: Color(0xffffffff),
                                   onClick: () async {
@@ -242,7 +242,7 @@ const TextStyle _subheadingStyle =
 
 var _errorBorder = UnderlineInputBorder(
   borderRadius: BorderRadius.circular(6.0),
-  borderSide: BorderSide(
+  borderSide: const BorderSide(
     color: Colors.red,
   ),
 );
