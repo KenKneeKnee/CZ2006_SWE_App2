@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class BookingRepository {
   // 1
   final CollectionReference collection =
-  FirebaseFirestore.instance.collection('bookings');
+      FirebaseFirestore.instance.collection('bookings');
+
   // 2
   Stream<QuerySnapshot> getStream() {
     return collection.snapshots();
@@ -11,11 +12,11 @@ class BookingRepository {
 
   // 4
   void addBooking(String uid, String key) async {
-
     collection.add({
-        "userid": uid,
-        "eventID": key,
-      });
+      "userId": uid,
+      "eventId": key,
+      "active": true,
+    });
     /*
         .then((_) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -30,7 +31,11 @@ class BookingRepository {
 
   // 5
   void deleteBooking(String uid, String key) async {
-    collection.where("UserId", isEqualTo: uid).where("EventId", isEqualTo: key).get().then((value){
+    collection
+        .where("userId", isEqualTo: uid)
+        .where("eventId", isEqualTo: key)
+        .get()
+        .then((value) {
       value.docs.forEach((result) {
         collection.doc(result.id).delete();
       });
@@ -38,11 +43,10 @@ class BookingRepository {
     // await collection.doc(key).delete();
   }
 
-
-  void completeBooking(String key) async{
-    collection.where("EventId", isEqualTo: key).get().then((value){
+  void completeBooking(String key) async {
+    collection.where("eventId", isEqualTo: key).get().then((value) {
       value.docs.forEach((result) {
-        collection.doc(result.id).update({"active" : false});
+        collection.doc(result.id).update({"active": false});
       });
     });
   }

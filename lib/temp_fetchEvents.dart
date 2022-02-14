@@ -7,7 +7,7 @@ import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
-final uid = FirebaseAuth.instance.currentUser?.email;
+final uid = FirebaseAuth.instance.currentUser?.email as String;
 
 
 class eventPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _eventPageState extends State<eventPage> {
   void join(SportEvent e, String key) {
     if (e.curCap < e.maxCap) {
       e.curCap += 1;
-      booking.addBooking(uid!, key);
+      booking.addBooking(uid, key);
     }
     repository.updateEvent(e, key);
   }
@@ -29,16 +29,22 @@ class _eventPageState extends State<eventPage> {
   void leave(SportEvent e, String key) {
     if (e.curCap > 0) {
       e.curCap -= 1;
-      booking.deleteBooking(uid!, key);
+      booking.deleteBooking(uid, key);
     }
-
-    repository.updateEvent(e, key);
+    if (e.curCap==0){
+      repository.deleteEvent(e, key);
+    } else {
+      repository.updateEvent(e, key);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return StreamBuilder<QuerySnapshot>(
+        stream: booking.getStream(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot1){
+      return StreamBuilder<QuerySnapshot>(
       stream: repository.getStream(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -86,9 +92,6 @@ class _eventPageState extends State<eventPage> {
                       IconButton(
                           onPressed: () {
                             leave(curEvent,key);
-                            if (curEvent.curCap==0){
-                              repository.deleteEvent(curEvent, key);
-                            }
                           },
                           color: Colors.red,
                           icon: const Icon(
@@ -96,6 +99,8 @@ class _eventPageState extends State<eventPage> {
                     ]),
                   );
                 }));
+          },
+        );
       },
     );
   }
