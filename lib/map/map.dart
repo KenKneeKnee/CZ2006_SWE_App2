@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/events/create_event.dart';
+import 'package:my_app/map/widgets/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import '../map/map_marker.dart';
 
@@ -184,8 +185,7 @@ class _LocationMarker extends StatelessWidget {
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return _successDialog(
-                                                      context);
+                                                  return SuccessDialog();
                                                 })
                                           }
                                         else
@@ -194,7 +194,7 @@ class _LocationMarker extends StatelessWidget {
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return _failDialog(context);
+                                                  return FailDialog();
                                                 })
                                           }
                                       });
@@ -209,100 +209,6 @@ class _LocationMarker extends StatelessWidget {
     ));
   }
 }
-
-//----------------------------------------------------
-// UI widgets for the alert dialog of event creation
-Widget _okButton(BuildContext context) {
-  return BouncingButton(
-    bgColor: Colors.white,
-    textColor: Color(0xffD56F2F),
-    borderColor: Color(0xffD56F2F),
-    buttonText: "Got it!",
-    onClick: () {
-      Navigator.of(context, rootNavigator: true).pop('dialog');
-    },
-  );
-}
-
-AlertDialog _successDialog(BuildContext context) {
-  return AlertDialog(
-      content: Container(
-        height: 350,
-        decoration: _successBackground,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-              Text(
-                'Event Created!',
-                style: _titleStyle,
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Now all that\'s left is getting fellow SportBuddies to join your event!',
-                style: _paraStyleBold,
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        _okButton(context),
-      ]);
-}
-
-AlertDialog _failDialog(BuildContext context) {
-  return AlertDialog(
-      content: Container(
-        height: 240,
-        decoration: _failBackground,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-            Text(
-              'Error!',
-              style: _titleStyle,
-            ),
-            SizedBox(height: 15),
-            Text(
-              'Something went wrong. I\'m sorry :(',
-              style: _paraStyleBold,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        _okButton(context),
-      ]);
-}
-
-const BoxDecoration _successBackground = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('create-event-success.png'),
-    fit: BoxFit.fitWidth,
-    alignment: Alignment.topCenter,
-  ),
-);
-const BoxDecoration _failBackground = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('create-event-fail.png'),
-    fit: BoxFit.fitWidth,
-    alignment: Alignment.topCenter,
-  ),
-);
-//Text Styles
-const TextStyle _titleStyle = TextStyle(
-    fontWeight: FontWeight.bold, fontSize: 45, color: Color(0xffE3663E));
-
-const TextStyle _paraStyleBold = TextStyle(
-  color: Colors.black87,
-  fontSize: 15,
-  fontWeight: FontWeight.bold,
-);
 
 //-----------------------------------------------------
 Image _FindMarkerImage(String facilityType) {

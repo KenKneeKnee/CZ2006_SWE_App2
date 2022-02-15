@@ -5,10 +5,11 @@ import 'package:latlong2/latlong.dart';
 class MapMarker {
   const MapMarker({
     required this.facilityType,
-    required this.address,
-    required this.location,
+    required this.address, //address including postal code
+    required this.location, //coordinates
   });
   final String facilityType;
+  final String name = ""; //unable to get for this data
   final String address;
   final LatLng location;
 }
@@ -198,15 +199,17 @@ List<MapMarker> _createMarkers() {
     List<String> _facilities = res[i][1].split("/");
 
     for (int j = 0; j < _facilities.length; j++) {
+      //shift coordinates slightly if there are more than 1 facil for a place
       var randomGenerator = Random();
-
       _latitude = _latitude +
           (randomGenerator.nextInt(5) * 0.0001 * j) -
           (randomGenerator.nextInt(5) * 0.0001 * j);
       _longitude = _longitude +
           (randomGenerator.nextInt(5) * 0.0001 * j) -
           (randomGenerator.nextInt(5) * 0.0001 * j);
+
       String _facilityType = _facilities[j];
+
       markers.add(MapMarker(
           facilityType: _facilityType,
           address: _address,
