@@ -111,8 +111,26 @@ class _eventPageState extends State<eventPage> {
                             Icons.add_circle_rounded,
                           )),
                       IconButton(
-                          onPressed: () {
-                            leave(curEvent,key);
+                          onPressed: () async{
+                            int hasBooking = await booking.checkUser(uid, key);
+                            if (hasBooking==0){
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("u havent join this yet"),
+                                  content: Text("waiting for wat"),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Go Back'))
+                                  ],
+                                ),
+                              );
+                            } else{
+                              leave(curEvent,key);
+                            }
                           },
                           color: Colors.red,
                           icon: const Icon(
