@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         icon: Icon(Icons.lock_outline, color: Colors.grey),
         labelText: "PASSWORD",
         errorBorder: _errorBorder,
-        contentPadding: EdgeInsets.fromLTRB(0, 10.0, 10, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     );
 
@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         email: value,
       ),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         label: const Text(
           "EMAIL",
         ),
@@ -83,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
           Icons.email_outlined,
           color: Colors.grey,
         ),
-        //contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     );
 
