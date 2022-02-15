@@ -50,6 +50,18 @@ class BookingRepository {
       });
     });
   }
+
+  Future<int> checkUser (String uid, String key) async{
+    int res=0;
+    await collection
+        .where("userId", isEqualTo: uid)
+        .where("eventId", isEqualTo: key)
+        .get()
+        .then((value) {
+          res = value.docs.length;
+      });
+    return res;
+  }
 /*
   void retrieveUsers(String key) async{
     collection.where("EventId", isEqualTo: key).get().then((value){

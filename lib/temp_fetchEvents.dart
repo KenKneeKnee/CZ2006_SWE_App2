@@ -19,10 +19,11 @@ class _eventPageState extends State<eventPage> {
   final EventRepository repository = EventRepository();
   final BookingRepository booking = BookingRepository();
   void join(SportEvent e, String key) {
+
     if (e.curCap < e.maxCap) {
       e.curCap += 1;
-      booking.addBooking(uid, key);
     }
+    booking.addBooking(uid, key);
     repository.updateEvent(e, key);
   }
 
@@ -53,10 +54,11 @@ class _eventPageState extends State<eventPage> {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
-        List DocList = snapshot.data!.docs;
+        List EventList = snapshot.data!.docs;
+        List BookingList = snapshot1.data!.docs;
         Map<String, SportEvent> EventMap = {};
-        for (DocumentSnapshot doc in DocList) {
-          if (doc['placeId'] == "hellohello") {
+        for (DocumentSnapshot doc in EventList) {
+          if (doc['placeId'] == "yoyoyooyo") {
             SportEvent e = SportEvent.fromSnapshot(doc);
             EventMap[doc.id] = e;
           }
@@ -82,8 +84,27 @@ class _eventPageState extends State<eventPage> {
                         ),
                       ),
                       IconButton(
-                          onPressed: () {
-                            join(curEvent,key);
+                          onPressed: () async{
+                            int hasBooking = await booking.checkUser(uid, key);
+                            if (hasBooking>0){
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text("AY MAN You've already joined this event!"),
+                                    content: Text("Don't be stupid bro"),
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Go Back'))
+                                    ],
+                                  ),
+                                );
+                            } else{
+                              join(curEvent,key);
+                            }
+
                           },
                           color: Colors.green,
                           icon: const Icon(
