@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/user_profile/profile_page.dart';
 import 'package:my_app/start/screens/login_page.dart';
+import 'package:my_app/user_profile/user.dart';
+import 'package:my_app/user_profile/userDbManager.dart';
 import '../../widgets/bouncing_button.dart';
 import '../utils/fire_auth.dart';
 import '../utils/validator.dart';
@@ -15,6 +18,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   late TapGestureRecognizer _textGestureRecognizer;
+
   final _registerFormKey = GlobalKey<FormState>();
 
   final _nameTextController = TextEditingController();
@@ -24,6 +28,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _focusName = FocusNode();
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
+
+  final CollectionReference userdb = UserDbManager().collection;
 
   bool _isProcessing = false;
 
@@ -139,6 +145,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                   password: _passwordTextController.text,
                                 );
 
+                                await userdb.add(new UserData(
+                                        _emailTextController.text,
+                                        _nameTextController.text,
+                                        0,
+                                        0,
+                                        List<dynamic>.empty(),
+                                        List<dynamic>.empty())
+                                    .toJson());
+
                                 setState(() {
                                   _isProcessing = false;
                                 });
@@ -169,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: _paraStyle,
                       ),
                       TextSpan(
-                          text: ' Log In',
+                          text: 'Log In',
                           style: _paraStyleBold,
                           recognizer: _textGestureRecognizer),
                     ],
