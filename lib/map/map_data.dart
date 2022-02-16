@@ -1,12 +1,10 @@
+///Everything to do with storing and fetching the map data
+///
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'package:csv/csv.dart';
+
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:latlong2/latlong.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:file_picker/file_picker.dart';
 
 class SportsFacility {
   SportsFacility(
@@ -34,13 +32,14 @@ Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) async {
       .then((jsonStr) => jsonDecode(jsonStr));
 }
 
-/// reads json file into a list of SportsFacility objects (playground/parks)
+/// reads the json file (contianing 350 playgrounds, parks, etc) into a list of SportsFacility objects
 /// each object consists of the location coordinates, name, facility type (playground/park) & address description
 ///
-List<SportsFacility> _fetchPlaygroundParks() {
-  List<SportsFacility> _markers = [];
+///
+Future fetchPlaygroundParks() async {
   String _path = 'assets/images/parks-geojson.json';
-  parseJsonFromAssets(_path).then(
+  List<SportsFacility> _markers = [];
+  await parseJsonFromAssets(_path).then(
     (dmap) {
       // here you get json `dmap` as Map<String, dynamic>
       List<dynamic> data = dmap['features'];
@@ -83,15 +82,15 @@ List<SportsFacility> _fetchPlaygroundParks() {
           //     'fetched ${_name} with coordinates ${_longitude.toString()} : ${_latitude.toString()}');
         },
       );
-      if (_markers.length > 0) {
-        print(
-            'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
-        return _markers;
-      } else {
-        print('smth went wrong in fetching the playgrounds/parks');
-      }
     },
   );
+  if (_markers.length > 0) {
+    // print(
+    //     'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
+    return _markers;
+  } else {
+    print('smth went wrong in fetching the playgrounds/parks');
+  }
   return _markers;
 }
 
@@ -269,7 +268,7 @@ const res = [
   ]
 ];
 
-List<SportsFacility> _fetchSportsFacils() {
+List<SportsFacility> fetchSportsFacils() {
   List<SportsFacility> markers = <SportsFacility>[];
 
   for (int i = 0; i < res.length; i++) {
@@ -304,7 +303,7 @@ List<SportsFacility> _fetchSportsFacils() {
     }
   }
   if (markers.length > 0) {
-    print('fetched ${markers.length} facilites from _fetchSportsFacilites');
+    // print('fetched ${markers.length} facilites from _fetchSportsFacilites');
   } else {
     print('smth went wrong in fetching the 35 sports facilities');
   }
@@ -336,36 +335,50 @@ String _FindMarkerImage(String facilityType) {
   if (facilityType.contains("Park")) {
     return ('park-marker.png');
   }
-  return ('missing-marker.png');
+  if (facilityType.contains("Gaden")) {
+    return ('garden-marker.png');
+  }
+  return ('sports-marker.png');
 }
 
-final SportsFacilityList = _fetchPlaygroundParks();
-
-abstract class someClass {
-  static void writeToCsv() async {
-    final playgroundParkList = _fetchPlaygroundParks();
-    final otherFacilList = _fetchSportsFacils();
-
-    List<List> _facilList = [
-      ["Name", "Coordinates", "FacilityType", "Address", "imagePath"]
-    ];
-    otherFacilList.forEach((facility) {
-      List _facilInfo = [];
-      _facilInfo.add(facility.placeName);
-      _facilInfo.add(facility.coordinates);
-      _facilInfo.add(facility.facilityType);
-      _facilInfo.add(facility.addressDesc);
-      _facilInfo.add(facility.imagePath);
-
-      _facilList.add(_facilInfo);
-    });
-
-    String csv = const ListToCsvConverter().convert(_facilList);
-
-    /// Write to a file
-    final String directory = (await getApplicationSupportDirectory()).path;
-    final path = "$directory/csv-${DateTime.now()}.csv";
-    File file = await File(path);
-    file.writeAsString(csv);
+class SportsFacilDataSource {
+  Future someFunction() async {
+    List<SportsFacility> someList = await fetchPlaygroundParks();
+    List<SportsFacility> anotherList = fetchSportsFacils();
+    List<SportsFacility> finalList = someList + anotherList;
+    return finalList;
   }
 }
+
+// need to uncomment dependencies and do import if want to use this fn
+// import 'package:csv/csv.dart';
+// abstract class someClass {
+//   static void writeToCsv() async {
+//     final playgroundParkList = await fetchPlaygroundParks();
+//     final otherFacilList = fetchSportsFacils();
+
+//     List<List> _facilList = [
+//       ["Name", "Coordinates", "FacilityType", "Address", "imagePath"]
+//     ];
+//     playgroundParkList.forEach((facility) {
+//       List _facilInfo = [];
+//       _facilInfo.add(facility.placeName);
+//       _facilInfo.add(facility.coordinates);
+//       _facilInfo.add(facility.facilityType);
+//       _facilInfo.add(facility.addressDesc);
+//       _facilInfo.add(facility.imagePath);
+
+//       _facilList.add(_facilInfo);
+//     });
+
+//     String csv = const ListToCsvConverter().convert(_facilList);
+//     print(_facilList.length);
+//     print(csv);
+
+//     /// Write to a file
+//     // final String directory = (await getApplicationSupportDirectory()).path;
+//     // final path = "$directory/csv-${DateTime.now()}.csv";
+//     // File file = await File(path);
+//     // file.writeAsString(csv);
+//   }
+// }

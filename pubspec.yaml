@@ -52,10 +52,10 @@ dependencies:
   flutter_spinkit: ^5.1.0
 
   #for CSV writing/reading
-  csv: ^5.0.1
-  path_provider: ^2.0.2
-  permission_handler: ^7.1.0
-  file_picker: ^4.4.0
+  # csv: ^5.0.1
+  # path_provider: ^2.0.2
+  # permission_handler: ^7.1.0
+  # file_picker: ^4.4.0
 
 dev_dependencies:
   flutter_test:
@@ -100,6 +100,8 @@ flutter:
     - tennis-marker.png
     - swimming-marker.png
     - playground-marker.png
+    - garden-marker.png
+    - sports-marker.png
     - missing-marker.png
     - gym-marker.png
     - stadium-marker.png
