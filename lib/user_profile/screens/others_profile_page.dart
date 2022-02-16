@@ -1,10 +1,15 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/utils/fire_auth.dart';
+import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
+import '../utils/appbar_widget.dart';
+import 'edit_profile_page.dart';
+import '../utils/friends_widget.dart';
 
 class OtherProfilePage extends StatefulWidget {
   final User user;
@@ -19,14 +24,13 @@ class _ProfilePageState extends State<OtherProfilePage> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
-  late User _searchedUser;
+  late User _currentUser;
 
   final UserDbManager repository = UserDbManager();
 
   @override
   void initState() {
-    // need pass value
-    _searchedUser = widget.user;
+    _currentUser = widget.user;
     super.initState();
   }
 
@@ -46,38 +50,70 @@ class _ProfilePageState extends State<OtherProfilePage> {
         List DocList = snapshot.data!.docs;
 
         for (DocumentSnapshot doc in DocList) {
-          if (doc['userid'] == _searchedUser.email) {
+          if (doc['userid'] == FirebaseAuth.instance.currentUser?.email) {
             u = UserData.fromSnapshot(doc);
           }
         }
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+
+        return Container(
+            child: Builder(
+          builder: (context) => Scaffold(
+            appBar: buildAppBar(context),
+            body: ListView(
+              physics: BouncingScrollPhysics(),
               children: [
-                Text("userid: " + u.userid.toString()),
-                Text("username: " + u.username.toString()),
-                Text("points: " + u.points.toString()),
-                Text("reports: " + u.reports.toString()),
-                Text("friends:" + u.friends.toString()),
-                Text("friendrequest:" + u.friendrequests.toString()),
-                FloatingActionButton(
-                    onPressed: () {
-                      u.points = u.points + 1;
-                    },
-                    backgroundColor: Colors.green,
-                    child: const Icon(Icons.add_circle_rounded)),
-                FloatingActionButton(
-                    onPressed: () {
-                      u.points = u.points - 1;
-                    },
-                    backgroundColor: Colors.red,
-                    child: const Icon(Icons.remove)),
+                ProfileWidget(
+                  imagePath:
+                      "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU=",
+                  onClicked: () {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(builder: (context) => EditProfilePage()),
+                    // );
+                  },
+                ),
+                const SizedBox(height: 24),
+                buildName(u),
+                const SizedBox(height: 24),
+                FriendsWidget(u.friends, u.friendrequests, u.points),
+                const SizedBox(height: 48),
+                buildAbout(u),
               ],
             ),
           ),
-        );
+        ));
       },
     );
   }
+
+  Widget buildAbout(UserData user) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'About',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "I like to play football, but i malay. Don't like malay then can get lost",
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildName(UserData user) => Column(
+        children: [
+          Text(
+            user.username,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user.userid.toString(),
+            style: TextStyle(color: Colors.grey),
+          )
+        ],
+      );
 }
