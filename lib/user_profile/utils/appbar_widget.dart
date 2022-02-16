@@ -9,8 +9,10 @@ AppBar buildAppBar(BuildContext context) {
 
   return AppBar(
     title: const Text('My Profile'),
-    leading: BackButton(),
-    foregroundColor: Colors.blueAccent,
+    leading: BackButton(
+      color: Colors.black,
+    ),
+    foregroundColor: Colors.orangeAccent,
     elevation: 0,
     actions: [
       ThemeSwitcher(
