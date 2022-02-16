@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
-class AnimatedImage extends StatefulWidget {
-  AnimatedImage({Key? key, required this.imagePath}) : super(key: key);
+class AnimatedHoverImage extends StatefulWidget {
+  AnimatedHoverImage(
+      {Key? key, required this.imagePath, required this.durationMilliseconds})
+      : super(key: key);
   String imagePath;
+  final int durationMilliseconds;
   @override
-  _AnimatedImageState createState() => _AnimatedImageState();
+  _AnimatedHoverImageState createState() => _AnimatedHoverImageState();
 }
 
-class _AnimatedImageState extends State<AnimatedImage>
+class _AnimatedHoverImageState extends State<AnimatedHoverImage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 500),
+    duration: Duration(milliseconds: widget.durationMilliseconds),
   )..repeat(reverse: true);
 
   late Animation<Offset> _animation = Tween(
@@ -23,27 +26,24 @@ class _AnimatedImageState extends State<AnimatedImage>
     parent: _controller,
     curve: Curves.easeOutQuart,
   );
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   //animates the position of a widget relative to its normal position
-
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
+      alignment: AlignmentDirectional.bottomEnd,
       children: [
-        SizedBox(
-          height: 60,
-        ),
-        Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            SlideTransition(
-              child: Image.asset(
-                widget.imagePath,
-                fit: BoxFit.contain,
-              ),
-              position: _animation,
-            ),
-          ],
+        SlideTransition(
+          child: Image.asset(
+            widget.imagePath,
+            fit: BoxFit.contain,
+          ),
+          position: _animation,
         ),
       ],
     );

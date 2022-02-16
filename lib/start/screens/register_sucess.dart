@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/hovering_image.dart';
+import 'package:my_app/widgets/hovering_image.dart';
 import './login_page.dart';
 import './onboarding.dart';
 import '../../user_profile/profile_page.dart';
@@ -23,7 +24,9 @@ TextStyle myBodyStyle() {
 }
 
 class RegisterSuccess extends StatefulWidget {
-  const RegisterSuccess({Key? key}) : super(key: key);
+  //final User user;
+
+  // const RegisterSuccess({required this.user});
 
   @override
   _RegisterSuccessState createState() => _RegisterSuccessState();
@@ -45,9 +48,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Stack(
           children: [
-            AnimatedImage(
-              imagePath: 'tick-circle.png',
-            ),
+            _hoveringBackground(),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -70,10 +71,13 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                     buttonText: 'Teach me',
                     textColor: Color(0xffffffff),
                     onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Onboarding()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) =>{} Onboarding(
+                      //             user: widget.user,
+                      //           )),
+                      // );
                     }),
                 SizedBox(height: 20),
                 BouncingButton(
@@ -82,10 +86,13 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                   buttonText: 'I already know how',
                   textColor: Color(0xffE3663E),
                   onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => ProfilePage(
+                    //             user: widget.user,
+                    //           )),
+                    // );
                   },
                 ),
               ],
@@ -93,6 +100,22 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _hoveringBackground extends StatelessWidget {
+  const _hoveringBackground({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AnimatedHoverImage(
+          imagePath: 'tick-circle.png',
+          durationMilliseconds: 500,
+        )
+      ],
     );
   }
 }

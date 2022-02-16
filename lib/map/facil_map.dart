@@ -17,14 +17,14 @@ const MARKERSIZE_SHRINKED = 50.0;
 final LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
-class MapMap extends StatefulWidget {
-  MapMap({Key? key}) : super(key: key);
+class FacilitiesMap extends StatefulWidget {
+  FacilitiesMap({Key? key}) : super(key: key);
 
   @override
-  _MapMapState createState() => _MapMapState();
+  _FacilitiesMapState createState() => _FacilitiesMapState();
 }
 
-class _MapMapState extends State<MapMap> {
+class _FacilitiesMapState extends State<FacilitiesMap> {
   int _selectedIndex = 0;
   late bool loading;
   late List<SportsFacility> SportsFacilityList;
@@ -82,10 +82,10 @@ class _MapMapState extends State<MapMap> {
               ],
             )
           : Container(
-              child: Text('Loading'),
-              //TODO: add better loading screen
               color: Colors.white,
-            ),
+              height: MediaQuery.of(context).size.height,
+              child:
+                  CircularProgressIndicator()), //TODO: I THINK SMTH IS NOT RIGHT HERE
     );
   }
 
@@ -129,7 +129,7 @@ class _MapMapState extends State<MapMap> {
                   );
                 },
                 child: MapMarker(
-                  imagePath: _sportsFacil.imagePath,
+                  imagePath: _sportsFacil.markerImgPath,
                   selected: _selectedIndex == i, //true if this marker is tapped
                 ),
               );
@@ -183,7 +183,7 @@ class MapMarkerInfoSheet extends StatelessWidget {
       child: Column(
         children: [
           MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
-              SportsFacil.addressDesc),
+              SportsFacil.addressDesc, SportsFacil.hoverImgPath),
           EventCalendar(),
           BouncingButton(
               bgColor: Color(0xffE96B46),

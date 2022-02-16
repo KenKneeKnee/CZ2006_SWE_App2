@@ -4,6 +4,92 @@ import 'package:flutter/material.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/hovering_image.dart';
 
+///Header holding location details about a sports facility (Place name, Facility Type, Address)
+class MapMarkerInfoHeader extends StatelessWidget {
+  late String Title; //place name eg. Sun Park
+  late String
+      Subtitle; //facility type eg. Gym (will be used for place name if place name not available)
+  late String Para; //address eg. Street 21 S283710
+  late String hoveringIcon;
+
+  MapMarkerInfoHeader(
+      String title, String subtitle, String para, String Imgpath,
+      {Key? key})
+      : super(key: key) {
+    if (title == "") {
+      title = subtitle;
+      subtitle = "";
+    }
+    this.Title = title;
+    this.Subtitle = subtitle;
+    this.Para = para;
+    this.hoveringIcon = Imgpath;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(8.0, 10, 0, 10),
+      height: MediaQuery.of(context).size.height * 0.3,
+      //width: MediaQuery.of(context).size.width * 0.8,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(
+                    Title,
+                    style: _TitleStyle,
+                  ),
+                  subtitle: Text(
+                    Subtitle,
+                    style: _subtitleStyle,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    Para,
+                    style: _paraStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              flex: 1,
+              child: AnimatedHoverImage(
+                imagePath: hoveringIcon,
+                durationMilliseconds: 800,
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+/// Text Styles
+final _TitleStyle = TextStyle(
+  color: Colors.grey[900],
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+);
+
+final _subtitleStyle = TextStyle(
+    color: Colors.grey[900],
+    fontSize: 18,
+    //fontWeight: FontWeight.bold,
+    fontStyle: FontStyle.italic);
+
+final _paraStyle = TextStyle(
+  color: Colors.grey[900],
+  fontSize: 14,
+  //fontWeight: FontWeight.bold,
+);
+
 class OkButton extends StatelessWidget {
   const OkButton({Key? key}) : super(key: key);
 
@@ -109,77 +195,5 @@ const TextStyle _titleStyle = TextStyle(
 const TextStyle _paraStyleBold = TextStyle(
   color: Colors.black87,
   fontSize: 15,
-  fontWeight: FontWeight.bold,
-);
-
-///Header holding location details about a sports facility (Place name, Facility Type, Address)
-class MapMarkerInfoHeader extends StatelessWidget {
-  late String Title; //place name eg. Sun Park
-  late String
-      Subtitle; //facility type eg. Gym (will be used for place name if place name not available)
-  late String Para; //address eg. Street 21 S283710
-
-  MapMarkerInfoHeader(String title, String subtitle, String para, {Key? key})
-      : super(key: key) {
-    if (title == "") {
-      title = subtitle;
-      subtitle = "";
-    }
-    this.Title = title;
-    this.Subtitle = subtitle;
-    this.Para = para;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: Text(
-                    Title,
-                    style: _TitleStyle,
-                  ),
-                  subtitle: Text(
-                    Subtitle,
-                    style: _subtitleStyle,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    Para,
-                    style: _paraStyle,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Text Styles
-final _TitleStyle = TextStyle(
-  color: Colors.grey[900],
-  fontSize: 20,
-  fontWeight: FontWeight.bold,
-);
-
-final _subtitleStyle = TextStyle(
-  color: Colors.grey[900],
-  fontSize: 20,
-  fontWeight: FontWeight.bold,
-);
-
-final _paraStyle = TextStyle(
-  color: Colors.grey[900],
-  fontSize: 20,
   fontWeight: FontWeight.bold,
 );
