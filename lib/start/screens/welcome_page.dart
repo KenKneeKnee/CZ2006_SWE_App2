@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/widgets/background.dart';
 
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -34,49 +35,39 @@ class _WelcomePageState extends State<WelcomePage> {
               left: 0,
               right: 0, //left, right=0 makes it centered
             ),
-            Column(
-              children: [
-                const SizedBox(height: 500),
-                BouncingButton(
-                    bgColor: Color(0xffE3663E),
-                    borderColor: Color(0xffFFFFFF),
-                    buttonText: 'Create Account',
-                    textColor: Color(0xffFFFFFF),
-                    onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
-                      );
-                    }),
-                const SizedBox(height: 18),
-                BouncingButton(
-                    bgColor: Color(0xffFFFFFF),
-                    borderColor: Color(0xffE3663E),
-                    buttonText: 'Login',
-                    textColor: Color(0xffE3663E),
-                    onClick: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    }),
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 500),
+                  BouncingButton(
+                      bgColor: Color(0xffE3663E),
+                      borderColor: Color(0xffFFFFFF),
+                      buttonText: 'Create Account',
+                      textColor: Color(0xffFFFFFF),
+                      onClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage()),
+                        );
+                      }),
+                  const SizedBox(height: 18),
+                  BouncingButton(
+                      bgColor: Color(0xffFFFFFF),
+                      borderColor: Color(0xffE3663E),
+                      buttonText: 'Login',
+                      textColor: Color(0xffE3663E),
+                      onClick: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      }),
+                ],
+              ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class BackgroundImage extends StatelessWidget {
-  const BackgroundImage({Key? key, required this.imagePath}) : super(key: key);
-
-  final String imagePath;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
       ),
     );
   }
