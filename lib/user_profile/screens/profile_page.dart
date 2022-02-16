@@ -62,6 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
             body: ListView(
               physics: BouncingScrollPhysics(),
               children: [
+                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
                 ProfileWidget(
                   imagePath:
                       "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU=",

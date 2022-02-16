@@ -12,7 +12,8 @@ AppBar buildAppBar(BuildContext context) {
     leading: BackButton(
       color: Colors.black,
     ),
-    foregroundColor: Colors.orangeAccent,
+    foregroundColor: Colors.black,
+    backgroundColor: Colors.orange,
     elevation: 0,
     actions: [
       ThemeSwitcher(
