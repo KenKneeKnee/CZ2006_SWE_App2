@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/user_profile/screens/friend_page.dart';
 
 class FriendsWidget extends StatelessWidget {
   List<dynamic> friends;
@@ -27,7 +28,11 @@ class FriendsWidget extends StatelessWidget {
   Widget buildButton(BuildContext context, String value, String text) =>
       MaterialButton(
         padding: EdgeInsets.symmetric(vertical: 4),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Friend_Page(friends: friends),
+          ));
+        },
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
           mainAxisSize: MainAxisSize.min,
