@@ -149,6 +149,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                       password: _passwordTextController.text,
                                     );
 
+                                    await userdb.add(new UserData(
+                                            _emailTextController.text,
+                                            _nameTextController.text,
+                                            0,
+                                            0,
+                                            List<dynamic>.empty(),
+                                            List<dynamic>.empty())
+                                        .toJson());
+
                                     setState(() {
                                       _isProcessing = false;
                                     });
@@ -189,7 +198,8 @@ class _RegisterPageState extends State<RegisterPage> {
                               recognizer: _textGestureRecognizer),
                         ],
                       ),
-                  ),
+                    ),
+                  )
                 ],
               ),
             ),
