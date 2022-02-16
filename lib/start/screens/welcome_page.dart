@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/widgets/background.dart';
 
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -67,21 +68,6 @@ class _WelcomePageState extends State<WelcomePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class BackgroundImage extends StatelessWidget {
-  const BackgroundImage({Key? key, required this.imagePath}) : super(key: key);
-
-  final String imagePath;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints.expand(),
-      decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
       ),
     );
   }

@@ -5,7 +5,9 @@ import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
+import 'package:location/location.dart';
 
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiY2xhcmlzc2FqZXciLCJhIjoiY2t6YzRmMnYzMmtoMjJzdHZlZmk0cDFyZyJ9.OyEroOyhNimfl1l4UrHTXA';
@@ -14,28 +16,43 @@ const MAPBOX_URL =
 const MAPBOX_TILESET_ID = "clarissajew.4njadghk";
 const MARKERSIZE_ENLARGED = 80.0;
 const MARKERSIZE_SHRINKED = 50.0;
-final LatLng _startingPoint =
+
+LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
-class MapMap extends StatefulWidget {
-  MapMap({Key? key}) : super(key: key);
+class FacilitiesMap extends StatefulWidget {
+  FacilitiesMap({Key? key}) : super(key: key);
 
   @override
-  _MapMapState createState() => _MapMapState();
+  _FacilitiesMapState createState() => _FacilitiesMapState();
 }
 
-class _MapMapState extends State<MapMap> {
+class _FacilitiesMapState extends State<FacilitiesMap> {
   int _selectedIndex = 0;
   late bool loading;
+  late bool location;
+  late LatLng userLocation;
   late List<SportsFacility> SportsFacilityList;
   late List<Marker> MarkerList;
 
   @override
   void initState() {
     super.initState();
-
     loading = true;
+    location = false;
     getData();
+    getUserLocation();
+  }
+
+  Future getUserLocation() async {
+    final _userLocationData = await checkLocation();
+    setState(() {
+      location = true;
+    });
+    var _longitude = _userLocationData.longitude;
+    var _latitude = _userLocationData.latitude;
+    _startingPoint = LatLng(_latitude, _longitude);
+    print('Successfully fetched User\'s location -- ${_startingPoint}');
   }
 
   Future getData() async {
@@ -49,9 +66,6 @@ class _MapMapState extends State<MapMap> {
   }
 
   /// Returns a list of Marker objects from a list of SportsFacility objects
-  ///
-  ///@override
-  ///
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -63,7 +77,7 @@ class _MapMapState extends State<MapMap> {
         ],
         title: Text('Sports Facilities'),
       ),
-      body: !loading
+      body: (!loading & location)
           ? FlutterMap(
               options: MapOptions(
                 minZoom: 2.5,
@@ -82,18 +96,18 @@ class _MapMapState extends State<MapMap> {
               ],
             )
           : Container(
-              child: Text('Loading'),
-              //TODO: add better loading screen
               color: Colors.white,
-            ),
+              height: MediaQuery.of(context).size.height,
+              child:
+                  CircularProgressIndicator()), //TODO: I THINK SMTH IS NOT RIGHT HERE
     );
   }
 
   List<Marker> _buildMapMapMarkers() {
     final _markerList = <Marker>[]; //list to be returned from this function
 
-    print(
-        '${SportsFacilityList.length} facilities have been fetched into the SportsFacilityList');
+    // print(
+    //     '${SportsFacilityList.length} facilities have been fetched into the SportsFacilityList');
 
     for (int i = 0; i < SportsFacilityList.length; i++) {
       final _sportsFacil = SportsFacilityList[i];
@@ -121,15 +135,19 @@ class _MapMapState extends State<MapMap> {
                       return DraggableScrollableSheet(
                           expand: false,
                           builder: ((context, scrollController) {
-                            return MapMarkerInfoSheet(
-                                SportsFacil: _sportsFacil,
-                                index: _selectedIndex);
+                            return Stack(children: [
+                              RoundedBackgroundImage(
+                                  imagePath: 'background.png'),
+                              MapMarkerInfoSheet(
+                                  SportsFacil: _sportsFacil,
+                                  index: _selectedIndex),
+                            ]);
                           }));
                     },
                   );
                 },
                 child: MapMarker(
-                  imagePath: _sportsFacil.imagePath,
+                  imagePath: _sportsFacil.markerImgPath,
                   selected: _selectedIndex == i, //true if this marker is tapped
                 ),
               );
@@ -142,30 +160,6 @@ class _MapMapState extends State<MapMap> {
           '${_markerList.length} markers have been created on the map from ${SportsFacilityList.length}!');
     }
     return _markerList;
-  }
-}
-
-/// (custom) MapMarker consists of location marker image with dynamic size
-/// Function holding function to trigger corrsponding details is in the Marker class (flutter)
-class MapMarker extends StatelessWidget {
-  const MapMarker({Key? key, required this.selected, required this.imagePath})
-      : super(key: key);
-
-  final bool selected;
-  final String imagePath;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = selected ? MARKERSIZE_ENLARGED : MARKERSIZE_SHRINKED;
-
-    return Center(
-      child: AnimatedContainer(
-        height: size,
-        width: size,
-        duration: const Duration(milliseconds: 400),
-        child: Image.asset(imagePath),
-      ),
-    );
   }
 }
 
@@ -183,7 +177,7 @@ class MapMarkerInfoSheet extends StatelessWidget {
       child: Column(
         children: [
           MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
-              SportsFacil.addressDesc),
+              SportsFacil.addressDesc, SportsFacil.hoverImgPath),
           EventCalendar(),
           BouncingButton(
               bgColor: Color(0xffE96B46),
@@ -229,4 +223,31 @@ class MapMarkerInfoSheet extends StatelessWidget {
       ),
     );
   }
+}
+
+Future checkLocation() async {
+  Location location = new Location();
+
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+  LocationData _locationData;
+
+  _serviceEnabled = await location.serviceEnabled();
+  if (!_serviceEnabled) {
+    _serviceEnabled = await location.requestService();
+    if (!_serviceEnabled) {
+      return;
+    }
+  }
+
+  _permissionGranted = await location.hasPermission();
+  if (_permissionGranted == PermissionStatus.denied) {
+    _permissionGranted = await location.requestPermission();
+    if (_permissionGranted != PermissionStatus.granted) {
+      return;
+    }
+  }
+
+  _locationData = await location.getLocation();
+  return _locationData;
 }
