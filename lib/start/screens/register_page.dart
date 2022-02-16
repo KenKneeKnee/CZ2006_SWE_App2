@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
         name: value,
       ),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         icon: Icon(Icons.person_outline),
         labelText: "NAME",
         errorBorder: UnderlineInputBorder(
@@ -73,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
         icon: Icon(Icons.lock_outline, color: Colors.grey),
         labelText: "PASSWORD",
         errorBorder: _errorBorder,
-        contentPadding: EdgeInsets.fromLTRB(0, 10.0, 10, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20, 10.0, 20, 10.0),
       ),
     );
 
@@ -92,106 +93,116 @@ class _RegisterPageState extends State<RegisterPage> {
           Icons.email_outlined,
           color: Colors.grey,
         ),
-        //contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     );
 
-    return Container(
-      decoration: _background,
-      // onTap: () {
-      //   _focusName.unfocus();
-      //   _focusEmail.unfocus();
-      //   _focusPassword.unfocus();
-      // },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Padding(
-          padding: EdgeInsets.fromLTRB(
-              40, MediaQuery.of(context).size.height * 0.35, 40, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Hello there!', style: _titleStyle),
-              SizedBox(height: 20),
-              const Text(
-                  'You\'re one step away from a world of games, friends, and no fuss!',
-                  style: _subheadingStyle),
-              SizedBox(height: 50),
-              Form(
-                key: _registerFormKey,
-                child: Wrap(
-                  runSpacing: 30,
-                  children: <Widget>[
-                    _FormFieldContainer(_nameField),
-                    _FormFieldContainer(_emailField),
-                    _FormFieldContainer(_pwField),
-                    _isProcessing
-                        ? CircularProgressIndicator()
-                        : BouncingButton(
-                            bgColor: Color(0xffE3663E),
-                            borderColor: Color(0xffE3663E),
-                            buttonText: 'REGISTER',
-                            textColor: Color(0xffffffff),
-                            onClick: () async {
-                              setState(() {
-                                _isProcessing = true;
-                              });
+    return GestureDetector(
+      onTap: () {
+        _focusName.unfocus();
+        _focusEmail.unfocus();
+        _focusPassword.unfocus();
+      },
+      child: Container(
+        decoration: _background,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Padding(
+            padding: EdgeInsets.fromLTRB(
+                40, MediaQuery.of(context).size.height * 0.35, 40, 20),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Hello there!', style: _titleStyle),
+                  SizedBox(height: 20),
+                  const Text(
+                      'You\'re one step away from a world of games, friends, and no fuss!',
+                      style: _subheadingStyle),
+                  SizedBox(height: 50),
+                  Form(
+                    key: _registerFormKey,
+                    child: Wrap(
+                      runSpacing: 30,
+                      children: <Widget>[
+                        _FormFieldContainer(_nameField),
+                        _FormFieldContainer(_emailField),
+                        _FormFieldContainer(_pwField),
+                        _isProcessing
+                            ? LinearProgressIndicator()
+                            : BouncingButton(
+                                bgColor: Color(0xffE3663E),
+                                borderColor: Color(0xffE3663E),
+                                buttonText: 'REGISTER',
+                                textColor: Color(0xffffffff),
+                                onClick: () async {
+                                  setState(() {
+                                    _isProcessing = true;
+                                  });
 
-                              if (_registerFormKey.currentState!.validate()) {
-                                User? user =
-                                    await FireAuth.registerUsingEmailPassword(
-                                  name: _nameTextController.text,
-                                  email: _emailTextController.text,
-                                  password: _passwordTextController.text,
-                                );
+                                  if (_registerFormKey.currentState!
+                                      .validate()) {
+                                    User? user = await FireAuth
+                                        .registerUsingEmailPassword(
+                                      name: _nameTextController.text,
+                                      email: _emailTextController.text,
+                                      password: _passwordTextController.text,
+                                    );
 
-                                await userdb.add(new UserData(
-                                        _emailTextController.text,
-                                        _nameTextController.text,
-                                        0,
-                                        0,
-                                        List<dynamic>.empty(),
-                                        List<dynamic>.empty())
-                                    .toJson());
+                                    await userdb.add(new UserData(
+                                            _emailTextController.text,
+                                            _nameTextController.text,
+                                            0,
+                                            0,
+                                            List<dynamic>.empty(),
+                                            List<dynamic>.empty())
+                                        .toJson());
 
-                                setState(() {
-                                  _isProcessing = false;
-                                });
+                                    setState(() {
+                                      _isProcessing = false;
+                                    });
 
-                                if (user != null) {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProfilePage(user: user),
-                                    ),
-                                    ModalRoute.withName('/'),
-                                  );
-                                }
-                              }
-                            },
-                          )
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-              Center(
-                child: RichText(
-                  //textAlign: TextAlign.justify,
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      const TextSpan(
-                        text: 'Already have an account? ',
-                        style: _paraStyle,
-                      ),
-                      TextSpan(
-                          text: 'Log In',
-                          style: _paraStyleBold,
-                          recognizer: _textGestureRecognizer),
-                    ],
+                                    if (user != null) {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProfilePage(user: user),
+                                        ),
+                                        ModalRoute.withName('/'),
+                                      );
+                                    }
+                                  } else {
+                                    setState(() {
+                                      _isProcessing = false;
+                                      print('please retry');
+                                    });
+                                  }
+                                },
+                              )
+                      ],
+                    ),
                   ),
-                ),
+                  SizedBox(height: 30),
+                  Center(
+                    child: RichText(
+                      //textAlign: TextAlign.justify,
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          const TextSpan(
+                            text: 'Already have an account? ',
+                            style: _paraStyle,
+                          ),
+                          TextSpan(
+                              text: ' Log In',
+                              style: _paraStyleBold,
+                              recognizer: _textGestureRecognizer),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -204,7 +215,7 @@ Container _FormFieldContainer(Widget containerChild) {
   return Container(
     child: containerChild,
     height: 50,
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.only(
