@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_app/events/create_event.dart';
-import 'package:my_app/temp_fetchEvents.dart';
-import 'firebase_utils/firebase_options.dart';
-import 'package:my_app/calendar/calendar.dart';
-import 'package:my_app/map/map.dart';
-import 'package:my_app/start/screens/onboarding.dart';
-import 'package:my_app/start/screens/register_sucess.dart';
+import 'package:my_app/map/map2.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
-import 'start/screens/login_page.dart';
+import 'firebase_utils/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +38,7 @@ class SportBuds extends StatelessWidget {
           bodyText1: TextStyle(fontSize: 18.0),
         ),
       ),
-      home: LoginPage(),
+      home: WelcomePage(),
     );
   }
 }

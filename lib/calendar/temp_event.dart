@@ -1,6 +1,10 @@
 ///////just ignore this file for now
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/sportevent.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /// Example event class.
@@ -16,13 +20,30 @@ class GameEvent {
       '${title} | currentCap : ${currentCap} | maxCap : ${maxCap}';
 }
 
-/// Example events.
-///
 /// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
 final kEvents = LinkedHashMap<DateTime, List<GameEvent>>(
+  // Each pair is the list of events (value) for a particular day (key)
   equals: isSameDay,
   hashCode: getHashCode,
 )..addAll(_kEventSource);
+
+// final kEvents = Map<DateTime, List<SportEvent>>()..addAll(_sEventSource);
+
+// //Map<DateTime, List<SportEvent>>
+// _fetchEvents() {
+//   final EventRepository repository = EventRepository();
+//   return StreamBuilder<QuerySnapshot>(
+//       stream: repository.getStream(),
+//       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+//         if (snapshot.hasError) {
+//           return const Text('Something went wrong');
+//         }
+//         if (!snapshot.hasData) {
+//           return const CircularProgressIndicator();
+//         }
+//       }
+
+// }
 
 final _kEventSource = {
   for (var item in List.generate(50, (index) => index))
@@ -45,11 +66,13 @@ int getHashCode(DateTime key) {
 List<DateTime> daysInRange(DateTime first, DateTime last) {
   final dayCount = last.difference(first).inDays + 1;
   return List.generate(
-    dayCount,
+    dayCount, //length of list -- ie. number of days in range
     (index) => DateTime.utc(first.year, first.month, first.day + index),
   );
 }
 
 final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+final kFirstDay = DateTime(kToday.year, kToday.month - 3,
+    kToday.day); //Sets first day to be 3 months earler
+final kLastDay = DateTime(kToday.year, kToday.month + 3,
+    kToday.day); //Sets last day to be 3 months later

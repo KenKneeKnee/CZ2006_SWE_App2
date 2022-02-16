@@ -34,31 +34,36 @@ class _WelcomePageState extends State<WelcomePage> {
               left: 0,
               right: 0, //left, right=0 makes it centered
             ),
-            Column(
-              children: [
-                const SizedBox(height: 500),
-                BouncingButton(
-                    bgColor: Color(0xffE3663E),
-                    borderColor: Color(0xffFFFFFF),
-                    buttonText: 'Create Account',
-                    textColor: Color(0xffFFFFFF),
-                    onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
-                      );
-                    }),
-                const SizedBox(height: 18),
-                BouncingButton(
-                    bgColor: Color(0xffFFFFFF),
-                    borderColor: Color(0xffE3663E),
-                    buttonText: 'Login',
-                    textColor: Color(0xffE3663E),
-                    onClick: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
-                    }),
-              ],
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 500),
+                  BouncingButton(
+                      bgColor: Color(0xffE3663E),
+                      borderColor: Color(0xffFFFFFF),
+                      buttonText: 'Create Account',
+                      textColor: Color(0xffFFFFFF),
+                      onClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage()),
+                        );
+                      }),
+                  const SizedBox(height: 18),
+                  BouncingButton(
+                      bgColor: Color(0xffFFFFFF),
+                      borderColor: Color(0xffE3663E),
+                      buttonText: 'Login',
+                      textColor: Color(0xffE3663E),
+                      onClick: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      }),
+                ],
+              ),
             ),
           ],
         ),
