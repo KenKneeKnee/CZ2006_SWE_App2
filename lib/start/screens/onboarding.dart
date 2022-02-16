@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intro_slider/dot_animation_enum.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
-import 'package:my_app/user_profile/profile_page.dart';
+import 'package:my_app/user_profile/screens/profile_page.dart';
 
 const Color _PrimaryColV1 = Color(0x33ffcc5c);
 const Color _SecondaryColV1 = Color(0xffE3663E);
