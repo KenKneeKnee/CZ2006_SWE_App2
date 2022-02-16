@@ -8,8 +8,9 @@ AppBar buildAppBar(BuildContext context) {
   final icon = CupertinoIcons.moon_stars;
 
   return AppBar(
+    title: const Text('My Profile'),
     leading: BackButton(),
-    backgroundColor: Colors.transparent,
+    foregroundColor: Colors.blueAccent,
     elevation: 0,
     actions: [
       ThemeSwitcher(
