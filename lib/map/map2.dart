@@ -6,15 +6,12 @@ import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
-import 'package:my_app/map/map_data.dart';
 
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiY2xhcmlzc2FqZXciLCJhIjoiY2t6YzRmMnYzMmtoMjJzdHZlZmk0cDFyZyJ9.OyEroOyhNimfl1l4UrHTXA';
 const MAPBOX_URL =
     "https://api.mapbox.com/styles/v1/clarissajew/ckzcbywdr002o14p8zqjuwtvj/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiY2xhcmlzc2FqZXciLCJhIjoiY2t6YzRmMnYzMmtoMjJzdHZlZmk0cDFyZyJ9.OyEroOyhNimfl1l4UrHTXA";
-
 const MAPBOX_TILESET_ID = "clarissajew.4njadghk";
-
 const MARKERSIZE_ENLARGED = 80.0;
 const MARKERSIZE_SHRINKED = 50.0;
 final LatLng _startingPoint =
@@ -100,6 +97,7 @@ class _MapMapState extends State<MapMap> {
 
     for (int i = 0; i < SportsFacilityList.length; i++) {
       final _sportsFacil = SportsFacilityList[i];
+
       _markerList.add(
         Marker(
             height: MARKERSIZE_ENLARGED,
@@ -109,81 +107,29 @@ class _MapMapState extends State<MapMap> {
                 onTap: () {
                   setState(() {
                     _selectedIndex = i;
-                    print('selected place ${_selectedIndex}!');
-
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (builder) {
-                        return DraggableScrollableSheet(
-                            expand: false,
-                            builder: ((context, scrollController) {
-                              return SingleChildScrollView(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 20),
-                                child: Column(
-                                  children: <Widget>[
-                                    MapMapMarkerInfoSheet(
-                                        SportsFacil: _sportsFacil),
-                                    EventCalendar(),
-                                    BouncingButton(
-                                        bgColor: Color(0xffE96B46),
-                                        borderColor: Color(0xffE96B46),
-                                        buttonText: "Create Event",
-                                        textColor: Color(0xffffffff),
-                                        onClick: () {
-                                          String _placeId =
-                                              _selectedIndex.toString();
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                backgroundColor:
-                                                    Color(0xffE5E8E8),
-                                                child: CreateEventForm(
-                                                    date: DateTime.now(),
-                                                    placeId: _placeId,
-                                                    placeDetails: _sportsFacil
-                                                        .addressDesc),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                20.0))),
-                                              );
-                                            },
-                                          ).then((value) => {
-                                                if (value)
-                                                  {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return SuccessDialog();
-                                                        })
-                                                  }
-                                                else
-                                                  {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return FailDialog();
-                                                        })
-                                                  }
-                                              });
-                                        }),
-                                  ],
-                                ),
-                              );
-                            }));
-                      },
-                    );
                   });
+                  print('selected place ${_selectedIndex}!');
+
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    builder: (builder) {
+                      return DraggableScrollableSheet(
+                          expand: false,
+                          builder: ((context, scrollController) {
+                            return MapMarkerInfoSheet(
+                                SportsFacil: _sportsFacil,
+                                index: _selectedIndex);
+                          }));
+                    },
+                  );
                 },
-                child: MapMapMarker(
-                  sportsFacility: _sportsFacil,
-                  // index: i,
+                child: MapMarker(
+                  imagePath: _sportsFacil.imagePath,
                   selected: _selectedIndex == i, //true if this marker is tapped
                 ),
               );
@@ -199,17 +145,14 @@ class _MapMapState extends State<MapMap> {
   }
 }
 
-class MapMapMarker extends StatelessWidget {
-  const MapMapMarker(
-      {Key? key,
-      required this.selected,
-      // required this.index,
-      required this.sportsFacility})
+/// (custom) MapMarker consists of location marker image with dynamic size
+/// Function holding function to trigger corrsponding details is in the Marker class (flutter)
+class MapMarker extends StatelessWidget {
+  const MapMarker({Key? key, required this.selected, required this.imagePath})
       : super(key: key);
 
   final bool selected;
-  // final int index;
-  final SportsFacility sportsFacility;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -220,55 +163,68 @@ class MapMapMarker extends StatelessWidget {
         height: size,
         width: size,
         duration: const Duration(milliseconds: 400),
-        child: Image.asset(sportsFacility.imagePath),
+        child: Image.asset(imagePath),
       ),
     );
   }
 }
 
-class MapMapMarkerInfoSheet extends StatelessWidget {
-  const MapMapMarkerInfoSheet({
-    Key? key,
-    required this.SportsFacil,
-  }) : super(key: key);
+class MapMarkerInfoSheet extends StatelessWidget {
+  const MapMarkerInfoSheet(
+      {Key? key, required this.SportsFacil, required this.index})
+      : super(key: key);
   final SportsFacility SportsFacil;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
-    final _style = TextStyle(
-      color: Colors.grey[900],
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-    );
-
-    return Container(
-      color: Colors.white,
-      child: Row(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: Text(
-                    SportsFacil.placeName,
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                  subtitle: Text(
-                    SportsFacil.facilityType,
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    SportsFacil.addressDesc,
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
+              SportsFacil.addressDesc),
+          EventCalendar(),
+          BouncingButton(
+              bgColor: Color(0xffE96B46),
+              borderColor: Color(0xffE96B46),
+              buttonText: "Create Event",
+              textColor: Color(0xffffffff),
+              onClick: () {
+                String _placeId = index.toString();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      backgroundColor: Color(0xffE5E8E8),
+                      child: CreateEventForm(
+                          date: DateTime.now(),
+                          placeId: _placeId,
+                          placeDetails: SportsFacil.addressDesc),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(20.0))),
+                    );
+                  },
+                ).then((value) => {
+                      if (value)
+                        {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SuccessDialog();
+                              })
+                        }
+                      else
+                        {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return FailDialog();
+                              })
+                        }
+                    });
+              })
         ],
       ),
     );

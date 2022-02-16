@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/hovering_image.dart';
 import './login_page.dart';
 import './onboarding.dart';
 import '../../user_profile/profile_page.dart';
@@ -44,7 +45,9 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Stack(
           children: [
-            AnimatedImage(),
+            AnimatedImage(
+              imagePath: 'tick-circle.png',
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -90,56 +93,6 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class AnimatedImage extends StatefulWidget {
-  const AnimatedImage({Key? key}) : super(key: key);
-
-  @override
-  _AnimatedImageState createState() => _AnimatedImageState();
-}
-
-class _AnimatedImageState extends State<AnimatedImage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 500),
-  )..repeat(reverse: true);
-
-  late Animation<Offset> _animation = Tween(
-    begin: Offset.zero,
-    end: Offset(0, 0.05),
-  ).animate(CurvedAnimation(curve: Curves.fastOutSlowIn, parent: _controller));
-
-  late final Animation<double> _animation2 = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.easeOutQuart,
-  );
-
-  //animates the position of a widget relative to its normal position
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 60,
-        ),
-        Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            SlideTransition(
-              child: Image.asset(
-                'tick-circle.png',
-                fit: BoxFit.contain,
-              ),
-              position: _animation,
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

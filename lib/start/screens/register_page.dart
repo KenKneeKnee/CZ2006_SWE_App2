@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         _FormFieldContainer(_emailField),
                         _FormFieldContainer(_pwField),
                         _isProcessing
-                            ? CircularProgressIndicator()
+                            ? LinearProgressIndicator()
                             : BouncingButton(
                                 bgColor: Color(0xffE3663E),
                                 borderColor: Color(0xffE3663E),
@@ -156,6 +156,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ModalRoute.withName('/'),
                                       );
                                     }
+                                  } else {
+                                    setState(() {
+                                      _isProcessing = false;
+                                      print('please retry');
+                                    });
                                   }
                                 },
                               )
