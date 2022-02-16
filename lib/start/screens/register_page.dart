@@ -191,6 +191,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               recognizer: _textGestureRecognizer),
                         ],
                       ),
+                    ),
                   ),
                 ],
               ),

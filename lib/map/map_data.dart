@@ -373,9 +373,9 @@ String _FindHoverImage(String facilityType) {
   if (facilityType.contains("tadium")) {
     return ('stadium-hover.png');
   }
-  // if (facilityType.contains("Playground")) {
-  //   return ('playground-hover.png');
-  // }
+  if (facilityType.contains("Playground")) {
+    return ('playground-hover.png');
+  }
   if (facilityType.contains("Park")) {
     return ('park-hover.png');
   }
