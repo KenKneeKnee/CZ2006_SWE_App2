@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/map/facil_map.dart';
@@ -6,6 +7,7 @@ import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'firebase_utils/firebase_options.dart';
+import 'package:my_app/user_profile/screens/others_profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,7 @@ void main() async {
 class SportBuds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User? user;
     return MaterialApp(
       title: 'Flutter Authentication',
       debugShowCheckedModeBanner: false,

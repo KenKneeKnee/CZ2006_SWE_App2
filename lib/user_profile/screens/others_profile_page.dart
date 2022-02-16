@@ -2,14 +2,14 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/start/screens/login_page.dart';
-import 'package:my_app/start/utils/fire_auth.dart';
+import 'package:my_app/user_profile/utils/friend_action_widget.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import '../utils/appbar_widget.dart';
 import 'edit_profile_page.dart';
-import '../utils/friends_widget.dart';
+import '../utils/friends_display_widget.dart';
+import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 
 class OtherProfilePage extends StatefulWidget {
   final User user;
@@ -17,10 +17,10 @@ class OtherProfilePage extends StatefulWidget {
   const OtherProfilePage({required this.user});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _OtherProfilePageState createState() => _OtherProfilePageState();
 }
 
-class _ProfilePageState extends State<OtherProfilePage> {
+class _OtherProfilePageState extends State<OtherProfilePage> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
@@ -62,19 +62,17 @@ class _ProfilePageState extends State<OtherProfilePage> {
             body: ListView(
               physics: BouncingScrollPhysics(),
               children: [
-                ProfileWidget(
+                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                const OtherProfileWidget(
                   imagePath:
-                      "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU=",
-                  onClicked: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(builder: (context) => EditProfilePage()),
-                    // );
-                  },
+                      "https://pbs.twimg.com/profile_images/1453101247217733636/qawViunA_400x400.jpg",
                 ),
                 const SizedBox(height: 24),
                 buildName(u),
                 const SizedBox(height: 24),
-                FriendsWidget(u.friends, u.friendrequests, u.points),
+                FriendsDisplayWidget(u.friends, u.points),
+                const SizedBox(height: 24),
+                FriendsActionWidget(),
                 const SizedBox(height: 48),
                 buildAbout(u),
               ],
@@ -89,12 +87,12 @@ class _ProfilePageState extends State<OtherProfilePage> {
         padding: EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             Text(
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
               "I like to play football, but i malay. Don't like malay then can get lost",
               style: TextStyle(fontSize: 16, height: 1.4),
