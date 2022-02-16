@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/user_profile/profile_page.dart';
+import 'package:my_app/user_profile/screens/profile_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
-import '../../user_profile/profile_page.dart';
+import '../../user_profile/screens/profile_page.dart';
 import '../utils/fire_auth.dart';
 import '../utils/validator.dart';
 
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
         icon: Icon(Icons.lock_outline, color: Colors.grey),
         labelText: "PASSWORD",
         errorBorder: _errorBorder,
-        contentPadding: EdgeInsets.fromLTRB(0, 10.0, 10, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     );
 
@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
         email: value,
       ),
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
         label: const Text(
           "EMAIL",
         ),
@@ -83,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
           Icons.email_outlined,
           color: Colors.grey,
         ),
-        //contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
       ),
     );
 

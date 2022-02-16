@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/widgets/hovering_image.dart';
 import './login_page.dart';
 import './onboarding.dart';
-import '../../user_profile/profile_page.dart';
+import '../../user_profile/screens/profile_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
 TextStyle myTitleStyle() {
@@ -22,7 +24,9 @@ TextStyle myBodyStyle() {
 }
 
 class RegisterSuccess extends StatefulWidget {
-  const RegisterSuccess({Key? key}) : super(key: key);
+  final User user;
+
+  const RegisterSuccess({required this.user});
 
   @override
   _RegisterSuccessState createState() => _RegisterSuccessState();
@@ -44,7 +48,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Stack(
           children: [
-            AnimatedImage(),
+            _hoveringBackground(),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -67,10 +71,13 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                     buttonText: 'Teach me',
                     textColor: Color(0xffffffff),
                     onClick: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Onboarding()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) =>{} Onboarding(
+                      //             user: widget.user,
+                      //           )),
+                      // );
                     }),
                 SizedBox(height: 20),
                 BouncingButton(
@@ -79,10 +86,13 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                   buttonText: 'I already know how',
                   textColor: Color(0xffE3663E),
                   onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => ProfilePage(
+                    //             user: widget.user,
+                    //           )),
+                    // );
                   },
                 ),
               ],
@@ -94,51 +104,17 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
   }
 }
 
-class AnimatedImage extends StatefulWidget {
-  const AnimatedImage({Key? key}) : super(key: key);
-
-  @override
-  _AnimatedImageState createState() => _AnimatedImageState();
-}
-
-class _AnimatedImageState extends State<AnimatedImage>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 500),
-  )..repeat(reverse: true);
-
-  late Animation<Offset> _animation = Tween(
-    begin: Offset.zero,
-    end: Offset(0, 0.05),
-  ).animate(CurvedAnimation(curve: Curves.fastOutSlowIn, parent: _controller));
-
-  late final Animation<double> _animation2 = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.easeOutQuart,
-  );
-
-  //animates the position of a widget relative to its normal position
+class _hoveringBackground extends StatelessWidget {
+  const _hoveringBackground({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 60,
-        ),
-        Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
-            SlideTransition(
-              child: Image.asset(
-                'tick-circle.png',
-                fit: BoxFit.contain,
-              ),
-              position: _animation,
-            ),
-          ],
-        ),
+        AnimatedHoverImage(
+          imagePath: 'tick-circle.png',
+          durationMilliseconds: 500,
+        )
       ],
     );
   }

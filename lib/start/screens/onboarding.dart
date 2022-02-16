@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_slider/dot_animation_enum.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
+import 'package:my_app/user_profile/screens/profile_page.dart';
 
 const Color _PrimaryColV1 = Color(0x33ffcc5c);
 const Color _SecondaryColV1 = Color(0xffE3663E);
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({Key? key}) : super(key: key);
-
+  const Onboarding({Key? key, required this.user}) : super(key: key);
+  final User user;
   @override
   _OnboardingState createState() => _OnboardingState();
 }
@@ -61,7 +63,13 @@ class _OnboardingState extends State<Onboarding> {
 
   void onDonePress() {
     // Do what you want
-    print("End of slides");
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(user: widget.user),
+        // ProfilePage(user: user),
+      ),
+      ModalRoute.withName('/'),
+    );
   }
 
   Widget renderDoneBtn() {
