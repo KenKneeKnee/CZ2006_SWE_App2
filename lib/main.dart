@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:my_app/map/map2.dart';
+import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/start/screens/register_page.dart';
+import 'package:my_app/start/screens/register_sucess.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'firebase_utils/firebase_options.dart';
 
@@ -38,7 +40,7 @@ class SportBuds extends StatelessWidget {
           bodyText1: TextStyle(fontSize: 18.0),
         ),
       ),
-      home: WelcomePage(),
+      home: FacilitiesMap(),
     );
   }
 }

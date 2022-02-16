@@ -76,8 +76,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - sportsbuds-logo.png
     - parks-geojson.json
-    - park-marker.png
+
     - ob2.png
     - ob3.png
     - ob4.png
@@ -95,17 +96,28 @@ flutter:
     - welcome-player4.png
     - welcome-background.png
     - login-background.png
+
     - basketball-marker.png
-    - sportsbuds-logo.png
     - tennis-marker.png
     - swimming-marker.png
     - playground-marker.png
     - garden-marker.png
     - sports-marker.png
     - missing-marker.png
+    - park-marker.png
     - gym-marker.png
     - stadium-marker.png
-    - misc-1.png
+    - soccer-marker.png
+
+    - basketball-hover.png
+    - tennis-hover.png
+    - swimming-hover.png
+    - sports-hover.png
+    - gym-hover.png
+    - soccer-hover.png
+    - park-hover.png
+    - stadium-hover.png
+ 
     
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

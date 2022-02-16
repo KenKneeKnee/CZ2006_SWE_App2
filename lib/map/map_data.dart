@@ -12,13 +12,15 @@ class SportsFacility {
       required this.placeName,
       required this.addressDesc,
       required this.facilityType,
-      required this.imagePath});
+      required this.markerImgPath,
+      required this.hoverImgPath});
 
   final LatLng coordinates;
   final String placeName;
   final String addressDesc;
   final String facilityType;
-  final String imagePath;
+  final String markerImgPath;
+  final String hoverImgPath;
 
   @override
   toString() {
@@ -71,12 +73,12 @@ Future fetchPlaygroundParks() async {
           String _addrDesc = _addrDescSplit[1].split('</td>')[0];
 
           SportsFacility _temp = SportsFacility(
-            coordinates: _coordinates,
-            placeName: _name,
-            addressDesc: _addrDesc,
-            facilityType: _facilityType,
-            imagePath: _FindMarkerImage(_facilityType),
-          );
+              coordinates: _coordinates,
+              placeName: _name,
+              addressDesc: _addrDesc,
+              facilityType: _facilityType,
+              markerImgPath: _FindMarkerImage(_facilityType),
+              hoverImgPath: _FindHoverImage(_facilityType));
           _markers.add(_temp);
           // print(
           //     'fetched ${_name} with coordinates ${_longitude.toString()} : ${_latitude.toString()}');
@@ -296,7 +298,8 @@ List<SportsFacility> fetchSportsFacils() {
         placeName: "", //was not able to get name for these
         addressDesc: _address,
         coordinates: LatLng(_latitude, _longitude),
-        imagePath: _FindMarkerImage(_facilityType),
+        markerImgPath: _FindMarkerImage(_facilityType),
+        hoverImgPath: _FindHoverImage(_facilityType),
       );
       markers.add(sportsFacil);
       //print(sportsFacil);
@@ -309,36 +312,6 @@ List<SportsFacility> fetchSportsFacils() {
   }
 
   return markers;
-}
-
-//-----------------------------------------------------
-/// Find Marker image path according to the facility Type
-String _FindMarkerImage(String facilityType) {
-  if (facilityType.contains("Gym")) {
-    return ('gym-marker.png');
-  }
-  if (facilityType.contains("wim")) {
-    return ('swimming-marker.png');
-  }
-  if (facilityType.contains("ennis")) {
-    return ('tennis-marker.png');
-  }
-  if (facilityType.contains('all')) {
-    return ('basketball-marker.png');
-  }
-  if (facilityType.contains("tadium")) {
-    return ('stadium-marker.png');
-  }
-  if (facilityType.contains("Playground")) {
-    return ('playground-marker.png');
-  }
-  if (facilityType.contains("Park")) {
-    return ('park-marker.png');
-  }
-  if (facilityType.contains("Gaden")) {
-    return ('garden-marker.png');
-  }
-  return ('sports-marker.png');
 }
 
 class SportsFacilDataSource {
@@ -382,3 +355,67 @@ class SportsFacilDataSource {
 //     // file.writeAsString(csv);
 //   }
 // }
+
+/// Find Marker image path according to the facility Type
+String _FindHoverImage(String facilityType) {
+  if (facilityType.contains("Gym")) {
+    return ('gym-hover.png');
+  }
+  if (facilityType.contains("wim")) {
+    return ('swimming-hover.png');
+  }
+  if (facilityType.contains("ennis")) {
+    return ('tennis-hover.png');
+  }
+  if (facilityType.contains('all')) {
+    return ('basketball-hover.png');
+  }
+  if (facilityType.contains("tadium")) {
+    return ('stadium-hover.png');
+  }
+  // if (facilityType.contains("Playground")) {
+  //   return ('playground-hover.png');
+  // }
+  if (facilityType.contains("Park")) {
+    return ('park-hover.png');
+  }
+  // if (facilityType.contains("Garden")) {
+  //   return ('garden-hover.png');
+  // }
+  if (facilityType.contains("ield")) {
+    return ('soccer-hover.png');
+  }
+  return ('sports-hover.png');
+}
+
+/// Find Marker image path according to the facility Type
+String _FindMarkerImage(String facilityType) {
+  if (facilityType.contains("Gym")) {
+    return ('gym-marker.png');
+  }
+  if (facilityType.contains("wim")) {
+    return ('swimming-marker.png');
+  }
+  if (facilityType.contains("ennis")) {
+    return ('tennis-marker.png');
+  }
+  if (facilityType.contains('all')) {
+    return ('basketball-marker.png');
+  }
+  if (facilityType.contains("tadium")) {
+    return ('stadium-marker.png');
+  }
+  if (facilityType.contains("Playground")) {
+    return ('playground-marker.png');
+  }
+  if (facilityType.contains("Park")) {
+    return ('park-marker.png');
+  }
+  if (facilityType.contains("Garden")) {
+    return ('garden-marker.png');
+  }
+  if (facilityType.contains("ield")) {
+    return ('soccer-marker.png');
+  }
+  return ('sports-marker.png');
+}
