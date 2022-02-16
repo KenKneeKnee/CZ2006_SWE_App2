@@ -156,7 +156,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                             0,
                                             0,
                                             List<dynamic>.empty(),
-                                            List<dynamic>.empty())
+                                            List<dynamic>.empty(),
+                                            "")
                                         .toJson());
 
                                     setState(() {
