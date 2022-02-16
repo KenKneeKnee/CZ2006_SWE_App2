@@ -5,9 +5,9 @@ import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
-import 'package:my_app/start/screens/welcome_page.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
+import 'package:location/location.dart';
 
 const MAPBOX_TOKEN =
     'pk.eyJ1IjoiY2xhcmlzc2FqZXciLCJhIjoiY2t6YzRmMnYzMmtoMjJzdHZlZmk0cDFyZyJ9.OyEroOyhNimfl1l4UrHTXA';
@@ -17,7 +17,7 @@ const MAPBOX_TILESET_ID = "clarissajew.4njadghk";
 const MARKERSIZE_ENLARGED = 80.0;
 const MARKERSIZE_SHRINKED = 50.0;
 
-final LatLng _startingPoint =
+LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
 class FacilitiesMap extends StatefulWidget {
@@ -30,15 +30,29 @@ class FacilitiesMap extends StatefulWidget {
 class _FacilitiesMapState extends State<FacilitiesMap> {
   int _selectedIndex = 0;
   late bool loading;
+  late bool location;
+  late LatLng userLocation;
   late List<SportsFacility> SportsFacilityList;
   late List<Marker> MarkerList;
 
   @override
   void initState() {
     super.initState();
-
     loading = true;
+    location = false;
     getData();
+    getUserLocation();
+  }
+
+  Future getUserLocation() async {
+    final _userLocationData = await checkLocation();
+    setState(() {
+      location = true;
+    });
+    var _longitude = _userLocationData.longitude;
+    var _latitude = _userLocationData.latitude;
+    _startingPoint = LatLng(_latitude, _longitude);
+    print('Successfully fetched User\'s location -- ${_startingPoint}');
   }
 
   Future getData() async {
@@ -63,7 +77,7 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
         ],
         title: Text('Sports Facilities'),
       ),
-      body: !loading
+      body: (!loading & location)
           ? FlutterMap(
               options: MapOptions(
                 minZoom: 2.5,
@@ -92,8 +106,8 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
   List<Marker> _buildMapMapMarkers() {
     final _markerList = <Marker>[]; //list to be returned from this function
 
-    print(
-        '${SportsFacilityList.length} facilities have been fetched into the SportsFacilityList');
+    // print(
+    //     '${SportsFacilityList.length} facilities have been fetched into the SportsFacilityList');
 
     for (int i = 0; i < SportsFacilityList.length; i++) {
       final _sportsFacil = SportsFacilityList[i];
@@ -119,7 +133,7 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
                     ),
                     builder: (builder) {
                       return DraggableScrollableSheet(
-                          expand: true,
+                          expand: false,
                           builder: ((context, scrollController) {
                             return Stack(children: [
                               RoundedBackgroundImage(
@@ -209,4 +223,31 @@ class MapMarkerInfoSheet extends StatelessWidget {
       ),
     );
   }
+}
+
+Future checkLocation() async {
+  Location location = new Location();
+
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+  LocationData _locationData;
+
+  _serviceEnabled = await location.serviceEnabled();
+  if (!_serviceEnabled) {
+    _serviceEnabled = await location.requestService();
+    if (!_serviceEnabled) {
+      return;
+    }
+  }
+
+  _permissionGranted = await location.hasPermission();
+  if (_permissionGranted == PermissionStatus.denied) {
+    _permissionGranted = await location.requestPermission();
+    if (_permissionGranted != PermissionStatus.granted) {
+      return;
+    }
+  }
+
+  _locationData = await location.getLocation();
+  return _locationData;
 }
