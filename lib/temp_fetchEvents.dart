@@ -38,6 +38,7 @@ class _eventPageState extends State<eventPage> {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
+
         SportEvent e = SportEvent.fromSnapshot(snapshot.data!.docs[0]);
         return Column(
           children: [

@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/utils/fire_auth.dart';
-import 'package:my_app/user_profile/user.dart';
-import 'package:my_app/user_profile/userDbManager.dart';
+import 'package:my_app/user_profile/data/user.dart';
+import 'package:my_app/user_profile/data/userDbManager.dart';
 
 class OtherProfilePage extends StatefulWidget {
   final User user;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/hovering_image.dart';
 import './login_page.dart';
 import './onboarding.dart';
-import '../../user_profile/profile_page.dart';
+import '../../user_profile/screens/profile_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
 TextStyle myTitleStyle() {
