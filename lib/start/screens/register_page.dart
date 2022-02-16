@@ -3,12 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-<<<<<<< HEAD
 import 'package:my_app/user_profile/screens/profile_page.dart';
-=======
-import 'package:my_app/start/screens/register_sucess.dart';
-import 'package:my_app/user_profile/profile_page.dart';
->>>>>>> 2e3b5203d331a059438dd74066304d4dec19d46f
+import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
@@ -154,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       password: _passwordTextController.text,
                                     );
 
-                                    await userdb.add(new UserData(
+                                    await userdb.add(UserData(
                                             _emailTextController.text,
                                             _nameTextController.text,
                                             0,
@@ -170,9 +166,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                     if (user != null) {
                                       Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegisterSuccess(),
-                                          // ProfilePage(user: user),
+                                          builder: (context) => RegisterSuccess(
+                                            user: user,
+                                          ),
+                                          //ProfilePage(widget.user),
                                         ),
                                         ModalRoute.withName('/'),
                                       );
@@ -188,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Center(
                     child: RichText(
                       //textAlign: TextAlign.justify,
