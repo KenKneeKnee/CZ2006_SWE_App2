@@ -20,6 +20,7 @@ void main() async {
 class SportBuds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    User? user;
     return MaterialApp(
       title: 'Flutter Authentication',
       debugShowCheckedModeBanner: false,

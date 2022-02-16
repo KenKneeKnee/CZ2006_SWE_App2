@@ -11,7 +11,7 @@ class FriendsActionWidget extends StatelessWidget {
           label: const Text('Add Friend'),
           backgroundColor: Colors.green,
         ),
-        buildDivider(),
+        const Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0)),
         FloatingActionButton.extended(
           onPressed: () {},
           label: const Text('Report'),

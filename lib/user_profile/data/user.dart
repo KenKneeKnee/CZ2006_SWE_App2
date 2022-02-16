@@ -7,7 +7,7 @@ class UserData {
   late final List<dynamic> friends;
   late final List<dynamic> friendrequests;
   late final int reports;
-  late String about;
+  late final String about;
 
   UserData(this.userid, this.username, this.points, this.reports, this.friends,
       this.friendrequests, this.about);

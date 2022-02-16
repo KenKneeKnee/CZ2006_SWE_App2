@@ -8,10 +8,9 @@ AppBar buildAppBar(BuildContext context) {
   final icon = CupertinoIcons.moon_stars;
 
   return AppBar(
-    title: const Text('My Profile'),
+    title: const Text('Profile'),
     leading: BackButton(
-      color: Colors.black,
-    ),
+        color: Colors.black, onPressed: () => Navigator.of(context).pop()),
     foregroundColor: Colors.black,
     backgroundColor: Colors.orange,
     elevation: 0,

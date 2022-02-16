@@ -32,9 +32,11 @@ class _LoginPageState extends State<LoginPage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.of(context).pushReplacement(
+      //change back to pushReplacement after testing
+      Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ProfilePage(
+          //change to test pages
+          builder: (context) => OtherProfilePage(
             user: user,
           ),
         ),
@@ -150,9 +152,9 @@ class _LoginPageState extends State<LoginPage> {
                                       if (user != null) {
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                            //Can be changed for testing
+                                            //Can be changed for
                                             builder: (context) =>
-                                                OtherProfilePage(user: user),
+                                                ProfilePage(user: user),
                                           ),
                                         );
                                       }

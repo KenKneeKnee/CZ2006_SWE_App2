@@ -15,10 +15,6 @@ class FriendsDisplayWidget extends StatelessWidget {
           buildButton(context, points.toString(), 'Points')
         ],
       );
-  Widget buildDivider() => Container(
-        height: 24,
-        child: VerticalDivider(),
-      );
 
   Widget buildButton(BuildContext context, String value, String text) =>
       MaterialButton(
@@ -40,5 +36,9 @@ class FriendsDisplayWidget extends StatelessWidget {
             ),
           ],
         ),
+      );
+  Widget buildDivider() => Container(
+        height: 24,
+        child: VerticalDivider(),
       );
 }
