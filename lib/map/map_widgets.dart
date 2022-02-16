@@ -4,6 +4,34 @@ import 'package:flutter/material.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/hovering_image.dart';
 
+/// (custom) MapMarker consists of location marker image with dynamic size
+/// Function holding function to trigger corrsponding details is in the Marker class (flutter)
+class MapMarker extends StatelessWidget {
+  const MapMarker({Key? key, required this.selected, required this.imagePath})
+      : super(key: key);
+
+  final bool selected;
+  final String imagePath;
+  static const MARKERSIZE_ENLARGED =
+      80.0; //TODO: need to make this a "global" constant
+  // currenlty need to edit in facil_map too
+  static const MARKERSIZE_SHRINKED = 50.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = selected ? MARKERSIZE_ENLARGED : MARKERSIZE_SHRINKED;
+
+    return Center(
+      child: AnimatedContainer(
+        height: size,
+        width: size,
+        duration: const Duration(milliseconds: 400),
+        child: Image.asset(imagePath),
+      ),
+    );
+  }
+}
+
 ///Header holding location details about a sports facility (Place name, Facility Type, Address)
 class MapMarkerInfoHeader extends StatelessWidget {
   late String Title; //place name eg. Sun Park

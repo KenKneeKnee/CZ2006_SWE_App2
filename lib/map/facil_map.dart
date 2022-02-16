@@ -5,6 +5,8 @@ import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/start/screens/welcome_page.dart';
+import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
 const MAPBOX_TOKEN =
@@ -14,6 +16,7 @@ const MAPBOX_URL =
 const MAPBOX_TILESET_ID = "clarissajew.4njadghk";
 const MARKERSIZE_ENLARGED = 80.0;
 const MARKERSIZE_SHRINKED = 50.0;
+
 final LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
@@ -49,9 +52,6 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
   }
 
   /// Returns a list of Marker objects from a list of SportsFacility objects
-  ///
-  ///@override
-  ///
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -119,11 +119,15 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
                     ),
                     builder: (builder) {
                       return DraggableScrollableSheet(
-                          expand: false,
+                          expand: true,
                           builder: ((context, scrollController) {
-                            return MapMarkerInfoSheet(
-                                SportsFacil: _sportsFacil,
-                                index: _selectedIndex);
+                            return Stack(children: [
+                              RoundedBackgroundImage(
+                                  imagePath: 'background.png'),
+                              MapMarkerInfoSheet(
+                                  SportsFacil: _sportsFacil,
+                                  index: _selectedIndex),
+                            ]);
                           }));
                     },
                   );
@@ -142,30 +146,6 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
           '${_markerList.length} markers have been created on the map from ${SportsFacilityList.length}!');
     }
     return _markerList;
-  }
-}
-
-/// (custom) MapMarker consists of location marker image with dynamic size
-/// Function holding function to trigger corrsponding details is in the Marker class (flutter)
-class MapMarker extends StatelessWidget {
-  const MapMarker({Key? key, required this.selected, required this.imagePath})
-      : super(key: key);
-
-  final bool selected;
-  final String imagePath;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = selected ? MARKERSIZE_ENLARGED : MARKERSIZE_SHRINKED;
-
-    return Center(
-      child: AnimatedContainer(
-        height: size,
-        width: size,
-        duration: const Duration(milliseconds: 400),
-        child: Image.asset(imagePath),
-      ),
-    );
   }
 }
 
