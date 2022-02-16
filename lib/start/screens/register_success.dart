@@ -24,9 +24,9 @@ TextStyle myBodyStyle() {
 }
 
 class RegisterSuccess extends StatefulWidget {
-  //final User user;
+  final User user;
 
-  // const RegisterSuccess({required this.user});
+  const RegisterSuccess({required this.user});
 
   @override
   _RegisterSuccessState createState() => _RegisterSuccessState();
