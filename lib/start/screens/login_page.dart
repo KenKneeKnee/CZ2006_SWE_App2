@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       //change back to pushReplacement after testing
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           //change to test pages
           builder: (context) => ProfilePage(
