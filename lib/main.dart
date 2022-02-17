@@ -6,6 +6,8 @@ import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'firebase_utils/firebase_options.dart';
+import 'package:my_app/temp_fetchEvents.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +44,7 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
-      home: LoginPage(),
+      home: eventPage(),
     );
   }
 }
