@@ -1,6 +1,10 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/temp_event.dart';
+import 'package:my_app/events/create_event.dart';
+import 'package:my_app/map/map_data.dart';
+import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../events/sportevent.dart';
 
@@ -8,33 +12,36 @@ int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
 }
 
-var _kEventSource = realEventSource..addAll({DateTime.now(): realTodaySource});
+var _kEventSource = realEventSource..addAll({kToday: realTodaySource});
 
 class Grr extends StatefulWidget {
-  const Grr({Key? key}) : super(key: key);
-
+  const Grr({Key? key, required this.placeId, required this.sportsFacility})
+      : super(key: key);
+  final String placeId;
+  final SportsFacility sportsFacility;
   @override
   _GrrState createState() => _GrrState();
 }
 
 class _GrrState extends State<Grr> {
   late bool loading;
-  late Map<DateTime, List<SportEvent>> grrMap;
-  late List<SportEvent> grrToday;
+  // late Map<DateTime, List<SportEvent>> grrMap;
+  // late List<SportEvent> grrToday;
   Map<DateTime, List<SportEvent>> kEvents = {};
 
   late final ValueNotifier<List<SportEvent>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.week;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime _focusedDay = kToday;
+  DateTime? _selectedDay = kToday;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
   @override
   void initState() {
     super.initState();
+
     loading = true;
     grrGetData();
 
@@ -44,24 +51,31 @@ class _GrrState extends State<Grr> {
 
   Future grrGetData() async {
     var eventdatasource = EventDataFetcher();
-    final todayData = await eventdatasource.fetchDayEvent(DateTime.now());
-    final eventdata = await eventdatasource.fetchAllEvent(
-        DateTime.now(), DateTime.now().add(const Duration(days: 7)));
-
+    // final todayData =
+    //     await eventdatasource.fetchDayEvent(DateTime.now(), widget.placeId);
+    // final eventdata = await eventdatasource.fetchAllEvent(DateTime.now(),
+    //     DateTime.now().add(const Duration(days: 7)), widget.placeId);
+    await eventdatasource.fetchDayEvent(kToday, widget.placeId);
+    await eventdatasource.fetchAllEvent(
+        kToday, kToday.add(const Duration(days: 7)), widget.placeId);
     //await Future.delayed(const Duration(seconds: 3), () {});
+
     setState(() {
-      grrMap = eventdata;
-      grrToday = todayData;
+      // grrMap = eventdata;
+      // grrToday = todayData;
       loading = false;
+      _kEventSource = realEventSource
+        ..addAll({DateTime.now(): realTodaySource});
+
       kEvents = LinkedHashMap<DateTime, List<SportEvent>>(
         equals: isSameDay,
         hashCode: getHashCode,
       )..addAll(_kEventSource);
     });
 
-    // print('real event source has ${realEventSource.entries}');
-    // print('real today has ${realTodaySource}');
-    // print('kEvents has ${kEvents.entries}');
+    print('real event source has ${realEventSource.entries}');
+    print('real today has ${realTodaySource}');
+    print('kEvents has ${kEvents.entries}');
   }
 
   @override
@@ -72,6 +86,7 @@ class _GrrState extends State<Grr> {
 
   List<SportEvent> _getEventsForDay(DateTime day) {
     // Implementation example
+
     return kEvents[day] ?? [];
   }
 
@@ -188,33 +203,47 @@ class _GrrState extends State<Grr> {
                     },
                   ),
                 ),
+                BouncingButton(
+                    bgColor: Color(0xffE96B46),
+                    borderColor: Color(0xffE96B46),
+                    buttonText: "Create Event",
+                    textColor: Color(0xffffffff),
+                    onClick: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Dialog(
+                            backgroundColor: Color(0xffE5E8E8),
+                            child: CreateEventForm(
+                                date: _focusedDay,
+                                placeId: widget.placeId,
+                                placeDetails:
+                                    widget.sportsFacility.addressDesc),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                          );
+                        },
+                      ).then((value) => {
+                            if (value)
+                              {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SuccessDialog();
+                                    })
+                              }
+                            else
+                              {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return FailDialog();
+                                    })
+                              }
+                          });
+                    })
               ],
-            ),
-          )
-        : Container(color: Colors.amber);
-
-    return (!loading)
-        ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.black,
-            ),
-            body: Container(
-              color: Colors.blue,
-              height: 100,
-              child: TextButton(
-                child: Text(
-                  'check',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  print('grrMap has ${grrMap.length} items');
-                  print('realEventSource has ${realEventSource.length} items');
-                  realEventSource.forEach((key, value) {
-                    print(key);
-                    print(value);
-                  });
-                },
-              ),
             ),
           )
         : LinearProgressIndicator();

@@ -115,6 +115,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                                 widget.placeId);
 
                             repository.addEvent(newEvent);
+                            print(newEvent);
                             Navigator.pop(context, true);
                             // Navigator.of(context, rootNavigator: true)
                             //     .pop(); //close dialog

@@ -164,11 +164,11 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
 }
 
 class MapMarkerInfoSheet extends StatelessWidget {
-  const MapMarkerInfoSheet(
-      {Key? key, required this.SportsFacil, required this.index})
+  MapMarkerInfoSheet({Key? key, required this.SportsFacil, required this.index})
       : super(key: key);
   final SportsFacility SportsFacil;
   final int index;
+  late String placeId = index.toString();
 
   @override
   Widget build(BuildContext context) {
@@ -179,47 +179,10 @@ class MapMarkerInfoSheet extends StatelessWidget {
         children: [
           MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
               SportsFacil.addressDesc, SportsFacil.hoverImgPath),
-          Grr(),
-          BouncingButton(
-              bgColor: Color(0xffE96B46),
-              borderColor: Color(0xffE96B46),
-              buttonText: "Create Event",
-              textColor: Color(0xffffffff),
-              onClick: () {
-                String _placeId = index.toString();
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      backgroundColor: Color(0xffE5E8E8),
-                      child: CreateEventForm(
-                          date: DateTime.now(),
-                          placeId: _placeId,
-                          placeDetails: SportsFacil.addressDesc),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(20.0))),
-                    );
-                  },
-                ).then((value) => {
-                      if (value)
-                        {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return SuccessDialog();
-                              })
-                        }
-                      else
-                        {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return FailDialog();
-                              })
-                        }
-                    });
-              })
+          Grr(
+            placeId: placeId,
+            sportsFacility: SportsFacil,
+          ),
         ],
       ),
     );
