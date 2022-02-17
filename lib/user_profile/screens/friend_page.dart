@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,7 +32,74 @@ class _FriendPageState extends State<Friend_Page> {
       setState(() {
         topContainer = value;
       });
+<<<<<<< HEAD
+
+      UserData tempuser = new UserData(
+          data["userid"],
+          data["username"],
+          data["points"],
+          data["reports"],
+          data["friends"],
+          data["friendrequests"],
+          data["about"]);
+
+      listofUsers.add(tempuser);
     });
+
+    listofUsers.forEach((user) {
+      listItems.add(Container(
+          height: 150,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
+              ]),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      user.username,
+                      style: const TextStyle(
+                          fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      user.userid.toString(),
+                      style: const TextStyle(fontSize: 17, color: Colors.grey),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      user.points.toString(),
+                      style: const TextStyle(
+                          fontSize: 25,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+                Image.asset(
+                  "assets/images/1573252249390.jpeg",
+                  height: double.infinity,
+                )
+              ],
+            ),
+          )));
+    });
+
+    setState(() {
+      friendsData = listItems;
+=======
+>>>>>>> c55c065a7874fc52fa5c45e57bd36c2c857d288c
+    });
+    print(friendsData.length);
   }
 
   @override
