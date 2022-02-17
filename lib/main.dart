@@ -6,7 +6,7 @@ import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
-import 'package:my_app/temp_fetchEvents.dart';
+import 'package:my_app/events/temp_fetchEvents.dart';
 import 'firebase_utils/firebase_options.dart';
 import 'package:my_app/events/temp_fetchEvents.dart';
 import 'package:my_app/events/temp_fetchEvents.dart';
@@ -46,7 +46,7 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
-      home: bookingPage(),
+      home: eventPage(),
     );
   }
 }

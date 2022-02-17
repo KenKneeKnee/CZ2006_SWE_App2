@@ -1,9 +1,15 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/sportevent.dart';
 
 class BookingRepository {
   // 1
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('bookings');
+
+  final EventRepository eventRepository= EventRepository();
 
   // 2
   Stream<QuerySnapshot> getStream() {
@@ -67,7 +73,7 @@ class BookingRepository {
   }
 
   void retrieveUsers(String key) async{
-    collection.where("EventId", isEqualTo: key).get();
+    collection.where("eventId", isEqualTo: key).get();
   }
 
    Future<QuerySnapshot> retrieveActiveEvents(String uid) async{
@@ -77,6 +83,5 @@ class BookingRepository {
   Future<QuerySnapshot> retrievePastEvents(String uid) async{
     return collection.where("active", isEqualTo: false).where('userId', isEqualTo: uid).get();
   }
-
 
 }

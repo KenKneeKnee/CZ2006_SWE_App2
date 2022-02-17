@@ -42,6 +42,7 @@ class _eventPageState extends State<eventPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return StreamBuilder<QuerySnapshot>(
         stream: booking.getStream(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot1){
@@ -55,13 +56,35 @@ class _eventPageState extends State<eventPage> {
           return const CircularProgressIndicator();
         }
         List EventList = snapshot.data!.docs;
-        List BookingList = snapshot1.data!.docs;
         Map<String, SportEvent> EventMap = {};
         for (DocumentSnapshot doc in EventList) {
-          if (doc['placeId'] == "hellohello") {
+          if (doc['placeId'] == "92") {
             SportEvent e = SportEvent.fromSnapshot(doc);
             EventMap[doc.id] = e;
           }
+        }
+
+        Future<int> hasActiveEvent(String uid, String key) async {
+
+          SportEvent e = EventMap[key] as SportEvent;
+          Timestamp eventStart = Timestamp.fromDate(e.start);
+          Timestamp eventEnd = Timestamp.fromDate(e.end); //current event timebox
+
+          QuerySnapshot ss = await booking.retrieveActiveEvents(uid); // current bookings for this user
+          for (DocumentSnapshot doc in ss.docs) {
+            String eid = await doc.get("eventId");
+            print(uid);
+            print(eid);
+            DocumentReference docref = repository.collection.doc(eid);
+            DocumentSnapshot docsnap = await docref.get();
+            print(docsnap.data());
+            Timestamp activestart = await docsnap.get('start');
+            Timestamp activeend = await docsnap.get('end');
+            if ((eventStart.compareTo(activeend)<=0) || (eventEnd.compareTo(activestart))>=0) {
+              return 1; // has clash
+            }
+          }
+          return 0;
         }
 
         return Scaffold(
@@ -87,6 +110,7 @@ class _eventPageState extends State<eventPage> {
                       IconButton(
                           onPressed: () async{
                             int hasBooking = await booking.checkUser(uid, key);
+                            int hasClash = await hasActiveEvent(uid, key);
                             if (hasBooking==-1) {
                               showDialog(
                                 context: context,
@@ -118,6 +142,22 @@ class _eventPageState extends State<eventPage> {
                                     ],
                                   ),
                                 );
+                            }
+                            else if (hasClash==1){
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("you have an active booking which clashes"),
+                                  content: Text("leave other booking if you want this"),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Go Back'))
+                                  ],
+                                ),
+                              );
                             } else{
                               showDialog(
                                   context: context,
