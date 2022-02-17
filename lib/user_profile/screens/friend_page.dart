@@ -57,7 +57,6 @@ class _FriendPageState extends State<Friend_Page> {
               }
             }
           }
-          print(listfriends.length);
 
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
