@@ -7,12 +7,8 @@ import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'firebase_utils/firebase_options.dart';
-<<<<<<< Updated upstream
-import 'package:my_app/temp_fetchEvents.dart';
-
-=======
 import 'package:my_app/events/temp_fetchEvents.dart';
->>>>>>> Stashed changes
+import 'package:my_app/events/temp_fetchEvents.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,11 +45,7 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
-<<<<<<< Updated upstream
       home: eventPage(),
-=======
-      home: EventCalendar(),
->>>>>>> Stashed changes
     );
   }
 }
