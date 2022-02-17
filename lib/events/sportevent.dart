@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class SportEvent {
   final String name;
-  // late String id;
   final DateTime start;
   final DateTime end;
   final int maxCap;
@@ -27,7 +27,20 @@ class SportEvent {
   Map<String, dynamic> toJson() => _EventToJson(this);
 
   @override
-  String toString() => 'Event<$SportEvent>';
+  String toString() {
+    final DateFormat formatter = DateFormat.jm();
+    return ('${name} \n ${formatter.format(start)} - ${formatter.format(end)} \n ${curCap}/${maxCap}');
+  }
+
+  String toTime() {
+    final DateFormat formatter = DateFormat.jm();
+    return ('${formatter.format(start)} - ${formatter.format(end)}');
+  }
+
+  String toCap() {
+    final DateFormat formatter = DateFormat.jm();
+    return ('${curCap}/${maxCap}');
+  }
 }
 
 // 1

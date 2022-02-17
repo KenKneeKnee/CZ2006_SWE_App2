@@ -1,8 +1,8 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/temp_event.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../events/sportevent.dart';
 
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
@@ -19,11 +19,11 @@ class Grr extends StatefulWidget {
 
 class _GrrState extends State<Grr> {
   late bool loading;
-  late Map<DateTime, List<GameEvent>> grrMap;
-  late List<GameEvent> grrToday;
-  Map<DateTime, List<GameEvent>> kEvents = {};
+  late Map<DateTime, List<SportEvent>> grrMap;
+  late List<SportEvent> grrToday;
+  Map<DateTime, List<SportEvent>> kEvents = {};
 
-  late final ValueNotifier<List<GameEvent>> _selectedEvents;
+  late final ValueNotifier<List<SportEvent>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.week;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -43,7 +43,6 @@ class _GrrState extends State<Grr> {
   }
 
   Future grrGetData() async {
-    print('running grrGetData');
     var eventdatasource = EventDataFetcher();
     final todayData = await eventdatasource.fetchDayEvent(DateTime.now());
     final eventdata = await eventdatasource.fetchAllEvent(
@@ -54,15 +53,15 @@ class _GrrState extends State<Grr> {
       grrMap = eventdata;
       grrToday = todayData;
       loading = false;
-      kEvents = LinkedHashMap<DateTime, List<GameEvent>>(
+      kEvents = LinkedHashMap<DateTime, List<SportEvent>>(
         equals: isSameDay,
         hashCode: getHashCode,
       )..addAll(_kEventSource);
     });
 
-    print('real event source has ${realEventSource.entries}');
-    print('real today has ${realTodaySource}');
-    print('kEvents has ${kEvents.entries}');
+    // print('real event source has ${realEventSource.entries}');
+    // print('real today has ${realTodaySource}');
+    // print('kEvents has ${kEvents.entries}');
   }
 
   @override
@@ -71,7 +70,7 @@ class _GrrState extends State<Grr> {
     super.dispose();
   }
 
-  List<GameEvent> _getEventsForDay(DateTime day) {
+  List<SportEvent> _getEventsForDay(DateTime day) {
     // Implementation example
     return kEvents[day] ?? [];
   }
@@ -93,11 +92,12 @@ class _GrrState extends State<Grr> {
   @override
   Widget build(BuildContext context) {
     return (!loading)
-        ? Card(
-            color: Colors.amber,
+        ? Container(
+            color: Colors.transparent,
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
             child: Column(
               children: [
-                TableCalendar<GameEvent>(
+                TableCalendar<SportEvent>(
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
                   focusedDay: _focusedDay,
@@ -126,7 +126,8 @@ class _GrrState extends State<Grr> {
                   },
                 ),
                 Container(
-                  child: ValueListenableBuilder<List<GameEvent>>(
+                  padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
+                  child: ValueListenableBuilder<List<SportEvent>>(
                     valueListenable: _selectedEvents,
                     builder: (context, value, _) {
                       return ListView.builder(
@@ -135,30 +136,49 @@ class _GrrState extends State<Grr> {
                         itemBuilder: (context, index) {
                           return Container(
                             margin: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
+                              horizontal: 18.0,
+                              vertical: 10.0,
                             ),
                             decoration: BoxDecoration(
                               border: Border.all(),
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon:
-                                        Icon(Icons.add_circle_outline_rounded),
-                                    color: Colors.red),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon:
-                                      Icon(Icons.remove_circle_outline_rounded),
-                                  color: Colors.green,
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      print("${value[index].name} was tapped");
+                                    },
+                                    child: Container(
+                                      child: ListTile(
+                                        title: Text('${value[index].name}'),
+                                        subtitle: Text(value[index].toTime()),
+                                        leading:
+                                            Icon(Icons.event_available_rounded),
+                                        trailing: Text(value[index].toCap()),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                Expanded(
-                                  //onTap: () => print('${value[index]}'),
-                                  child: Text('${value[index]}'),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                            Icons.add_circle_outline_rounded),
+                                        color: Colors.red),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                          Icons.remove_circle_outline_rounded),
+                                      color: Colors.green,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
