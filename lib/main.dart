@@ -8,6 +8,8 @@ import 'package:my_app/start/screens/welcome_page.dart';
 import 'package:my_app/temp_fetchEvents.dart';
 import 'firebase_utils/firebase_options.dart';
 import 'package:my_app/temp_fetchEvents.dart';
+import 'package:my_app/events/booking_retrieve.dart';
+
 
 
 void main() async {
@@ -45,7 +47,7 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
-      home: eventPage(),
+      home: bookingPage(),
     );
   }
 }
