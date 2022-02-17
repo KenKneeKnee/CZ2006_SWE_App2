@@ -65,31 +65,18 @@ class BookingRepository {
       });
     return res;
   }
-/*
+
   void retrieveUsers(String key) async{
-    collection.where("EventId", isEqualTo: key).get().then((value){
-      value.docs.forEach((element) {
-        print(element.data()["userid"]);
-      });
-
-    });
+    collection.where("EventId", isEqualTo: key).get();
   }
 
-  void retrieveActiveEvents(String key) async{
-    collection.where("active", isEqualTo: true).get().then((value){
-      value.docs.forEach((result) {
-        print(result.data()["key"]);
-      });
-    });
+   Future<QuerySnapshot> retrieveActiveEvents(String uid) async{
+    return collection.where("active", isEqualTo: true).where('userId', isEqualTo: uid).get();
   }
 
-  void retrievePastEvents(String key) async{
-    collection.where("active", isEqualTo: false).get().then((value){
-      value.docs.forEach((result) {
-       print(result.data()["key"]);
-      });
-    });
+  Future<QuerySnapshot> retrievePastEvents(String uid) async{
+    return collection.where("active", isEqualTo: false).where('userId', isEqualTo: uid).get();
   }
 
- */
+
 }
