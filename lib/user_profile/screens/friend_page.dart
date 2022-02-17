@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -101,9 +103,11 @@ class _FriendPageState extends State<Friend_Page> {
             ),
           )));
     });
+
     setState(() {
       friendsData = listItems;
     });
+    print(friendsData.length);
   }
 
   @override

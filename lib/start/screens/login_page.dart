@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           //change to test pages
-          builder: (context) => OtherProfilePage(
+          builder: (context) => ProfilePage(
             user: user,
           ),
         ),
