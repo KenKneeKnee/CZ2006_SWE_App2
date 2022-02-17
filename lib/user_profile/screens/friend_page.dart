@@ -15,7 +15,7 @@ class Friend_Page extends StatefulWidget {
 class _FriendPageState extends State<Friend_Page> {
   final UserDbManager repository = UserDbManager();
   late List<dynamic> friendData = widget.friends;
-  final List<UserData> listfriends = List<UserData>.empty();
+  final List<UserData> listfriends = [];
   ScrollController controller = ScrollController();
   final List<Widget> friendbuttons = [];
   double topContainer = 0;
@@ -23,9 +23,10 @@ class _FriendPageState extends State<Friend_Page> {
   @override
   void initState() {
     super.initState();
+    print('received a list ${widget.friends.length}');
+    print('first friend is ${widget.friends[0]}');
     controller.addListener(() {
       double value = controller.offset / 119;
-
       setState(() {
         topContainer = value;
       });
@@ -47,7 +48,7 @@ class _FriendPageState extends State<Friend_Page> {
           UserData u = UserData.fromSnapshot(snapshot.data!.docs[0]);
 
           List DocList = snapshot.data!.docs;
-
+          print('initial list : ${listfriends.length}');
           for (String userid in friendData) {
             for (DocumentSnapshot doc in DocList) {
               if (doc["userid"] == userid) {
@@ -56,10 +57,11 @@ class _FriendPageState extends State<Friend_Page> {
               }
             }
           }
+          print(listfriends.length);
 
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
-                height: 150,
+                height: size.height * 0.5,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -106,6 +108,7 @@ class _FriendPageState extends State<Friend_Page> {
                           //)
                         ]))));
           }
+          print('friend button list : ${friendbuttons.length}');
 
           return SafeArea(
               child: Scaffold(
@@ -148,13 +151,13 @@ class _FriendPageState extends State<Friend_Page> {
                             }
                           }
                           return Opacity(
-                            opacity: 0,
+                            opacity: scale,
                             child: Transform(
                               transform: Matrix4.identity()
                                 ..scale(scale, scale),
                               alignment: Alignment.bottomCenter,
                               child: Align(
-                                  heightFactor: 0.7,
+                                  heightFactor: 0.8,
                                   alignment: Alignment.topCenter,
                                   child: friendbuttons[index]),
                             ),

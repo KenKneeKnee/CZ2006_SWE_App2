@@ -35,8 +35,8 @@ UserData _UserFromJson(Map<String, dynamic> json) {
       json['username'] as String,
       json['points'] as int,
       json['reports'] as int,
-      List.from(json['friendrequests']) as List<dynamic>,
       List.from(json['friends']) as List<dynamic>,
+      List.from(json['friendrequests']) as List<dynamic>,
       json['about'] as String);
 }
 
