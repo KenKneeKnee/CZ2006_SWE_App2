@@ -58,13 +58,14 @@ class _eventPageState extends State<eventPage> {
         List BookingList = snapshot1.data!.docs;
         Map<String, SportEvent> EventMap = {};
         for (DocumentSnapshot doc in EventList) {
-          if (doc['placeId'] == "yoyoyooyo") {
+          if (doc['placeId'] == "hellohello") {
             SportEvent e = SportEvent.fromSnapshot(doc);
             EventMap[doc.id] = e;
           }
         }
 
         return Scaffold(
+            appBar: AppBar(title: const Text("Event Page")),
             body: ListView.builder(
                 shrinkWrap: true,
                 itemCount: EventMap.length,
@@ -102,9 +103,27 @@ class _eventPageState extends State<eventPage> {
                                   ),
                                 );
                             } else{
-                              join(curEvent,key);
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Join Event'),
+                                    content: const Text('Confirm?'),
+                                      actions: <Widget>[
+                                          TextButton(
+                                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                                              child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context, 'Ok');
+                                                join(curEvent,key);
+                                              },
+                                              child: const Text('Ok'),
+                                          ),
+                                      ],
+                                  ),
+                              );
                             }
-
                           },
                           color: Colors.green,
                           icon: const Icon(
@@ -129,7 +148,26 @@ class _eventPageState extends State<eventPage> {
                                 ),
                               );
                             } else{
-                              leave(curEvent,key);
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Leave Event'),
+                                  content: const Text('Confirm?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, 'Ok');
+                                        leave(curEvent,key);
+                                      },
+                                      child: const Text('Ok'),
+                                    ),
+                                  ],
+                                ),
+                              );
                             }
                           },
                           color: Colors.red,
