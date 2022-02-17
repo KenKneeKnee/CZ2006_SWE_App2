@@ -87,7 +87,23 @@ class _eventPageState extends State<eventPage> {
                       IconButton(
                           onPressed: () async{
                             int hasBooking = await booking.checkUser(uid, key);
-                            if (hasBooking>0){
+                            if (hasBooking==-1) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("Account Error!"),
+                                  content: Text("Please make sure you are logged in."),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Go Back'))
+                                  ],
+                                ),
+                              );
+                            }
+                            else if (hasBooking>0){
                                 showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
@@ -148,7 +164,7 @@ class _eventPageState extends State<eventPage> {
                                 ),
                               );
                             }
-                            if (hasBooking==0){
+                            else if (hasBooking==0){
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
