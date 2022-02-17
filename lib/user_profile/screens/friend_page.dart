@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/data/user.dart';
@@ -8,41 +9,30 @@ import 'package:my_app/user_profile/data/userDbManager.dart';
 
 class Friend_Page extends StatefulWidget {
   final List<dynamic> friends;
-
   const Friend_Page({Key? key, required this.friends}) : super(key: key);
   @override
   _FriendPageState createState() => _FriendPageState();
 }
 
 class _FriendPageState extends State<Friend_Page> {
+  final UserDbManager repository = UserDbManager();
+  late List<dynamic> friendData = widget.friends;
+  final List<UserData> listfriends = [];
   ScrollController controller = ScrollController();
-  bool closeTopContainer = false;
+  final List<Widget> friendbuttons = [];
   double topContainer = 0;
-  late List<dynamic> useridList;
-
-  UserDbManager _dbManager = UserDbManager();
-
-  List<Widget> friendsData = [];
 
   @override
   void initState() {
-    useridList = widget.friends;
     super.initState();
-  }
-
-  void getFriendsData() {
-    List<Widget> listItems = [];
-    List<UserData> listofUsers = [];
-
-    useridList.forEach((userid) {
-      var data;
-
-      _dbManager.collection
-          .where('userid', isEqualTo: userid)
-          .get()
-          .then((QuerySnapshot docs) {
-        data = docs.docs[0].data;
+    print('received a list ${widget.friends.length}');
+    print('first friend is ${widget.friends[0]}');
+    controller.addListener(() {
+      double value = controller.offset / 119;
+      setState(() {
+        topContainer = value;
       });
+<<<<<<< HEAD
 
       UserData tempuser = new UserData(
           data["userid"],
@@ -106,6 +96,8 @@ class _FriendPageState extends State<Friend_Page> {
 
     setState(() {
       friendsData = listItems;
+=======
+>>>>>>> c55c065a7874fc52fa5c45e57bd36c2c857d288c
     });
     print(friendsData.length);
   }
@@ -113,53 +105,109 @@ class _FriendPageState extends State<Friend_Page> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final double categoryHeight = size.height * 0.30;
+    return StreamBuilder<QuerySnapshot>(
+        stream: repository.getStream(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
+          UserData u = UserData.fromSnapshot(snapshot.data!.docs[0]);
 
-    return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: Icon(
-          Icons.menu,
-          color: Colors.black,
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.person, color: Colors.black),
-            onPressed: () {},
-          )
-        ],
-      ),
-      body: Container(
-        height: size.height,
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                const SizedBox(
-                  height: 10,
-                ),
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: closeTopContainer ? 0 : 1,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: size.width,
-                    alignment: Alignment.topCenter,
-                    height: closeTopContainer ? 0 : categoryHeight,
+          List DocList = snapshot.data!.docs;
+          print('initial list : ${listfriends.length}');
+          for (String userid in friendData) {
+            for (DocumentSnapshot doc in DocList) {
+              if (doc["userid"] == userid) {
+                u = UserData.fromSnapshot(doc);
+                listfriends.add(u);
+              }
+            }
+          }
+          print(listfriends.length);
+
+          for (UserData u in listfriends) {
+            friendbuttons.add(Container(
+                height: size.height * 0.5,
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withAlpha(100), blurRadius: 10.0),
+                    ]),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                u.username,
+                                style: const TextStyle(
+                                    fontSize: 28, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                u.userid.toString(),
+                                style: const TextStyle(
+                                    fontSize: 17, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                u.points.toString(),
+                                style: const TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                          // Image.asset(
+                          //   "assets/images/${post["image"]}",
+                          //   height: double.infinity,
+                          //)
+                        ]))));
+          }
+          print('friend button list : ${friendbuttons.length}');
+
+          return SafeArea(
+              child: Scaffold(
+                  backgroundColor: Colors.white,
+                  appBar: AppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.white,
+                    leading: Icon(
+                      Icons.menu,
+                      color: Colors.black,
+                    ),
+                    actions: <Widget>[
+                      Text("HI",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold)),
+                      IconButton(
+                        icon: Icon(Icons.search, color: Colors.black),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.person, color: Colors.black),
+                        onPressed: () {},
+                      )
+                    ],
                   ),
-                ),
-                Expanded(
+                  body: Container(
+                    height: size.height,
                     child: ListView.builder(
                         controller: controller,
-                        itemCount: friendsData.length,
+                        itemCount: friendbuttons.length,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           double scale = 1.0;
@@ -178,17 +226,13 @@ class _FriendPageState extends State<Friend_Page> {
                                 ..scale(scale, scale),
                               alignment: Alignment.bottomCenter,
                               child: Align(
-                                  heightFactor: 0.7,
+                                  heightFactor: 0.8,
                                   alignment: Alignment.topCenter,
-                                  child: friendsData[index]),
+                                  child: friendbuttons[index]),
                             ),
                           );
-                        })),
-              ],
-            )
-          ],
-        ),
-      ),
-    ));
+                        }),
+                  )));
+        });
   }
 }
