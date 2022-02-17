@@ -8,8 +8,7 @@ import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'firebase_utils/firebase_options.dart';
-import 'package:my_app/events/temp_fetchEvents.dart';
-import 'package:my_app/events/temp_fetchEvents.dart';
+import 'package:my_app/events/booking_retrieve.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
