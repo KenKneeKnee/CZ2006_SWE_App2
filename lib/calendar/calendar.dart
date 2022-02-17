@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/events/create_event.dart';
+import 'package:my_app/events/event_repository.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'temp_event.dart';
 
+final repository=EventRepository();
 class EventCalendar extends StatefulWidget {
   @override
   _EventCalendarState createState() => _EventCalendarState();
@@ -38,17 +41,18 @@ class _EventCalendarState extends State<EventCalendar> {
 
   List<GameEvent> _getEventsForDay(DateTime day) {
     // Implementation example
-    return kEvents[day] ?? [];
+    getEvents(day);
+    return realEventSource[day] ?? [];
   }
 
-  List<GameEvent> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
-    final days = daysInRange(start, end);
-
-    return [
-      for (final d in days) ..._getEventsForDay(d),
-    ];
-  }
+  // List<GameEvent> _getEventsForRange(DateTime start, DateTime end) {
+  //   // Implementation example
+  //   final days = daysInRange(start, end);
+  //
+  //   return [
+  //     for (final d in days) ..._getEventsForDay(d),
+  //   ];
+  // }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -59,7 +63,6 @@ class _EventCalendarState extends State<EventCalendar> {
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
-
       _selectedEvents.value = _getEventsForDay(selectedDay);
     }
   }
@@ -75,7 +78,7 @@ class _EventCalendarState extends State<EventCalendar> {
 
     // `start` or `end` could be null
     if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
+      //_selectedEvents.value = _getEventsForRange(start, end);
     } else if (start != null) {
       _selectedEvents.value = _getEventsForDay(start);
     } else if (end != null) {

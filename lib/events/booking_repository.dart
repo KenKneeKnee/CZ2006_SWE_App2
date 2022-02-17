@@ -53,6 +53,9 @@ class BookingRepository {
 
   Future<int> checkUser (String uid, String key) async{
     int res=0;
+    if (uid==null){
+      return -1;
+    }
     await collection
         .where("userId", isEqualTo: uid)
         .where("eventId", isEqualTo: key)

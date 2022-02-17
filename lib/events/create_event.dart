@@ -111,7 +111,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                                 startTime!,
                                 endTime!,
                                 maxCap,
-                                0,
+                                1,
                                 widget.placeId);
 
                             repository.addEvent(newEvent);

@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/calendar/calendar.dart';
 import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'firebase_utils/firebase_options.dart';
+<<<<<<< Updated upstream
 import 'package:my_app/temp_fetchEvents.dart';
 
+=======
+import 'package:my_app/events/temp_fetchEvents.dart';
+>>>>>>> Stashed changes
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +49,11 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
+<<<<<<< Updated upstream
       home: eventPage(),
+=======
+      home: EventCalendar(),
+>>>>>>> Stashed changes
     );
   }
 }

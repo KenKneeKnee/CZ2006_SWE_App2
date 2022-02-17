@@ -8,6 +8,7 @@ import 'package:my_app/events/sportevent.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /// Example event class.
+final repository=EventRepository();
 class GameEvent {
   final String title;
   final int currentCap;
@@ -27,6 +28,7 @@ final kEvents = LinkedHashMap<DateTime, List<GameEvent>>(
   hashCode: getHashCode,
 )..addAll(_kEventSource);
 
+final Map<DateTime, List<GameEvent>> realEventSource={};
 // final kEvents = Map<DateTime, List<SportEvent>>()..addAll(_sEventSource);
 
 // //Map<DateTime, List<SportEvent>>
@@ -58,6 +60,7 @@ final _kEventSource = {
     ],
   });
 
+
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
 }
@@ -76,3 +79,24 @@ final kFirstDay = DateTime(kToday.year, kToday.month - 3,
     kToday.day); //Sets first day to be 3 months earler
 final kLastDay = DateTime(kToday.year, kToday.month + 3,
     kToday.day); //Sets last day to be 3 months later
+
+void getEvents (DateTime day) async{
+  DateTime curDay = DateTime(day.year, day.month, day.day);
+  DateTime nextDay = DateTime(day.year, day.month, day.day).add(const Duration(hours: 24));
+  Timestamp timestamp1 = Timestamp.fromDate(curDay);
+  Timestamp timestamp2 = Timestamp.fromDate(nextDay);
+  List res = [];
+  List<GameEvent> gamelist=[];
+  await repository.collection
+      .where("start", isGreaterThanOrEqualTo: timestamp1)
+      .where("start", isLessThan: timestamp2)
+      .get()
+      .then((value) {
+    res = value.docs;
+  });
+  for (DocumentSnapshot event in res) {
+    GameEvent ge = GameEvent(event.get("name"), event.get("curCap"), event.get("maxCap"));
+    gamelist.add(ge);
+  }
+  realEventSource[day]=gamelist;
+}
