@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/calendar/calendar.dart';
+import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
@@ -45,7 +46,7 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
-      home: eventPage(),
+      home: FacilitiesMap(),
     );
   }
 }

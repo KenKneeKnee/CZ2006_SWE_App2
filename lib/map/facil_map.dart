@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:my_app/calendar/calendar.dart';
+import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
@@ -175,10 +176,11 @@ class MapMarkerInfoSheet extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
               SportsFacil.addressDesc, SportsFacil.hoverImgPath),
-          EventCalendar(),
+          Grr(),
           BouncingButton(
               bgColor: Color(0xffE96B46),
               borderColor: Color(0xffE96B46),

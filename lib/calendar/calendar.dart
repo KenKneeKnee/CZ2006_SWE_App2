@@ -5,7 +5,8 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'temp_event.dart';
 
-final repository=EventRepository();
+final repository = EventRepository();
+
 class EventCalendar extends StatefulWidget {
   @override
   _EventCalendarState createState() => _EventCalendarState();
@@ -41,7 +42,7 @@ class _EventCalendarState extends State<EventCalendar> {
 
   List<GameEvent> _getEventsForDay(DateTime day) {
     // Implementation example
-    getEvents(day);
+    //getEvents(day);
     return realEventSource[day] ?? [];
   }
 

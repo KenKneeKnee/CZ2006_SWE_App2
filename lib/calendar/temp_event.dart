@@ -8,7 +8,8 @@ import 'package:my_app/events/sportevent.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /// Example event class.
-final repository=EventRepository();
+final repository = EventRepository();
+
 class GameEvent {
   final String title;
   final int currentCap;
@@ -28,7 +29,10 @@ final kEvents = LinkedHashMap<DateTime, List<GameEvent>>(
   hashCode: getHashCode,
 )..addAll(_kEventSource);
 
-final Map<DateTime, List<GameEvent>> realEventSource={};
+final Map<DateTime, List<GameEvent>> realEventSource = {};
+
+List<GameEvent> realTodaySource = [];
+
 // final kEvents = Map<DateTime, List<SportEvent>>()..addAll(_sEventSource);
 
 // //Map<DateTime, List<SportEvent>>
@@ -60,7 +64,6 @@ final _kEventSource = {
     ],
   });
 
-
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
 }
@@ -80,23 +83,48 @@ final kFirstDay = DateTime(kToday.year, kToday.month - 3,
 final kLastDay = DateTime(kToday.year, kToday.month + 3,
     kToday.day); //Sets last day to be 3 months later
 
-void getEvents (DateTime day) async{
-  DateTime curDay = DateTime(day.year, day.month, day.day);
-  DateTime nextDay = DateTime(day.year, day.month, day.day).add(const Duration(hours: 24));
-  Timestamp timestamp1 = Timestamp.fromDate(curDay);
-  Timestamp timestamp2 = Timestamp.fromDate(nextDay);
-  List res = [];
-  List<GameEvent> gamelist=[];
-  await repository.collection
-      .where("start", isGreaterThanOrEqualTo: timestamp1)
-      .where("start", isLessThan: timestamp2)
-      .get()
-      .then((value) {
-    res = value.docs;
-  });
-  for (DocumentSnapshot event in res) {
-    GameEvent ge = GameEvent(event.get("name"), event.get("curCap"), event.get("maxCap"));
-    gamelist.add(ge);
+class EventDataFetcher {
+  Future fetchDayEvent(DateTime day) async {
+    DateTime curDay = DateTime(day.year, day.month, day.day);
+    DateTime nextDay =
+        DateTime(day.year, day.month, day.day).add(const Duration(hours: 24));
+    Timestamp timestamp1 = Timestamp.fromDate(curDay);
+    Timestamp timestamp2 = Timestamp.fromDate(nextDay);
+    List res = [];
+    List<GameEvent> gamelist = [];
+    await repository.collection
+        .where("start", isGreaterThanOrEqualTo: timestamp1)
+        .where("start", isLessThan: timestamp2)
+        .get()
+        .then((value) {
+      res = value.docs;
+    });
+    for (DocumentSnapshot event in res) {
+      GameEvent ge = GameEvent(
+          event.get("name"), event.get("curCap"), event.get("maxCap"));
+      gamelist.add(ge);
+    }
+
+    // print(
+    //     'fetchDayEvent: fetched ${gamelist.length} events for ${day} from DB! C:');
+    return gamelist;
   }
-  realEventSource[day]=gamelist;
+
+  Future fetchAllEvent(DateTime start, DateTime end) async {
+    Map<DateTime, List<GameEvent>> grrMap = <DateTime, List<GameEvent>>{};
+    final dayCount = end.difference(start).inDays;
+
+    DateTime curDay = start;
+    print('start fetching!');
+    realTodaySource = await fetchDayEvent(curDay);
+
+    for (int i = 0; i <= dayCount; i++) {
+      curDay = curDay.add(const Duration(days: 1));
+      List<GameEvent> dayEvents = await fetchDayEvent(curDay);
+      grrMap[curDay] = dayEvents;
+      realEventSource[curDay] = dayEvents;
+    }
+    print('finished fetching ${realEventSource.length + 1} entries !');
+    return grrMap;
+  }
 }
