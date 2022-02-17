@@ -22,9 +22,9 @@ class _eventPageState extends State<eventPage> {
 
     if (e.curCap < e.maxCap) {
       e.curCap += 1;
+      booking.addBooking(uid, key);
+      repository.updateEvent(e, key);
     }
-    booking.addBooking(uid, key);
-    repository.updateEvent(e, key);
   }
 
   void leave(SportEvent e, String key) {
