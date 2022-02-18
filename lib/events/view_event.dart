@@ -3,8 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/map/map_data.dart';
+import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/background.dart';
 
 final uid = FirebaseAuth.instance.currentUser?.email as String;
@@ -71,7 +73,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                       RoundedBackgroundImage(
                           imagePath: 'view-event-background.png'),
                       Container(
-                        decoration: _baseContainer,
+                        decoration: baseContainer,
                         margin: EdgeInsets.fromLTRB(15, 60, 15, 0),
                         padding:
                             EdgeInsets.symmetric(horizontal: 12, vertical: 20),
@@ -79,30 +81,38 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                         child: Center(
                           child: Column(
                             children: [
-                              _calendarIcon,
-                              Title(widget.event.name),
-                              Text(
-                                widget.SportsFacil.addressDesc,
-                                style: _subtitleStyle,
-                                textAlign: TextAlign.center,
-                              ),
+                              calendarIcon,
+                              SportEventTextWidget.Title(widget.event.name),
+                              SportEventTextWidget.Subtitle(
+                                  widget.SportsFacil.addressDesc),
                               Row(
                                 children: [
                                   Flexible(
-                                      child: _TextWithIcon(
-                                          widget.event.toTime(), _timeIcon)),
+                                      child: TextWithIcon(
+                                          widget.event.toTime(), timeIcon)),
                                   Flexible(
-                                      child: _TextWithIcon(
+                                      child: TextWithIcon(
                                           '${widget.event.toCap()}\nplayers',
-                                          _capIcon)),
+                                          capIcon)),
                                 ],
                               ),
-                              _TextContainer('event description', context),
+                              TextContainer('event description', context),
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     IconButton(
                                         onPressed: () async {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return JoinedEventDialog(
+                                                  bgDeco: DialogBoxDecoration
+                                                      .joinEventBg,
+                                                  title: 'Joined Successfully!',
+                                                  paragraph:
+                                                      'Your fellow SportBuds can\'t wait to see you!',
+                                                );
+                                              });
                                           // int hasBooking = await booking.checkUser(uid, key);
                                           // if (hasBooking > 0) {
                                           //   showDialog(
@@ -150,6 +160,17 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                                         )),
                                     IconButton(
                                         onPressed: () async {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return LeftEventDialog(
+                                                  bgDeco: DialogBoxDecoration
+                                                      .leaveEventBg,
+                                                  title: 'Left successfully',
+                                                  paragraph:
+                                                      'Sorry to see you go. Hope to sometime soon!',
+                                                );
+                                              });
                                           //   String key = widget.event.
                                           //   int hasBooking = await booking.checkUser(uid, key);
                                           //   if (hasBooking == -1) {
@@ -222,109 +243,4 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               });
         });
   }
-
-  BoxDecoration _baseContainer = BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(20),
-    boxShadow: [
-      BoxShadow(
-        spreadRadius: 2,
-        color: Colors.grey,
-        offset: const Offset(-1, 4),
-        blurRadius: 3,
-      )
-    ],
-  );
-
-  Container _calendarIcon = Container(
-    color: Colors.transparent,
-    margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
-    height: 50,
-    child: Image.asset('icon-calendar.png'),
-  );
-
-  Icon _capIcon = const Icon(Icons.person);
-  Icon _timeIcon = const Icon(Icons.timer);
-
-  Container _TextWithIcon(String text, Icon icon) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
-      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-      decoration: BoxDecoration(
-          color: Color(0xffEBEBEB),
-          // border: Border.all(
-          //   color: Colors.black,
-          // ),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
-      child: Row(
-        children: [
-          icon,
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              child: Text(
-                text,
-                style: _paraStyleBold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Expanded _TextContainer(String text, BuildContext context) {
-    return Expanded(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.7,
-        padding: EdgeInsets.all(10),
-        // margin: EdgeInsets.fromLTRB(5, 5, 5, 25),
-        decoration: BoxDecoration(
-            color: Color(0xffEBEBEB),
-            // border: Border.all(
-            //   color: Colors.black,
-            // ),
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            text,
-            textAlign: TextAlign.center,
-            style: _paraStyle,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding Title(String text) {
-    return Padding(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 3),
-        child: Text(text, style: _TitleStyle));
-  }
-
-  /// Text Styles
-  final _TitleStyle = TextStyle(
-    color: Colors.grey[900],
-    fontSize: 36,
-    fontWeight: FontWeight.bold,
-  );
-
-  final _subtitleStyle = TextStyle(
-      color: Colors.grey[900],
-      fontSize: 14,
-      //fontWeight: FontWeight.bold,
-      fontStyle: FontStyle.italic);
-
-  final _paraStyle = TextStyle(
-    color: Colors.grey[900],
-    fontSize: 14,
-
-    //fontWeight: FontWeight.bold,
-  );
-  final _paraStyleBold = TextStyle(
-    color: Colors.grey[900],
-    fontSize: 12,
-    fontWeight: FontWeight.bold,
-  );
 }

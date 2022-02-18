@@ -154,20 +154,23 @@ class SuccessDialog extends StatelessWidget {
           decoration: bgDeco,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-                Text(
-                  title,
-                  style: dialogTitleStyle,
-                ),
-                const SizedBox(height: 15),
-                Text(
-                  paragraph,
-                  style: dialogParaStyleBold,
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+                  Text(
+                    title,
+                    style: dialogTitleStyle,
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    paragraph,
+                    style: dialogParaStyleBold,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -178,26 +181,35 @@ class SuccessDialog extends StatelessWidget {
 }
 
 class FailDialog extends StatelessWidget {
-  const FailDialog({Key? key}) : super(key: key);
+  FailDialog(
+      {Key? key,
+      required this.bgDeco,
+      required this.paragraph,
+      required this.title})
+      : super(key: key);
+  String paragraph;
+  String title;
+  BoxDecoration bgDeco;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
         content: Container(
           height: 240,
-          decoration: DialogBoxDecoration.createEventFailBg,
+          decoration: bgDeco,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-              const Text(
-                'Error!',
+              Text(
+                title,
                 style: dialogTitleStyle,
               ),
               const SizedBox(height: 15),
-              const Text(
-                'Something went wrong. I\'m sorry :(',
+              Text(
+                paragraph,
                 style: dialogParaStyleBold,
               ),
             ],
@@ -223,6 +235,23 @@ class DialogBoxDecoration {
       image: AssetImage('create-event-fail.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.topCenter,
+    ),
+  );
+
+  static BoxDecoration joinEventBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: DecorationImage(
+      image: AssetImage('join-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+  static BoxDecoration leaveEventBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: DecorationImage(
+      image: AssetImage('leave-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
     ),
   );
 }

@@ -154,9 +154,16 @@ class _GrrState extends State<Grr> {
                               vertical: 10.0,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(),
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  spreadRadius: 1,
+                                  color: Colors.grey,
+                                  offset: const Offset(0, 1),
+                                  blurRadius: 3,
+                                )
+                              ],
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -251,7 +258,12 @@ class _GrrState extends State<Grr> {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return FailDialog();
+                                      return FailDialog(
+                                        bgDeco: DialogBoxDecoration
+                                            .createEventFailBg,
+                                        title: 'Error',
+                                        paragraph: "Something went wrong. :(",
+                                      );
                                     })
                               }
                           });
