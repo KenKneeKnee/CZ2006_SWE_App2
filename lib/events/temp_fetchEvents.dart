@@ -6,9 +6,7 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 final uid = FirebaseAuth.instance.currentUser?.email as String;
-
 
 class eventPage extends StatefulWidget {
   eventPage({Key? key}) : super(key: key);
@@ -19,7 +17,6 @@ class _eventPageState extends State<eventPage> {
   final EventRepository repository = EventRepository();
   final BookingRepository booking = BookingRepository();
   void join(SportEvent e, String key) {
-
     if (e.curCap < e.maxCap) {
       e.curCap += 1;
       booking.addBooking(uid, key);
@@ -32,7 +29,7 @@ class _eventPageState extends State<eventPage> {
       e.curCap -= 1;
       booking.deleteBooking(uid, key);
     }
-    if (e.curCap==0){
+    if (e.curCap == 0) {
       repository.deleteEvent(e, key);
     } else {
       repository.updateEvent(e, key);
@@ -133,7 +130,8 @@ class _eventPageState extends State<eventPage> {
                                     actions: [
                                       ElevatedButton(
                                           onPressed: () {
-                                            Navigator.pop(context);
+                                            Navigator.pop(context, 'Ok');
+                                            join(curEvent, key);
                                           },
                                           child: Text('Go Back'))
                                     ],
@@ -227,24 +225,79 @@ class _eventPageState extends State<eventPage> {
                                       onPressed: () => Navigator.pop(context, 'Cancel'),
                                       child: const Text('Cancel'),
                                     ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context, 'Ok');
-                                        leave(curEvent,key);
-                                      },
-                                      child: const Text('Ok'),
+                                  );
+                                }
+                              },
+                              color: Colors.green,
+                              icon: const Icon(
+                                Icons.add_circle_rounded,
+                              )),
+                          IconButton(
+                              onPressed: () async {
+                                int hasBooking =
+                                    await booking.checkUser(uid, key);
+                                if (hasBooking == -1) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("Account Error!"),
+                                      content: Text(
+                                          "Please make sure you are logged in."),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Go Back'))
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                          color: Colors.red,
-                          icon: const Icon(
-                              Icons.remove_circle_outline_rounded)),
-                    ]),
-                  );
-                }));
+                                  );
+                                }
+                                if (hasBooking == 0) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text("u havent join this yet"),
+                                      content: Text("waiting for wat"),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text('Go Back'))
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Leave Event'),
+                                      content: const Text('Confirm?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context, 'Ok');
+                                            leave(curEvent, key);
+                                          },
+                                          child: const Text('Ok'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              color: Colors.red,
+                              icon: const Icon(
+                                  Icons.remove_circle_outline_rounded)),
+                        ]),
+                      );
+                    }));
           },
         );
       },
