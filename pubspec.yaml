@@ -125,6 +125,8 @@ flutter:
     - view-event-background.png
 
     - icon-calendar.png
+    - join-event.png
+    - leave-event.png
  
     
   #   - images/a_dot_burr.jpeg
