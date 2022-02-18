@@ -131,7 +131,6 @@ class _eventPageState extends State<eventPage> {
                                       ElevatedButton(
                                           onPressed: () {
                                             Navigator.pop(context, 'Ok');
-                                            join(curEvent, key);
                                           },
                                           child: Text('Go Back'))
                                     ],
@@ -164,13 +163,24 @@ class _eventPageState extends State<eventPage> {
                                               onPressed: () => Navigator.pop(context, 'Cancel'),
                                               child: const Text('Cancel'),
                                           ),
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context, 'Ok');
-                                                join(curEvent,key);
-                                              },
-                                              child: const Text('Ok'),
-                                          ),
+                                          // TextButton(
+                                          //     onPressed: () {
+                                          //       Navigator.pop(context, 'Ok');
+                                          //       join(curEvent,key);
+                                          //       showDialog(
+                                          //           context: context,
+                                          //           builder: (BuildContext context) {
+                                          //             return JoinedEventDialog(
+                                          //               bgDeco: DialogBoxDecoration
+                                          //                   .joinEventBg,
+                                          //               title: 'Joined Successfully!',
+                                          //               paragraph:
+                                          //               'Your fellow SportBuds can\'t wait to see you!',
+                                          //             );
+                                          //           });
+                                          //     },
+                                          //     child: const Text('Ok'),
+                                          // ),
                                       ],
                                   ),
                               );
@@ -180,62 +190,9 @@ class _eventPageState extends State<eventPage> {
                           icon: const Icon(
                             Icons.add_circle_rounded,
                           )),
-                      IconButton(
-                          onPressed: () async{
-                            int hasBooking = await booking.checkUser(uid, key);
-                            if (hasBooking==-1){
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text("Account Error!"),
-                                  content: Text("Please make sure you are logged in."),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('Go Back'))
-                                  ],
-                                ),
-                              );
-                            }
-                            else if (hasBooking==0){
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text("u havent join this yet"),
-                                  content: Text("waiting for wat"),
-                                  actions: [
-                                    ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('Go Back'))
-                                  ],
-                                ),
-                              );
-                            } else{
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('Leave Event'),
-                                  content: const Text('Confirm?'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context, 'Cancel'),
-                                      child: const Text('Cancel'),
-                                    ),
-                                  );
-                                }
-                              },
-                              color: Colors.green,
-                              icon: const Icon(
-                                Icons.add_circle_rounded,
-                              )),
                           IconButton(
                               onPressed: () async {
-                                int hasBooking =
-                                    await booking.checkUser(uid, key);
+                                int hasBooking = await booking.checkUser(uid, key);
                                 if (hasBooking == -1) {
                                   showDialog(
                                     context: context,
@@ -280,13 +237,24 @@ class _eventPageState extends State<eventPage> {
                                               Navigator.pop(context, 'Cancel'),
                                           child: const Text('Cancel'),
                                         ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context, 'Ok');
-                                            leave(curEvent, key);
-                                          },
-                                          child: const Text('Ok'),
-                                        ),
+                                        // TextButton(
+                                        //   onPressed: () {
+                                        //     Navigator.pop(context, 'Ok');
+                                        //     leave(curEvent, key);
+                                        //     showDialog(
+                                        //         context: context,
+                                        //         builder: (BuildContext context) {
+                                        //           return LeftEventDialog(
+                                        //             bgDeco: DialogBoxDecoration
+                                        //                 .leaveEventBg,
+                                        //             title: 'Left successfully',
+                                        //             paragraph:
+                                        //             'Sorry to see you go. Hope to sometime soon!',
+                                        //           );
+                                        //         });
+                                        //   },
+                                        //   child: const Text('Ok'),
+                                        // ),
                                       ],
                                     ),
                                   );

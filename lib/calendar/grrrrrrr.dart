@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/temp_event.dart';
 import 'package:my_app/events/create_event.dart';
+import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
@@ -28,9 +29,9 @@ class _GrrState extends State<Grr> {
   late bool loading;
   // late Map<DateTime, List<SportEvent>> grrMap;
   // late List<SportEvent> grrToday;
-  Map<DateTime, List<SportEvent>> kEvents = {};
+  Map<DateTime, List<RetrievedEvent>> kEvents = {};
 
-  late final ValueNotifier<List<SportEvent>> _selectedEvents;
+  late final ValueNotifier<List<RetrievedEvent>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.week;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -68,7 +69,7 @@ class _GrrState extends State<Grr> {
       _kEventSource = realEventSource
         ..addAll({DateTime.now(): realTodaySource});
 
-      kEvents = LinkedHashMap<DateTime, List<SportEvent>>(
+      kEvents = LinkedHashMap<DateTime, List<RetrievedEvent>>(
         equals: isSameDay,
         hashCode: getHashCode,
       )..addAll(_kEventSource);
@@ -85,7 +86,7 @@ class _GrrState extends State<Grr> {
     super.dispose();
   }
 
-  List<SportEvent> _getEventsForDay(DateTime day) {
+  List<RetrievedEvent> _getEventsForDay(DateTime day) {
     return kEvents[day] ?? [];
   }
 
@@ -111,7 +112,7 @@ class _GrrState extends State<Grr> {
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
             child: Column(
               children: [
-                TableCalendar<SportEvent>(
+                TableCalendar<RetrievedEvent>(
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
                   focusedDay: _focusedDay,
@@ -141,7 +142,7 @@ class _GrrState extends State<Grr> {
                 ),
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
-                  child: ValueListenableBuilder<List<SportEvent>>(
+                  child: ValueListenableBuilder<List<RetrievedEvent>>(
                     valueListenable: _selectedEvents,
                     builder: (context, value, _) {
                       return ListView.builder(

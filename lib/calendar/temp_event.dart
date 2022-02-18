@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/sportevent.dart';
 
 final repository = EventRepository();
-final Map<DateTime, List<SportEvent>> realEventSource = {};
-List<SportEvent> realTodaySource = [];
+final Map<DateTime, List<RetrievedEvent>> realEventSource = {};
+List<RetrievedEvent> realTodaySource = [];
 
 // List<DateTime> daysInRange(DateTime first, DateTime last) {
 //   final dayCount = last.difference(first).inDays + 1;
@@ -29,7 +30,7 @@ class EventDataFetcher {
     Timestamp timestamp2 = Timestamp.fromDate(nextDay);
 
     List res = [];
-    List<SportEvent> gamelist = [];
+    List<RetrievedEvent> gamelist = [];
     await repository.collection
         .where("placeId", isEqualTo: place)
         .where("start", isGreaterThanOrEqualTo: timestamp1)
@@ -43,9 +44,9 @@ class EventDataFetcher {
       DateTime _start = _startTS.toDate();
       Timestamp _endTS = event.get("end");
       DateTime _end = _endTS.toDate();
-      SportEvent ge = SportEvent(event.get("name"), _start, _end,
-          event.get("maxCap"), event.get("curCap"), event.get("placeId"));
-      gamelist.add(ge);
+      RetrievedEvent re = RetrievedEvent(event.get("name"), _start, _end,
+          event.get("maxCap"), event.get("curCap"), event.get("placeId"), event.id);
+      gamelist.add(re);
     }
 
     // print(
@@ -55,7 +56,7 @@ class EventDataFetcher {
 
   Future fetchAllEvent(DateTime start, DateTime end, String place) async {
     realEventSource.clear();
-    Map<DateTime, List<SportEvent>> grrMap = <DateTime, List<SportEvent>>{};
+    Map<DateTime, List<RetrievedEvent>> grrMap = <DateTime, List<RetrievedEvent>>{};
     final dayCount = end.difference(start).inDays;
 
     DateTime curDay = start;
@@ -63,7 +64,7 @@ class EventDataFetcher {
 
     for (int i = 0; i <= dayCount; i++) {
       curDay = curDay.add(const Duration(days: 1));
-      List<SportEvent> dayEvents = await fetchDayEvent(curDay, place);
+      List<RetrievedEvent> dayEvents = await fetchDayEvent(curDay, place);
       grrMap[curDay] = dayEvents;
       realEventSource[curDay] = dayEvents;
     }

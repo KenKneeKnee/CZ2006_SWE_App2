@@ -25,4 +25,5 @@ class EventRepository {
   void deleteEvent(SportEvent e, String key) async {
     await collection.doc(key).delete();
   }
+
 }
