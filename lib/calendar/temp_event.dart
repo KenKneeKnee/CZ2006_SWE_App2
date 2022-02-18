@@ -48,8 +48,8 @@ class EventDataFetcher {
       gamelist.add(ge);
     }
 
-    print(
-        'fetchDayEvent: fetched ${gamelist.length} events for ${place} from DB! C:');
+    // print(
+    //     'fetchDayEvent: fetched ${gamelist.length} events for ${place} from DB! C:');
     return gamelist;
   }
 

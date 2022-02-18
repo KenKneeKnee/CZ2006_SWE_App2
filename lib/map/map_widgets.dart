@@ -136,28 +136,36 @@ class OkButton extends StatelessWidget {
 }
 
 class SuccessDialog extends StatelessWidget {
-  const SuccessDialog({Key? key}) : super(key: key);
+  SuccessDialog(
+      {Key? key,
+      required this.bgDeco,
+      required this.paragraph,
+      required this.title})
+      : super(key: key);
+  String paragraph;
+  String title;
+  BoxDecoration bgDeco;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
         content: Container(
           height: 350,
-          decoration: _successBackground,
+          decoration: bgDeco,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-                const Text(
-                  'Event Created!',
-                  style: _titleStyle,
+                Text(
+                  title,
+                  style: dialogTitleStyle,
                 ),
                 const SizedBox(height: 15),
-                const Text(
-                  'Now all that\'s left is getting fellow SportBuddies to join your event!',
-                  style: _paraStyleBold,
+                Text(
+                  paragraph,
+                  style: dialogParaStyleBold,
                 ),
               ],
             ),
@@ -177,7 +185,7 @@ class FailDialog extends StatelessWidget {
     return AlertDialog(
         content: Container(
           height: 240,
-          decoration: _failBackground,
+          decoration: DialogBoxDecoration.createEventFailBg,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -185,12 +193,12 @@ class FailDialog extends StatelessWidget {
               SizedBox(height: MediaQuery.of(context).size.height * 0.2),
               const Text(
                 'Error!',
-                style: _titleStyle,
+                style: dialogTitleStyle,
               ),
               const SizedBox(height: 15),
               const Text(
                 'Something went wrong. I\'m sorry :(',
-                style: _paraStyleBold,
+                style: dialogParaStyleBold,
               ),
             ],
           ),
@@ -201,26 +209,29 @@ class FailDialog extends StatelessWidget {
   }
 }
 
-const BoxDecoration _successBackground = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('create-event-success.png'),
-    fit: BoxFit.fitWidth,
-    alignment: Alignment.topCenter,
-  ),
-);
-const BoxDecoration _failBackground = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('create-event-fail.png'),
-    fit: BoxFit.fitWidth,
-    alignment: Alignment.topCenter,
-  ),
-);
+class DialogBoxDecoration {
+  static BoxDecoration createEventSuccessBg = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('create-event-success.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
+    ),
+  );
+
+  static BoxDecoration createEventFailBg = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('create-event-fail.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
+    ),
+  );
+}
 
 //Text Styles
-const TextStyle _titleStyle = TextStyle(
+const TextStyle dialogTitleStyle = TextStyle(
     fontWeight: FontWeight.bold, fontSize: 45, color: Color(0xffE3663E));
 
-const TextStyle _paraStyleBold = TextStyle(
+const TextStyle dialogParaStyleBold = TextStyle(
   color: Colors.black87,
   fontSize: 15,
   fontWeight: FontWeight.bold,

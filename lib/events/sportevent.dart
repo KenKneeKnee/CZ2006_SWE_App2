@@ -12,6 +12,9 @@ class SportEvent {
   int curCap;
   final String placeId;
 
+  /// Description of what will be in the event
+  // final String activity;
+
   SportEvent(
       this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId);
 

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/temp_event.dart';
 import 'package:my_app/events/create_event.dart';
+import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
@@ -73,9 +74,9 @@ class _GrrState extends State<Grr> {
       )..addAll(_kEventSource);
     });
 
-    print('real event source has ${realEventSource.entries}');
-    print('real today has ${realTodaySource}');
-    print('kEvents has ${kEvents.entries}');
+    // print('real event source has ${realEventSource.entries}');
+    // print('real today has ${realTodaySource}');
+    // print('kEvents has ${kEvents.entries}');
   }
 
   @override
@@ -85,8 +86,6 @@ class _GrrState extends State<Grr> {
   }
 
   List<SportEvent> _getEventsForDay(DateTime day) {
-    // Implementation example
-
     return kEvents[day] ?? [];
   }
 
@@ -179,22 +178,30 @@ class _GrrState extends State<Grr> {
                                     ),
                                   ),
                                 ),
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                            Icons.add_circle_outline_rounded),
-                                        color: Colors.red),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                          Icons.remove_circle_outline_rounded),
-                                      color: Colors.green,
-                                    ),
-                                  ],
-                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          print(
+                                              'preparing dialog for place ${value[index]} || ${widget.sportsFacility.placeName}');
+                                          return Dialog(
+                                            backgroundColor: Color(0xffE5E8E8),
+                                            child: ViewEventPopUp(
+                                              placeIndex: index,
+                                              event: value[index],
+                                              SportsFacil:
+                                                  widget.sportsFacility,
+                                            ),
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: Icon(Icons.arrow_right_alt_outlined),
+                                    color: Colors.black),
                               ],
                             ),
                           );
@@ -230,7 +237,13 @@ class _GrrState extends State<Grr> {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return SuccessDialog();
+                                      return SuccessDialog(
+                                        bgDeco: DialogBoxDecoration
+                                            .createEventSuccessBg,
+                                        title: 'Event Created!',
+                                        paragraph:
+                                            'Now all that\'s left is getting fellow SportBuddies to join your event!',
+                                      );
                                     })
                               }
                             else

@@ -121,6 +121,10 @@ flutter:
     - park-hover.png
     - stadium-hover.png
     - playground-hover.png
+
+    - view-event-background.png
+
+    - icon-calendar.png
  
     
   #   - images/a_dot_burr.jpeg
