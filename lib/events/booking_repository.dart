@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/sportevent.dart';
@@ -9,7 +7,7 @@ class BookingRepository {
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('bookings');
 
-  final EventRepository eventRepository= EventRepository();
+  final EventRepository eventRepository = EventRepository();
 
   // 2
   Stream<QuerySnapshot> getStream() {
@@ -57,9 +55,13 @@ class BookingRepository {
     });
   }
 
-  Future<int> checkUser (String uid, String key) async{
-    int res=0;
-    if (uid==null){
+  /// Checks the Bookings DB
+  /// Returns -1 if user is not logged in
+  /// Returns 0 if user is logged in but has not joined event
+  /// Returns 1 if user is logged in and has joined event already
+  Future<int> checkUser(String uid, String key) async {
+    int res = 0;
+    if (uid == null) {
       return -1;
     }
     await collection
@@ -67,21 +69,26 @@ class BookingRepository {
         .where("eventId", isEqualTo: key)
         .get()
         .then((value) {
-          res = value.docs.length;
-      });
+      res = value.docs.length;
+    });
     return res;
   }
 
-  void retrieveUsers(String key) async{
+  void retrieveUsers(String key) async {
     collection.where("eventId", isEqualTo: key).get();
   }
 
-   Future<QuerySnapshot> retrieveActiveEvents(String uid) async{
-    return collection.where("active", isEqualTo: true).where('userId', isEqualTo: uid).get();
+  Future<QuerySnapshot> retrieveActiveEvents(String uid) async {
+    return collection
+        .where("active", isEqualTo: true)
+        .where('userId', isEqualTo: uid)
+        .get();
   }
 
-  Future<QuerySnapshot> retrievePastEvents(String uid) async{
-    return collection.where("active", isEqualTo: false).where('userId', isEqualTo: uid).get();
+  Future<QuerySnapshot> retrievePastEvents(String uid) async {
+    return collection
+        .where("active", isEqualTo: false)
+        .where('userId', isEqualTo: uid)
+        .get();
   }
-
 }
