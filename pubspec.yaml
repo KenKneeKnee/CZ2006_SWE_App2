@@ -131,6 +131,9 @@ flutter:
     - icon-calendar.png
     - join-event.png
     - leave-event.png
+    - not-logged-in.png
+    - full-event.png
+    - clashing-schedules.png
  
     
   #   - images/a_dot_burr.jpeg

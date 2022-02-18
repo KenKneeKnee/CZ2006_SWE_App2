@@ -129,7 +129,7 @@ class OkButton extends StatelessWidget {
       borderColor: const Color(0xffD56F2F),
       buttonText: "Got it!",
       onClick: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
+        Navigator.of(context).popUntil((route) => route.isFirst);
       },
     );
   }
@@ -149,6 +149,7 @@ class SuccessDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        contentPadding: EdgeInsets.zero,
         content: Container(
           height: 350,
           decoration: bgDeco,
@@ -194,6 +195,7 @@ class FailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        contentPadding: EdgeInsets.zero,
         content: Container(
           height: 240,
           decoration: bgDeco,
@@ -222,7 +224,7 @@ class FailDialog extends StatelessWidget {
 }
 
 class DialogBoxDecoration {
-  static BoxDecoration createEventSuccessBg = BoxDecoration(
+  static const BoxDecoration createEventSuccessBg = BoxDecoration(
     image: DecorationImage(
       image: AssetImage('create-event-success.png'),
       fit: BoxFit.fitWidth,
@@ -230,7 +232,7 @@ class DialogBoxDecoration {
     ),
   );
 
-  static BoxDecoration createEventFailBg = BoxDecoration(
+  static const BoxDecoration createEventFailBg = BoxDecoration(
     image: DecorationImage(
       image: AssetImage('create-event-fail.png'),
       fit: BoxFit.fitWidth,
@@ -240,7 +242,7 @@ class DialogBoxDecoration {
 
   static BoxDecoration joinEventBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
-    image: DecorationImage(
+    image: const DecorationImage(
       image: AssetImage('join-event.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
@@ -248,8 +250,34 @@ class DialogBoxDecoration {
   );
   static BoxDecoration leaveEventBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
-    image: DecorationImage(
+    image: const DecorationImage(
       image: AssetImage('leave-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static BoxDecoration fullEventBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('full-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static BoxDecoration notLoggedInBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('not-logged-in.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+  static BoxDecoration clashingSchedBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('clashing-schedules.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),

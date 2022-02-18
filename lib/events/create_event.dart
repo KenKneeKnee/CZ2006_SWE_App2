@@ -106,19 +106,18 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
                           if (isValid != null && isValid) {
                             formKey.currentState?.save();
-                            SportEvent newEvent = new SportEvent(
-                                title,
-                                startTime!,
-                                endTime!,
-                                maxCap,
-                                1,
-                                widget.placeId);
+                            SportEvent newEvent = SportEvent(
+                              title,
+                              startTime!,
+                              endTime!,
+                              maxCap,
+                              1,
+                              widget.placeId, //temporary id
+                            );
 
                             repository.addEvent(newEvent);
-                            print(newEvent);
+
                             Navigator.pop(context, true);
-                            // Navigator.of(context, rootNavigator: true)
-                            //     .pop(); //close dialog
                           } else {
                             Navigator.pop(context, false);
                           }

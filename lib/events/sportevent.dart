@@ -60,11 +60,10 @@ SportEvent _EventFromJson(Map<String, dynamic> json) {
 
 // 2
 Map<String, dynamic> _EventToJson(SportEvent instance) => <String, dynamic>{
-      'name': instance.name,
-      //'id': instance.id,
-      'start': instance.start,
-      'end': instance.end,
-      'maxCap': instance.maxCap,
-      'curCap': instance.curCap,
-      'placeId': instance.placeId
-    };
+  'name': instance.name,
+  'start': instance.start,
+  'end': instance.end,
+  'maxCap': instance.maxCap,
+  'curCap': instance.curCap,
+  'placeId': instance.placeId,
+};
