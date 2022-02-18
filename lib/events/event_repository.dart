@@ -6,6 +6,7 @@ class EventRepository {
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('events');
   // 2
+
   Stream<QuerySnapshot> getStream() {
     return collection.snapshots();
   }

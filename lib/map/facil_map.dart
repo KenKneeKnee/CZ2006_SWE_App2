@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:my_app/calendar/calendar.dart';
+import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
@@ -164,61 +164,25 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
 }
 
 class MapMarkerInfoSheet extends StatelessWidget {
-  const MapMarkerInfoSheet(
-      {Key? key, required this.SportsFacil, required this.index})
+  MapMarkerInfoSheet({Key? key, required this.SportsFacil, required this.index})
       : super(key: key);
   final SportsFacility SportsFacil;
   final int index;
+  late String placeId = index.toString();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
               SportsFacil.addressDesc, SportsFacil.hoverImgPath),
-          EventCalendar(),
-          BouncingButton(
-              bgColor: Color(0xffE96B46),
-              borderColor: Color(0xffE96B46),
-              buttonText: "Create Event",
-              textColor: Color(0xffffffff),
-              onClick: () {
-                String _placeId = index.toString();
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Dialog(
-                      backgroundColor: Color(0xffE5E8E8),
-                      child: CreateEventForm(
-                          date: DateTime.now(),
-                          placeId: _placeId,
-                          placeDetails: SportsFacil.addressDesc),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(20.0))),
-                    );
-                  },
-                ).then((value) => {
-                      if (value)
-                        {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return SuccessDialog();
-                              })
-                        }
-                      else
-                        {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return FailDialog();
-                              })
-                        }
-                    });
-              })
+          Grr(
+            placeId: placeId,
+            sportsFacility: SportsFacil,
+          ),
         ],
       ),
     );
