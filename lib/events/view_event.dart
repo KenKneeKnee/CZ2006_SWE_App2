@@ -53,6 +53,9 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
   @override
   Widget build(BuildContext context) {
     SportEvent curEvent = widget.event;
+    SportsFacility facility = widget.SportsFacil;
+    String _imagePath = _FindBackgroundImage(facility.facilityType);
+
     return StreamBuilder<QuerySnapshot>(
         stream: booking.getStream(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot1) {
@@ -70,8 +73,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                 return Card(
                   child: Stack(
                     children: [
-                      RoundedBackgroundImage(
-                          imagePath: 'view-event-background.png'),
+                      RoundedBackgroundImage(imagePath: _imagePath),
                       Container(
                         decoration: baseContainer,
                         margin: EdgeInsets.fromLTRB(15, 60, 15, 0),
@@ -243,4 +245,25 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               });
         });
   }
+}
+
+/// Find Marker image path according to the facility Type
+String _FindBackgroundImage(String facilityType) {
+  if (facilityType.contains("Gym")) {
+    return ('view-event-gym.png');
+  }
+  if (facilityType.contains("wim")) {
+    return ('view-event-swimming.png');
+  }
+  if (facilityType.contains("ennis")) {
+    return ('view-event-tennis.png');
+  }
+  if (facilityType.contains('all')) {
+    return ('view-event-basketball.png');
+  }
+  if (facilityType.contains("tadium")) {
+    return ('stadium-hover.png');
+  }
+
+  return ('view-event-soccer.png');
 }
