@@ -73,11 +73,8 @@ class _eventPageState extends State<eventPage> {
           QuerySnapshot ss = await booking.retrieveActiveEvents(uid); // current bookings for this user
           for (DocumentSnapshot doc in ss.docs) {
             String eid = await doc.get("eventId");
-            print(uid);
-            print(eid);
             DocumentReference docref = repository.collection.doc(eid);
             DocumentSnapshot docsnap = await docref.get();
-            print(docsnap.data());
             Timestamp activestart = await docsnap.get('start');
             Timestamp activeend = await docsnap.get('end');
             if ((eventStart.compareTo(activeend)<=0) || (eventEnd.compareTo(activestart))>=0) {
