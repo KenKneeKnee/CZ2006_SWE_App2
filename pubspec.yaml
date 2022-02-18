@@ -122,7 +122,11 @@ flutter:
     - stadium-hover.png
     - playground-hover.png
 
-    - view-event-background.png
+    - view-event-basketball.png
+    - view-event-soccer.png
+    - view-event-gym.png
+    - view-event-tennis.png
+    - view-event-swimming.png
 
     - icon-calendar.png
     - join-event.png
