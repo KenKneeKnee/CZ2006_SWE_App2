@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
+import 'package:my_app/user_profile/screens/friend_profile_page.dart';
+import 'package:my_app/user_profile/screens/profile_page.dart';
 
 class Friend_Page extends StatefulWidget {
   final List<dynamic> friends;
@@ -92,7 +95,21 @@ class _FriendPageState extends State<Friend_Page> {
                                 style: const TextStyle(
                                     fontSize: 17, color: Colors.grey),
                               ),
-                              SizedBox(
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              FloatingActionButton.extended(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          //change to test pages
+                                          builder: (context) =>
+                                              FriendProfilePage(u)),
+                                    );
+                                  },
+                                  label: const Text('Visit'),
+                                  backgroundColor: Colors.orange),
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(

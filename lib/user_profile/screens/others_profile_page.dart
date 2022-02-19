@@ -10,12 +10,11 @@ import '../utils/appbar_widget.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_display_widget.dart';
 import 'package:my_app/user_profile/utils/other_profile_widget.dart';
+import 'package:my_app/user_profile/screens/friend_page.dart' as f;
 
 class OtherProfilePage extends StatefulWidget {
-  final User user;
-
-  const OtherProfilePage({required this.user});
-
+  final UserData u;
+  OtherProfilePage({Key? key, required this.u}) : super(key: key);
   @override
   _OtherProfilePageState createState() => _OtherProfilePageState();
 }
@@ -24,13 +23,12 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
-  late User _currentUser;
+  //change to user data. dont pass in User
 
   final UserDbManager repository = UserDbManager();
 
   @override
   void initState() {
-    _currentUser = widget.user;
     super.initState();
   }
 
