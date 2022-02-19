@@ -8,6 +8,8 @@ import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
 import 'package:my_app/user_profile/screens/profile_page.dart';
 
+import 'others_profile_page.dart';
+
 class Friend_Page extends StatefulWidget {
   final List<dynamic> friends;
   const Friend_Page({Key? key, required this.friends}) : super(key: key);
@@ -104,7 +106,9 @@ class _FriendPageState extends State<Friend_Page> {
                                       MaterialPageRoute(
                                           //change to test pages
                                           builder: (context) =>
-                                              FriendProfilePage(u)),
+                                              OtherProfilePage(
+                                                u: u,
+                                              )),
                                     );
                                   },
                                   label: const Text('Visit'),

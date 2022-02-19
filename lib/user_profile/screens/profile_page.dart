@@ -56,33 +56,35 @@ class _ProfilePageState extends State<ProfilePage> {
         }
 
         return Container(
+            decoration: _background,
             child: Builder(
-          builder: (context) => Scaffold(
-            appBar: buildAppBar(context),
-            body: ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                ProfileWidget(
-                  imagePath:
-                      "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU=",
-                  onClicked: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => EditProfilePage()),
-                    );
-                  },
+              builder: (context) => Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: buildAppBar(context),
+                body: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                    ProfileWidget(
+                      imagePath:
+                          "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU=",
+                      onClicked: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => EditProfilePage()),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    buildName(u),
+                    const SizedBox(height: 24),
+                    FriendsWidget(u.friends, u.friendrequests, u.points),
+                    const SizedBox(height: 48),
+                    buildAbout(u),
+                  ],
                 ),
-                const SizedBox(height: 24),
-                buildName(u),
-                const SizedBox(height: 24),
-                FriendsWidget(u.friends, u.friendrequests, u.points),
-                const SizedBox(height: 48),
-                buildAbout(u),
-              ],
-            ),
-          ),
-        ));
+              ),
+            ));
       },
     );
   }
@@ -119,6 +121,13 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       );
 }
+
+const BoxDecoration _background = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('background.png'),
+    fit: BoxFit.fitHeight,
+  ),
+);
 
 //     return Scaffold(
 //       appBar: AppBar(
