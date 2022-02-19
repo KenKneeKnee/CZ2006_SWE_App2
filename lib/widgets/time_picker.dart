@@ -24,7 +24,9 @@ class _TimePickerState extends State<TimePicker> {
 
   @override
   void initState() {
-    widget.selectedTime = DateTime.now();
+    DateTime sDate = widget.selectedDate;
+    widget.selectedTime = DateTime(sDate.year, sDate.month,
+        sDate.day, DateTime.now().hour, DateTime.now().minute);
     if (widget.initialise) {
       String formattedTime = DateFormat('HH:mm').format(DateTime.now());
       timeinput.text = formattedTime; //set the initial value of text field
