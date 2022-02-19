@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/user_profile/screens/others_profile_page.dart';
 
 class FriendsActionWidget extends StatelessWidget {
   FriendsActionWidget();
@@ -32,46 +34,33 @@ class FriendsActionWidget extends StatelessWidget {
         child: VerticalDivider(),
       );
   Widget _buildReportDialog(BuildContext context) {
-    return AlertDialog(
-      title: const Text('This wanker has been reported'),
-      backgroundColor: Colors.orange,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const <Widget>[
-          Text(
-              "We will review your report. Thank you for making the community safe"),
-        ],
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Close'),
-        ),
-      ],
-    );
+    return UserProfileDialog(bgDeco: DialogBoxDecoration.userReportedBg);
   }
 
   Widget _buildRequestDialog(BuildContext context) {
+    return UserProfileDialog(bgDeco: DialogBoxDecoration.friendAddedBg);
+  }
+}
+
+class UserProfileDialog extends StatelessWidget {
+  UserProfileDialog({
+    Key? key,
+    required this.bgDeco,
+  }) : super(key: key);
+  // String paragraph;
+  // String title;
+  BoxDecoration bgDeco;
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.orange,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const <Widget>[
-          Text("Friend request sent to this monkey"),
-        ],
+      contentPadding: EdgeInsets.zero,
+      content: Container(
+        height: 400,
+        width: 400,
+        decoration: bgDeco,
       ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Close'),
-        ),
-      ],
+      actions: [],
     );
   }
 }

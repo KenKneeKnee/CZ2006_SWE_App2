@@ -26,8 +26,6 @@ class _FriendPageState extends State<Friend_Page> {
   @override
   void initState() {
     super.initState();
-    print('received a list ${widget.friends.length}');
-    print('first friend is ${widget.friends[0]}');
     controller.addListener(() {
       double value = controller.offset / 119;
 
@@ -53,7 +51,7 @@ class _FriendPageState extends State<Friend_Page> {
 
           List DocList = snapshot.data!.docs;
 
-          print('initial list : ${listfriends.length}');
+          listfriends.clear();
           for (String userid in friendData) {
             for (DocumentSnapshot doc in DocList) {
               if (doc["userid"] == userid) {
@@ -64,9 +62,11 @@ class _FriendPageState extends State<Friend_Page> {
           }
           print(listfriends.length);
 
+          friendbuttons.clear();
+
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
-                height: size.height * 0.5,
+                height: size.height * 0.3,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -127,7 +127,6 @@ class _FriendPageState extends State<Friend_Page> {
                           //)
                         ]))));
           }
-          print('friend button list : ${friendbuttons.length}');
 
           return SafeArea(
               child: Scaffold(
@@ -135,22 +134,14 @@ class _FriendPageState extends State<Friend_Page> {
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Colors.white,
-                    leading: Icon(
-                      Icons.menu,
-                      color: Colors.black,
-                    ),
+                    leading: BackButton(
+                        color: Colors.black,
+                        onPressed: () => Navigator.of(context).pop()),
                     actions: <Widget>[
-                      Text("HI",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold)),
                       IconButton(
                         icon: Icon(Icons.search, color: Colors.black),
                         onPressed: () {},
                       ),
-                      IconButton(
-                        icon: Icon(Icons.person, color: Colors.black),
-                        onPressed: () {},
-                      )
                     ],
                   ),
                   body: Container(
@@ -176,7 +167,7 @@ class _FriendPageState extends State<Friend_Page> {
                                 ..scale(scale, scale),
                               alignment: Alignment.bottomCenter,
                               child: Align(
-                                  heightFactor: 0.7,
+                                  heightFactor: 0.9,
                                   alignment: Alignment.topCenter,
                                   child: friendbuttons[index]),
                             ),

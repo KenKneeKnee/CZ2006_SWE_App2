@@ -14,20 +14,8 @@ AppBar buildAppBar(BuildContext context) {
     leading: BackButton(
         color: Colors.black, onPressed: () => Navigator.of(context).pop()),
     foregroundColor: Colors.black,
-    backgroundColor: Colors.orange,
+    backgroundColor: Color(0xffE3663E),
     elevation: 0,
-    actions: [
-      ThemeSwitcher(
-        builder: (context) => IconButton(
-          icon: Icon(icon),
-          onPressed: () {
-            final theme = isDarkMode ? MyThemes.lightTheme : MyThemes.darkTheme;
-
-            final switcher = ThemeSwitcher.of(context);
-            switcher.changeTheme(theme: theme);
-          },
-        ),
-      ),
-    ],
+    actions: [],
   );
 }
