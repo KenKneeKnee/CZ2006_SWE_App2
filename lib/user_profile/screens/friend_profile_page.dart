@@ -48,14 +48,14 @@ class FriendProfilePage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              "I like to play football, but i malay. Don't like malay then can get lost",
+              user.about,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
           ],
