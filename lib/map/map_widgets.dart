@@ -282,6 +282,23 @@ class DialogBoxDecoration {
       alignment: Alignment.bottomCenter,
     ),
   );
+
+  static BoxDecoration friendAddedBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('friend-added.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+  static BoxDecoration userReportedBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('user-reported.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
 }
 
 //Text Styles
