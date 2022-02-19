@@ -134,6 +134,9 @@ flutter:
     - not-logged-in.png
     - full-event.png
     - clashing-schedules.png
+
+    - friend-added.png
+    - user-reported.png
  
     
   #   - images/a_dot_burr.jpeg

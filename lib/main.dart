@@ -44,7 +44,7 @@ class SportBuds extends StatelessWidget {
         ),
       ),
       //For testing pages
-      home: FacilitiesMap(),
+      home: WelcomePage(),
     );
   }
 }
