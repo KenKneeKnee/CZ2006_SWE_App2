@@ -2,11 +2,14 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/utils/fire_auth.dart';
+import 'package:my_app/user_profile/screens/view_events_page.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
+import 'package:my_app/widgets/bouncing_button.dart';
 import '../utils/appbar_widget.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_widget.dart';
@@ -21,7 +24,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
   late User _currentUser;
@@ -32,6 +34,21 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     _currentUser = widget.user;
     super.initState();
+  }
+
+  logout() async {
+    setState(() {
+      _isSigningOut = true;
+    });
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      _isSigningOut = false;
+    });
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
   }
 
   @override
@@ -60,7 +77,19 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Builder(
               builder: (context) => Scaffold(
                 backgroundColor: Colors.transparent,
-                appBar: buildAppBar(context),
+                appBar: AppBar(
+                  title: const Text('Profile'),
+                  leading: _isSigningOut
+                      ? CircularProgressIndicator()
+                      : IconButton(
+                          icon: const Icon(Icons.logout),
+                          color: Colors.black,
+                          onPressed: logout),
+                  foregroundColor: Colors.black,
+                  backgroundColor: Color(0xffE3663E),
+                  elevation: 0,
+                  actions: [],
+                ),
                 body: ListView(
                   physics: BouncingScrollPhysics(),
                   children: [
@@ -80,6 +109,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     const SizedBox(height: 24),
                     FriendsWidget(u.friends, u.friendrequests, u.points),
                     const SizedBox(height: 48),
+                    BouncingButton(
+                        bgColor: const Color(0xffE3663E),
+                        borderColor: const Color(0xffE3663E),
+                        buttonText: "View Events",
+                        textColor: const Color(0xffffffff),
+                        onClick: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  //change to test pages
+                                  builder: (context) => bookingPage()),
+                            )),
                     buildAbout(u),
                   ],
                 ),
@@ -128,6 +167,10 @@ const BoxDecoration _background = BoxDecoration(
     fit: BoxFit.fitHeight,
   ),
 );
+
+
+
+
 
 //     return Scaffold(
 //       appBar: AppBar(

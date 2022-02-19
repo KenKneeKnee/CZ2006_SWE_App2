@@ -20,9 +20,6 @@ class OtherProfilePage extends StatefulWidget {
 }
 
 class _OtherProfilePageState extends State<OtherProfilePage> {
-  bool _isSendingVerification = false;
-  bool _isSigningOut = false;
-
   //change to user data. dont pass in User
 
   final UserDbManager repository = UserDbManager();
