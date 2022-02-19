@@ -12,9 +12,22 @@ import '../utils/friends_display_widget.dart';
 import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 
-class FriendProfilePage extends StatelessWidget {
-  UserData u;
-  FriendProfilePage(this.u, {Key? key}) : super(key: key);
+class FriendProfilePage extends StatefulWidget {
+  final UserData u;
+  FriendProfilePage({Key? key, required this.u}) : super(key: key);
+
+  @override
+  _FriendProfilePageState createState() => _FriendProfilePageState();
+}
+
+class _FriendProfilePageState extends State<FriendProfilePage> {
+  late UserData u;
+
+  @override
+  void initState() {
+    this.u = widget.u;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +63,14 @@ class FriendProfilePage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             Text(
-              "I like to play football, but i malay. Don't like malay then can get lost",
+              user.about,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
           ],
