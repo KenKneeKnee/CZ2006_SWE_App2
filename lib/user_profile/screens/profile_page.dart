@@ -119,6 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   //change to test pages
                                   builder: (context) => bookingPage()),
                             )),
+                    const SizedBox(height: 24),
                     buildAbout(u),
                   ],
                 ),
