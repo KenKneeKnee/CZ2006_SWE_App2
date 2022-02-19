@@ -137,7 +137,7 @@ class _FriendPageState extends State<Friend_Page> {
                   backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 0,
-                    backgroundColor: Colors.white,
+                    backgroundColor: Color(0xffE3663E),
                     leading: BackButton(
                         color: Colors.black,
                         onPressed: () => Navigator.of(context).pop()),
