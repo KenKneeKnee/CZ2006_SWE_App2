@@ -98,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 16),
             Text(
-              "I like to play football, dont add me if you are malay thank you",
+              user.about,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
           ],
