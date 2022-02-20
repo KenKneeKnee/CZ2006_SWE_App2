@@ -71,13 +71,13 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                     buttonText: 'Teach me',
                     textColor: Color(0xffffffff),
                     onClick: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) =>{} Onboarding(
-                      //             user: widget.user,
-                      //           )),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Onboarding(
+                                  user: widget.user,
+                                )),
+                      );
                     }),
                 SizedBox(height: 20),
                 BouncingButton(
@@ -86,13 +86,13 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                   buttonText: 'I already know how',
                   textColor: Color(0xffE3663E),
                   onClick: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => ProfilePage(
-                    //             user: widget.user,
-                    //           )),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProfilePage(
+                                user: widget.user,
+                              )),
+                    );
                   },
                 ),
               ],

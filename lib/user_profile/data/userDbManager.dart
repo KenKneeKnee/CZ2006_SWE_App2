@@ -12,6 +12,12 @@ class UserDbManager {
     return collection.snapshots();
   }
 
+  Future updateUser(UserData u, String key) async {
+    print('${u.about} ${u.username}');
+    await collection.doc(key).update(u.toJson());
+    print('aa');
+  }
+
   VisitUserProfile() {
     String? userid = FirebaseAuth.instance.currentUser?.email;
     return collection.doc(userid);

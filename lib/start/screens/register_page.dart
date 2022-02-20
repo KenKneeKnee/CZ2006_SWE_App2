@@ -150,14 +150,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                       password: _passwordTextController.text,
                                     );
 
-                                    await userdb.add(UserData(
-                                            _emailTextController.text,
-                                            _nameTextController.text,
-                                            0,
-                                            0,
-                                            List<dynamic>.empty(),
-                                            List<dynamic>.empty())
-                                        .toJson());
+                                    UserData newuser = new UserData(
+                                        _emailTextController.text,
+                                        _nameTextController.text,
+                                        0,
+                                        0,
+                                        List<dynamic>.empty(),
+                                        List<dynamic>.empty(),
+                                        "");
+
+                                    await userdb
+                                        .doc(_emailTextController.text)
+                                        .set(newuser
+                                            .toJson()); //adds new user and sets custom ID
 
                                     setState(() {
                                       _isProcessing = false;

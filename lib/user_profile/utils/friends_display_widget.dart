@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/user_profile/screens/friend_page.dart';
 
-class FriendsWidget extends StatelessWidget {
+class FriendsDisplayWidget extends StatelessWidget {
   List<dynamic> friends;
-  List<dynamic> friendrequests;
   int points;
 
-  FriendsWidget(this.friends, this.friendrequests, this.points);
+  FriendsDisplayWidget(this.friends, this.points);
 
   @override
   Widget build(BuildContext context) => Row(
@@ -14,25 +12,14 @@ class FriendsWidget extends StatelessWidget {
         children: <Widget>[
           buildButton(context, friends.length.toString(), 'Friends'),
           buildDivider(),
-          buildButton(
-              context, friendrequests.length.toString(), 'Friend Requests'),
-          buildDivider(),
           buildButton(context, points.toString(), 'Points')
         ],
-      );
-  Widget buildDivider() => Container(
-        height: 24,
-        child: VerticalDivider(),
       );
 
   Widget buildButton(BuildContext context, String value, String text) =>
       MaterialButton(
         padding: EdgeInsets.symmetric(vertical: 4),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => Friend_Page(friends: friends),
-          ));
-        },
+        onPressed: () {},
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -49,5 +36,9 @@ class FriendsWidget extends StatelessWidget {
             ),
           ],
         ),
+      );
+  Widget buildDivider() => Container(
+        height: 24,
+        child: VerticalDivider(),
       );
 }
