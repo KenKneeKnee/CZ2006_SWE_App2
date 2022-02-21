@@ -106,7 +106,7 @@ class _FriendPageState extends State<Friend_Page> {
                                       MaterialPageRoute(
                                           //change to test pages
                                           builder: (context) =>
-                                              FriendProfilePage(u)),
+                                              FriendProfilePage(u: u)),
                                     );
                                   },
                                   label: const Text('Visit'),

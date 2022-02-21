@@ -12,36 +12,51 @@ import '../utils/friends_display_widget.dart';
 import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 
-class FriendProfilePage extends StatelessWidget {
-  UserData u;
-  FriendProfilePage(this.u);
+class FriendProfilePage extends StatefulWidget {
+  final UserData u;
+  FriendProfilePage({Key? key, required this.u}) : super(key: key);
+
+  @override
+  _FriendProfilePageState createState() => _FriendProfilePageState();
+}
+
+class _FriendProfilePageState extends State<FriendProfilePage> {
+  late UserData u;
+
+  @override
+  void initState() {
+    this.u = widget.u;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+        decoration: _background,
         child: Builder(
-      builder: (context) => Scaffold(
-        appBar: buildAppBar(context),
-        body: ListView(
-          physics: BouncingScrollPhysics(),
-          children: [
-            const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-            const OtherProfileWidget(
-              imagePath:
-                  "https://pbs.twimg.com/profile_images/1453101247217733636/qawViunA_400x400.jpg",
+          builder: (context) => Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: buildAppBar(context),
+            body: ListView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                const OtherProfileWidget(
+                  imagePath:
+                      "https://pbs.twimg.com/profile_images/1453101247217733636/qawViunA_400x400.jpg",
+                ),
+                const SizedBox(height: 24),
+                buildName(u),
+                const SizedBox(height: 24),
+                FriendsDisplayWidget(u.friends, u.points),
+                const SizedBox(height: 24),
+                FriendsActionWidget(),
+                const SizedBox(height: 48),
+                buildAbout(u),
+              ],
             ),
-            const SizedBox(height: 24),
-            buildName(u),
-            const SizedBox(height: 24),
-            FriendsDisplayWidget(u.friends, u.points),
-            const SizedBox(height: 24),
-            FriendsActionWidget(),
-            const SizedBox(height: 48),
-            buildAbout(u),
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 
   Widget buildAbout(UserData user) => Container(
@@ -76,3 +91,10 @@ class FriendProfilePage extends StatelessWidget {
         ],
       );
 }
+
+const BoxDecoration _background = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('background.png'),
+    fit: BoxFit.fitHeight,
+  ),
+);

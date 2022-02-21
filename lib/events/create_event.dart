@@ -25,16 +25,6 @@ class _CreateEventFormState extends State<CreateEventForm> {
   final formKey = GlobalKey<FormState>();
   final EventRepository repository = EventRepository();
 
-  TimePicker startPicker = TimePicker(
-    selectedDate: DateTime.now(),
-    labelText: "Start Time",
-    initialise: true,
-  );
-  TimePicker endPicker = TimePicker(
-    selectedDate: DateTime.now(),
-    labelText: "End Time",
-    initialise: false,
-  );
   String title = '';
   int maxCap = 0;
   DateTime? startTime;
@@ -42,6 +32,17 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   @override
   Widget build(BuildContext context) {
+    TimePicker startPicker = TimePicker(
+      selectedDate: widget.date,
+      labelText: "Start Time",
+      initialise: true,
+    );
+    TimePicker endPicker = TimePicker(
+      selectedDate: widget.date,
+      labelText: "End Time",
+      initialise: false,
+    );
+
     return StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -103,6 +104,8 @@ class _CreateEventFormState extends State<CreateEventForm> {
                             startTime = startPicker.selectedTime;
                             endTime = endPicker.selectedTime;
                           });
+                          print(startTime);
+                          print(endTime);
 
                           if (isValid != null && isValid) {
                             formKey.currentState?.save();
