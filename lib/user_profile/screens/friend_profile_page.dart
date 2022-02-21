@@ -14,7 +14,7 @@ import 'package:my_app/user_profile/screens/friend_page.dart';
 
 class FriendProfilePage extends StatelessWidget {
   UserData u;
-  FriendProfilePage(this.u, {Key? key}) : super(key: key);
+  FriendProfilePage(this.u);
 
   @override
   Widget build(BuildContext context) {
