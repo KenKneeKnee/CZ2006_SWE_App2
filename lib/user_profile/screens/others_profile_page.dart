@@ -1,32 +1,31 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/start/screens/login_page.dart';
-import 'package:my_app/start/utils/fire_auth.dart';
+import 'package:my_app/user_profile/utils/friend_action_widget.dart';
+import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
+import '../utils/appbar_widget.dart';
+import 'edit_profile_page.dart';
+import '../utils/friends_display_widget.dart';
+import 'package:my_app/user_profile/utils/other_profile_widget.dart';
+import 'package:my_app/user_profile/screens/friend_page.dart' as f;
 
 class OtherProfilePage extends StatefulWidget {
-  final User user;
-
-  const OtherProfilePage({required this.user});
-
+  final UserData u;
+  OtherProfilePage({Key? key, required this.u}) : super(key: key);
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _OtherProfilePageState createState() => _OtherProfilePageState();
 }
 
-class _ProfilePageState extends State<OtherProfilePage> {
-  bool _isSendingVerification = false;
-  bool _isSigningOut = false;
-
-  late User _searchedUser;
+class _OtherProfilePageState extends State<OtherProfilePage> {
+  //change to user data. dont pass in User
 
   final UserDbManager repository = UserDbManager();
 
   @override
   void initState() {
-    // need pass value
-    _searchedUser = widget.user;
     super.initState();
   }
 
@@ -46,38 +45,77 @@ class _ProfilePageState extends State<OtherProfilePage> {
         List DocList = snapshot.data!.docs;
 
         for (DocumentSnapshot doc in DocList) {
-          if (doc['userid'] == _searchedUser.email) {
+          if (doc['userid'] == FirebaseAuth.instance.currentUser?.email) {
             u = UserData.fromSnapshot(doc);
           }
         }
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("userid: " + u.userid.toString()),
-                Text("username: " + u.username.toString()),
-                Text("points: " + u.points.toString()),
-                Text("reports: " + u.reports.toString()),
-                Text("friends:" + u.friends.toString()),
-                Text("friendrequest:" + u.friendrequests.toString()),
-                FloatingActionButton(
-                    onPressed: () {
-                      u.points = u.points + 1;
-                    },
-                    backgroundColor: Colors.green,
-                    child: const Icon(Icons.add_circle_rounded)),
-                FloatingActionButton(
-                    onPressed: () {
-                      u.points = u.points - 1;
-                    },
-                    backgroundColor: Colors.red,
-                    child: const Icon(Icons.remove)),
-              ],
-            ),
-          ),
-        );
+
+        return Container(
+            decoration: _background,
+            child: Builder(
+              builder: (context) => Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: buildAppBar(context),
+                body: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                    const OtherProfileWidget(
+                      imagePath:
+                          "https://pbs.twimg.com/profile_images/1453101247217733636/qawViunA_400x400.jpg",
+                    ),
+                    const SizedBox(height: 24),
+                    buildName(u),
+                    const SizedBox(height: 24),
+                    FriendsDisplayWidget(u.friends, u.points),
+                    const SizedBox(height: 24),
+                    FriendsActionWidget(),
+                    const SizedBox(height: 48),
+                    buildAbout(u),
+                  ],
+                ),
+              ),
+            ));
       },
     );
   }
+
+  Widget buildAbout(UserData user) => Container(
+        padding: EdgeInsets.symmetric(horizontal: 48),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'About',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text(
+              "I like to play football, but i malay. Don't like malay then can get lost",
+              style: TextStyle(fontSize: 16, height: 1.4),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildName(UserData user) => Column(
+        children: [
+          Text(
+            user.username,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            user.userid.toString(),
+            style: TextStyle(color: Colors.grey),
+          )
+        ],
+      );
 }
+
+const BoxDecoration _background = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('background.png'),
+    fit: BoxFit.fitHeight,
+  ),
+);
