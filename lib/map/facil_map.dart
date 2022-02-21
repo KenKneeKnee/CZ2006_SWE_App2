@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -27,13 +29,16 @@ class FacilitiesMap extends StatefulWidget {
   _FacilitiesMapState createState() => _FacilitiesMapState();
 }
 
-class _FacilitiesMapState extends State<FacilitiesMap> {
+class _FacilitiesMapState extends State<FacilitiesMap>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
   late bool loading;
   late bool location;
   late LatLng userLocation;
   late List<SportsFacility> SportsFacilityList;
   late List<Marker> MarkerList;
+
+  late final AnimationController _animationController;
 
   @override
   void initState() {
@@ -42,11 +47,23 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
     location = false;
     getData();
     getUserLocation();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+    _animationController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   ///Fetches User's location
   Future getUserLocation() async {
     final _userLocationData = await checkLocation();
+    if (_userLocationData == null) {
+      print('location services not enabled!');
+    }
     setState(() {
       location = true;
     });
@@ -66,7 +83,7 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
     });
   }
 
-  /// Returns a list of Marker objects from a list of SportsFacility objects
+  /// Returns a list of Marker objects from  a list of SportsFacility objects
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -86,6 +103,7 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
                 zoom: 15,
                 center: _startingPoint,
               ),
+              children: [],
               nonRotatedLayers: [
                 TileLayerOptions(urlTemplate: MAPBOX_URL, additionalOptions: {
                   'accessToken': MAPBOX_TOKEN,
@@ -93,6 +111,17 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
                 }),
                 MarkerLayerOptions(
                   markers: MarkerList, //List<Marker>
+                ),
+                MarkerLayerOptions(
+                  markers: [
+                    Marker(
+                        point: _startingPoint,
+                        height: 60,
+                        width: 60,
+                        builder: (context) {
+                          return _myLocationMarker(_animationController);
+                        }),
+                  ], //List<Marker>
                 ),
               ],
             )
@@ -215,4 +244,43 @@ Future checkLocation() async {
 
   _locationData = await location.getLocation();
   return _locationData;
+}
+
+class _myLocationMarker extends AnimatedWidget {
+  const _myLocationMarker(
+    Animation<double> animation, {
+    Key? key,
+  }) : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    final value = (listenable as Animation<double>).value;
+    final newValue = lerpDouble(0.5, 1.0, value)!;
+    //lerpDouble interpolates between two numbers by an extrapolation t
+    final size = 50.0;
+
+    return Center(
+        child: Stack(
+      children: [
+        Center(
+          child: Container(
+            height: size * newValue,
+            width: size * newValue,
+            decoration: BoxDecoration(
+              color: Colors.amber.withOpacity(0.5),
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+        Center(
+          child: Container(
+            height: 20,
+            width: 20,
+            decoration:
+                BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
+          ),
+        ),
+      ],
+    ));
+  }
 }
