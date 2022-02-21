@@ -118,7 +118,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffE3663E),
         title: Text(
           "Edit Profile",
           style: TextStyle(
@@ -127,11 +127,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         actions: <Widget>[
           IconButton(
+            color: Colors.black,
             onPressed: () => Navigator.pop(context),
             icon: Icon(
               Icons.done,
               size: 30.0,
-              color: Colors.green,
+              color: Colors.black,
             ),
           ),
         ],
