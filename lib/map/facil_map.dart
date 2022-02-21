@@ -44,6 +44,7 @@ class _FacilitiesMapState extends State<FacilitiesMap> {
     getUserLocation();
   }
 
+  ///Fetches User's location
   Future getUserLocation() async {
     final _userLocationData = await checkLocation();
     setState(() {

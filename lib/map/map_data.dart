@@ -38,7 +38,7 @@ Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) async {
 /// each object consists of the location coordinates, name, facility type (playground/park) & address description
 ///
 ///
-Future fetchPlaygroundParks() async {
+Future fetchFromJsonAssets() async {
   String _path = 'assets/images/parks-geojson.json';
   List<SportsFacility> _markers = [];
   await parseJsonFromAssets(_path).then(
@@ -270,7 +270,7 @@ const res = [
   ]
 ];
 
-List<SportsFacility> fetchSportsFacils() {
+List<SportsFacility> fetchFromList() {
   List<SportsFacility> markers = <SportsFacility>[];
 
   for (int i = 0; i < res.length; i++) {
@@ -316,8 +316,8 @@ List<SportsFacility> fetchSportsFacils() {
 
 class SportsFacilDataSource {
   Future someFunction() async {
-    List<SportsFacility> someList = await fetchPlaygroundParks();
-    List<SportsFacility> anotherList = fetchSportsFacils();
+    List<SportsFacility> someList = await fetchFromJsonAssets();
+    List<SportsFacility> anotherList = fetchFromList();
     List<SportsFacility> finalList = someList + anotherList;
     return finalList;
   }
@@ -379,9 +379,7 @@ String _FindHoverImage(String facilityType) {
   if (facilityType.contains("Park")) {
     return ('park-hover.png');
   }
-  // if (facilityType.contains("Garden")) {
-  //   return ('garden-hover.png');
-  // }
+
   if (facilityType.contains("ield")) {
     return ('soccer-hover.png');
   }
@@ -410,9 +408,6 @@ String _FindMarkerImage(String facilityType) {
   }
   if (facilityType.contains("Park")) {
     return ('park-marker.png');
-  }
-  if (facilityType.contains("Garden")) {
-    return ('garden-marker.png');
   }
   if (facilityType.contains("ield")) {
     return ('soccer-marker.png');
