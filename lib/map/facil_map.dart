@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:lottie/lottie.dart' hide Marker;
 import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/create_event.dart';
+import 'package:my_app/loading_lotties/map_lottie.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/background.dart';
@@ -24,6 +27,9 @@ LatLng _startingPoint =
 
 class FacilitiesMap extends StatefulWidget {
   FacilitiesMap({Key? key}) : super(key: key);
+
+  //final User user;
+  //TODO: Put user's profile pic for the location marker icon
 
   @override
   _FacilitiesMapState createState() => _FacilitiesMapState();
@@ -76,8 +82,10 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
     final facildata = await sportsfacildatasource.someFunction();
+    await Future.delayed(const Duration(seconds: 5));
     setState(() {
       SportsFacilityList = facildata;
+
       loading = false;
       MarkerList = _buildMapMapMarkers();
     });
@@ -86,15 +94,6 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   /// Returns a list of Marker objects from  a list of SportsFacility objects
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          MaterialButton(
-            onPressed: () => null,
-            child: Image.asset('sportsbuds-logo.png'),
-          ),
-        ],
-        title: Text('Sports Facilities'),
-      ),
       body: (!loading & location)
           ? FlutterMap(
               options: MapOptions(
@@ -125,11 +124,21 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                 ),
               ],
             )
-          : Container(
-              color: Colors.white,
-              height: MediaQuery.of(context).size.height,
-              child:
-                  CircularProgressIndicator()), //TODO: I THINK SMTH IS NOT RIGHT HERE
+          : LottieMap(),
+      // : Container(
+      //     child: Center(
+      //       child: Stack(
+      //         children: [
+      //           Lottie.network(
+      //             'https://assets6.lottiefiles.com/packages/lf20_qjeqt7ez.json',
+      //             repeat: true,
+      //             reverse: true,
+      //             animate: true,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ), //TODO: I THINK SMTH IS NOT RIGHT HERE
     );
   }
 
