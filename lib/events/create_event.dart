@@ -175,13 +175,20 @@ class _CreateEventFormState extends State<CreateEventForm> {
         child: TextFormField(
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(
-            labelText: 'Max no. of players:',
+            labelText: 'Max no. of Buds attending: ',
             prefixIcon: Icon(Icons.person),
             border: OutlineInputBorder(),
           ),
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
           ],
+          validator: (value) {
+            if (value != null && int.parse(value) > 30) {
+              return 'Must be at most 30 due to COVID laws';
+            } else {
+              return null;
+            }
+          },
           onSaved: (value) => setState(() {
             if (value != null) {
               maxCap = int.parse(value);

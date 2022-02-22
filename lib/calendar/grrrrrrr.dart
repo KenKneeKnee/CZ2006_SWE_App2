@@ -245,9 +245,9 @@ class _GrrState extends State<Grr> {
                         if (res==2) {
                           showDialog(context: context,
                               builder: (BuildContext context) {
-                            return FailDialog(bgDeco: DialogBoxDecoration
-                                .createEventFailBg,
-                                paragraph: "We see that your end time stretches into the next day! "
+                            return OvernightDialog(bgDeco: DialogBoxDecoration
+                                .overnightEventBg,
+                                paragraph: "Your end time stretches into the next day! "
                                     "Please book two separate events for this day and the next.",
                                 title: "Planning an all nighter?");
                               }
