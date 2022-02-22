@@ -217,7 +217,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-//helper functions / UI to keep the main code short
+
+// UI to keep the main code short
 
 Container _FormFieldContainer(Widget containerChild) {
   return Container(
