@@ -174,6 +174,7 @@ class NotLoggedInButton extends StatelessWidget {
   }
 }
 
+
 BoxDecoration baseContainer = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(20),
@@ -488,6 +489,7 @@ class NotLoggedInDialog extends StatelessWidget {
     );
   }
 }
+
 
 //Text Styles
 const TextStyle _dialogTitleStyle = TextStyle(

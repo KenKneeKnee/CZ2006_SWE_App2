@@ -8,6 +8,7 @@ import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../events/event_widgets.dart';
 import '../events/sportevent.dart';
 
 int getHashCode(DateTime key) {
@@ -239,8 +240,20 @@ class _GrrState extends State<Grr> {
                                     BorderRadius.all(Radius.circular(20.0))),
                           );
                         },
-                      ).then((value) => {
-                            if (value)
+                      ).then((value) {
+                        int res = value;
+                        if (res==2) {
+                          showDialog(context: context,
+                              builder: (BuildContext context) {
+                            return OvernightDialog(bgDeco: DialogBoxDecoration
+                                .overnightEventBg,
+                                paragraph: "Your end time stretches into the next day! "
+                                    "Please book two separate events for this day and the next.",
+                                title: "Planning an all nighter?");
+                              }
+                          );
+                        }
+                        else if (res==1)
                               {
                                 showDialog(
                                     context: context,
@@ -252,7 +265,7 @@ class _GrrState extends State<Grr> {
                                         paragraph:
                                             'Now all that\'s left is getting fellow SportBuddies to join your event!',
                                       );
-                                    })
+                                    });
                               }
                             else
                               {
@@ -265,7 +278,7 @@ class _GrrState extends State<Grr> {
                                         title: 'Error',
                                         paragraph: "Something went wrong. :(",
                                       );
-                                    })
+                                    });
                               }
                           });
                     })
