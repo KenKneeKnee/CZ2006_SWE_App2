@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/map/facil_map.dart';
+import 'dart:math';
+import 'package:my_app/map/map_data.dart';
+
 
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
@@ -33,6 +39,28 @@ class _eventPageState extends State<eventPage> {
       repository.deleteEvent(e, key);
     } else {
       repository.updateEvent(e, key);
+    }
+  }
+
+  double calculateDistance(lat1, lon1, lat2, lon2){
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+            (1 - c((lon2 - lon1) * p))/2;
+    return 12742 * asin(sqrt(a)) * 1000;
+  }
+
+  Future<void> complete(SportEvent e, String key) async {
+    SportsFacility s;
+    LocationData userLocation = await checkLocation();
+    DateTime? curTime = DateTime.now();
+    // nid to run a for loop to check whether user is within radius of all facilities??
+    bool inRadius = calculateDistance(userLocation.latitude, userLocation.longitude, lat2 , lon2) < 100;
+    // set a threshold for time after event?
+    if(curTime.isAfter(e.end) & inRadius == true){
+      booking.completeBooking(key);
+      //functions to do once event completed
     }
   }
 
