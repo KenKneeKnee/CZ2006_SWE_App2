@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/retrievedevent.dart';
+import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -174,7 +175,6 @@ class NotLoggedInButton extends StatelessWidget {
   }
 }
 
-
 BoxDecoration baseContainer = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(20),
@@ -295,7 +295,10 @@ class ReturnToMapButton extends StatelessWidget {
       borderColor: const Color(0xffD56F2F),
       buttonText: "Return to Map",
       onClick: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FacilitiesMap()),
+        );
       },
     );
   }
@@ -489,7 +492,6 @@ class NotLoggedInDialog extends StatelessWidget {
     );
   }
 }
-
 
 //Text Styles
 const TextStyle _dialogTitleStyle = TextStyle(

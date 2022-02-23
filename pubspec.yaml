@@ -54,6 +54,7 @@ dependencies:
   flutter_spinkit: ^5.1.0
   animated_theme_switcher: ^2.0.6
   lottie: ^1.2.2
+  animated_text_kit: ^4.2.1
 
 
   #for CSV writing/reading
