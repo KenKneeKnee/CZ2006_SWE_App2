@@ -7,7 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:lottie/lottie.dart' hide Marker;
 import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/create_event.dart';
-import 'package:my_app/loading_lotties/map_lottie.dart';
+import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/background.dart';

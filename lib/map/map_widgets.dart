@@ -1,6 +1,7 @@
 //----------------------------------------------------
 // UI widgets for the alert dialog of event creation
 import 'package:flutter/material.dart';
+import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/hovering_image.dart';
 
@@ -129,7 +130,11 @@ class OkButton extends StatelessWidget {
       borderColor: const Color(0xffD56F2F),
       buttonText: "Got it!",
       onClick: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FacilitiesMap()), //return to map
+        );
       },
     );
   }
@@ -226,9 +231,9 @@ class FailDialog extends StatelessWidget {
 class OvernightDialog extends StatelessWidget {
   OvernightDialog(
       {Key? key,
-        required this.bgDeco,
-        required this.paragraph,
-        required this.title})
+      required this.bgDeco,
+      required this.paragraph,
+      required this.title})
       : super(key: key);
   String paragraph;
   String title;
@@ -252,7 +257,9 @@ class OvernightDialog extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 45, color: Color.fromRGBO(2, 45, 130, 1.0)),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 45,
+                        color: Color.fromRGBO(2, 45, 130, 1.0)),
                   ),
                   const SizedBox(height: 15),
                   Text(

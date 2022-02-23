@@ -6,6 +6,7 @@ import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
+import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
@@ -57,7 +58,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
             return const Text('Something went wrong');
           }
           if (!snapshot.hasData) {
-            return const CircularProgressIndicator();
+            return const LottieEvent();
           }
 
           return ListView(
@@ -107,16 +108,15 @@ class _CreateEventFormState extends State<CreateEventForm> {
                         textColor: Color(0xffffffff),
                         onClick: () async {
                           final isValid = formKey.currentState?.validate();
-                          bool overnight=false;
+                          bool overnight = false;
                           setState(() {
                             startTime = startPicker.selectedTime;
                             endTime = endPicker.selectedTime;
                             if (endTime!.isBefore(startTime!)) {
-                              overnight=true;
+                              overnight = true;
                               Navigator.pop(context, 2);
                             }
                           });
-
 
                           if (isValid != null && isValid && !overnight) {
                             formKey.currentState?.save();
@@ -129,7 +129,8 @@ class _CreateEventFormState extends State<CreateEventForm> {
                               widget.placeId, //temporary id
                             );
 
-                            DocumentReference addedDocRef = await repository.addEvent(newEvent);
+                            DocumentReference addedDocRef =
+                                await repository.addEvent(newEvent);
                             String newId = addedDocRef.id;
                             bookings.addBooking(uid, newId);
 
