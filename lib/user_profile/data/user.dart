@@ -8,9 +8,10 @@ class UserData {
   late final List<dynamic> friendrequests;
   late final int reports;
   late final String about;
+  late final String image;
 
   UserData(this.userid, this.username, this.points, this.reports, this.friends,
-      this.friendrequests, this.about);
+      this.friendrequests, this.about, this.image);
 
   // ignore: non_constant_identifier_names
   void set_points(int newpoints) {
@@ -37,7 +38,8 @@ UserData _UserFromJson(Map<String, dynamic> json) {
       json['reports'] as int,
       List.from(json['friends']) as List<dynamic>,
       List.from(json['friendrequests']) as List<dynamic>,
-      json['about'] as String);
+      json['about'] as String,
+      json['image'] as String);
 }
 
 // 2
@@ -50,7 +52,8 @@ Map<String, dynamic> _UserToJson(UserData instance) => <String, dynamic>{
       'reports': instance.reports,
       'friendrequests': instance.friendrequests,
       'friends': instance.friends,
-      'about': instance.about
+      'about': instance.about,
+      'image': instance.image
     };
 
 

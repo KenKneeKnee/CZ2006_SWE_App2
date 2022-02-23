@@ -150,6 +150,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                       password: _passwordTextController.text,
                                     );
 
+                                    List<String> pictures = [
+                                      "assets/images/1573252249390.jpeg",
+                                      "assets/images/celerystick.jpg"
+                                    ];
+
                                     UserData newuser = new UserData(
                                         _emailTextController.text,
                                         _nameTextController.text,
@@ -157,7 +162,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         0,
                                         List<dynamic>.empty(),
                                         List<dynamic>.empty(),
-                                        "");
+                                        "",
+                                        "assets/images/celerystick.jpg");
 
                                     await userdb
                                         .doc(_emailTextController.text)
