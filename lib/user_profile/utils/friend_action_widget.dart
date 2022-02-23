@@ -8,15 +8,11 @@ class FriendsActionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+        //can maybe change to remove friend
         FloatingActionButton.extended(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) =>
-                    _buildRequestDialog(context));
-          },
-          label: const Text('Add Friend'),
-          backgroundColor: Colors.green,
+          onPressed: () {},
+          label: const Text('This bud is your friend!'),
+          backgroundColor: Colors.lightGreen,
         ),
         const Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0)),
         FloatingActionButton.extended(
