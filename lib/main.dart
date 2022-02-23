@@ -2,7 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/calendar/grrrrrrr.dart';
+<<<<<<< HEAD
 import 'package:my_app/events/view_event.dart';
+=======
+import 'package:my_app/loading_lotties/map_lottie.dart';
+>>>>>>> master
 import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
@@ -25,30 +29,29 @@ class SportBuds extends StatelessWidget {
   Widget build(BuildContext context) {
     User? user;
     return MaterialApp(
-      title: 'Flutter Authentication',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.blue,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            textStyle: TextStyle(
-              fontSize: 24.0,
+        title: 'Flutter Authentication',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.blue,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              textStyle: TextStyle(
+                fontSize: 24.0,
+              ),
+              padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
             ),
-            padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+          ),
+          textTheme: TextTheme(
+            headline1: TextStyle(
+              fontSize: 46.0,
+              color: Colors.blue.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+            bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        textTheme: TextTheme(
-          headline1: TextStyle(
-            fontSize: 46.0,
-            color: Colors.blue.shade700,
-            fontWeight: FontWeight.w500,
-          ),
-          bodyText1: TextStyle(fontSize: 18.0),
-        ),
-      ),
-      //For testing pages
-      home: LoginPage(),
+        home: FacilitiesMap()
     );
   }
 }

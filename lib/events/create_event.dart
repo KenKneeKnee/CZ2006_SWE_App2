@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
+
+import '../map/map_widgets.dart';
 
 class CreateEventForm extends StatefulWidget {
   CreateEventForm(
@@ -24,17 +29,9 @@ class CreateEventForm extends StatefulWidget {
 class _CreateEventFormState extends State<CreateEventForm> {
   final formKey = GlobalKey<FormState>();
   final EventRepository repository = EventRepository();
+  final BookingRepository bookings = BookingRepository();
+  final uid = FirebaseAuth.instance.currentUser?.email as String;
 
-  TimePicker startPicker = TimePicker(
-    selectedDate: DateTime.now(),
-    labelText: "Start Time",
-    initialise: true,
-  );
-  TimePicker endPicker = TimePicker(
-    selectedDate: DateTime.now(),
-    labelText: "End Time",
-    initialise: false,
-  );
   String title = '';
   int maxCap = 0;
   DateTime? startTime;
@@ -42,6 +39,17 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
   @override
   Widget build(BuildContext context) {
+    TimePicker startPicker = TimePicker(
+      selectedDate: widget.date,
+      labelText: "Start Time",
+      initialise: true,
+    );
+    TimePicker endPicker = TimePicker(
+      selectedDate: widget.date,
+      labelText: "End Time",
+      initialise: false,
+    );
+
     return StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -97,14 +105,20 @@ class _CreateEventFormState extends State<CreateEventForm> {
                         borderColor: Color(0xffE96B46),
                         buttonText: "Submit",
                         textColor: Color(0xffffffff),
-                        onClick: () {
+                        onClick: () async {
                           final isValid = formKey.currentState?.validate();
+                          bool overnight=false;
                           setState(() {
                             startTime = startPicker.selectedTime;
                             endTime = endPicker.selectedTime;
+                            if (endTime!.isBefore(startTime!)) {
+                              overnight=true;
+                              Navigator.pop(context, 2);
+                            }
                           });
 
-                          if (isValid != null && isValid) {
+
+                          if (isValid != null && isValid && !overnight) {
                             formKey.currentState?.save();
                             SportEvent newEvent = SportEvent(
                               title,
@@ -115,11 +129,13 @@ class _CreateEventFormState extends State<CreateEventForm> {
                               widget.placeId, //temporary id
                             );
 
-                            repository.addEvent(newEvent);
+                            DocumentReference addedDocRef = await repository.addEvent(newEvent);
+                            String newId = addedDocRef.id;
+                            bookings.addBooking(uid, newId);
 
-                            Navigator.pop(context, true);
+                            Navigator.pop(context, 1);
                           } else {
-                            Navigator.pop(context, false);
+                            Navigator.pop(context, 0);
                           }
                         },
                       ),
@@ -159,13 +175,20 @@ class _CreateEventFormState extends State<CreateEventForm> {
         child: TextFormField(
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(
-            labelText: 'Max no. of players:',
+            labelText: 'Max no. of Buds attending: ',
             prefixIcon: Icon(Icons.person),
             border: OutlineInputBorder(),
           ),
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.digitsOnly
           ],
+          validator: (value) {
+            if (value != null && int.parse(value) > 30) {
+              return 'Must be at most 30 due to COVID laws';
+            } else {
+              return null;
+            }
+          },
           onSaved: (value) => setState(() {
             if (value != null) {
               maxCap = int.parse(value);

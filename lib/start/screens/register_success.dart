@@ -49,53 +49,55 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
         child: Stack(
           children: [
             _hoveringBackground(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                ),
-                Text(
-                  'Registration Complete!',
-                  style: myTitleStyle(),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'You’re almost there! Let us \nteach you the ropes and you’ll be playing in no time',
-                  style: myBodyStyle(),
-                ),
-                SizedBox(height: 50),
-                BouncingButton(
-                    bgColor: Color(0xffE3663E),
-                    borderColor: Color(0xffE3663E),
-                    buttonText: 'Teach me',
-                    textColor: Color(0xffffffff),
+            SizedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                  ),
+                  Text(
+                    'Registration Complete!',
+                    style: myTitleStyle(),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'You’re almost there! Let us \nteach you the ropes and you’ll be playing in no time',
+                    style: myBodyStyle(),
+                  ),
+                  SizedBox(height: 50),
+                  BouncingButton(
+                      bgColor: Color(0xffE3663E),
+                      borderColor: Color(0xffE3663E),
+                      buttonText: 'Teach me',
+                      textColor: Color(0xffffffff),
+                      onClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Onboarding(
+                                    user: widget.user,
+                                  )),
+                        );
+                      }),
+                  SizedBox(height: 20),
+                  BouncingButton(
+                    bgColor: Color(0xffffffff),
+                    borderColor: Color(0xffffffff),
+                    buttonText: 'I already know how',
+                    textColor: Color(0xffE3663E),
                     onClick: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Onboarding(
+                            builder: (context) => ProfilePage(
                                   user: widget.user,
                                 )),
                       );
-                    }),
-                SizedBox(height: 20),
-                BouncingButton(
-                  bgColor: Color(0xffffffff),
-                  borderColor: Color(0xffffffff),
-                  buttonText: 'I already know how',
-                  textColor: Color(0xffE3663E),
-                  onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage(
-                                user: widget.user,
-                              )),
-                    );
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -223,6 +223,53 @@ class FailDialog extends StatelessWidget {
   }
 }
 
+class OvernightDialog extends StatelessWidget {
+  OvernightDialog(
+      {Key? key,
+        required this.bgDeco,
+        required this.paragraph,
+        required this.title})
+      : super(key: key);
+  String paragraph;
+  String title;
+  BoxDecoration bgDeco;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Container(
+          height: 350,
+          decoration: bgDeco,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 45, color: Color.fromRGBO(2, 45, 130, 1.0)),
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    paragraph,
+                    style: dialogParaStyleBold,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          const OkButton(),
+        ]);
+  }
+}
+
 class DialogBoxDecoration {
   static const BoxDecoration createEventSuccessBg = BoxDecoration(
     image: DecorationImage(
@@ -297,6 +344,14 @@ class DialogBoxDecoration {
       image: AssetImage('user-reported.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static const BoxDecoration overnightEventBg = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('overnight-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
     ),
   );
 }
