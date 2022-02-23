@@ -259,12 +259,21 @@ class OvernightDialog extends StatelessWidget {
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 45,
-                        color: Color.fromRGBO(2, 45, 130, 1.0)),
+                        color: Colors.white,
+                        shadows: [Shadow(color: Colors.black87,
+                        offset: Offset(7.5, 7.5),
+                        blurRadius: 15)]),
                   ),
                   const SizedBox(height: 15),
                   Text(
                     paragraph,
-                    style: dialogParaStyleBold,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.white,
+                        shadows: [Shadow(color: Colors.black87,
+                            offset: Offset(2.5, 2.5),
+                            blurRadius: 15)]),
                   ),
                 ],
               ),
