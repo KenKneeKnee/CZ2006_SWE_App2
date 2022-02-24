@@ -29,7 +29,7 @@ class _FriendPageState extends State<Friend_Page> {
   void initState() {
     super.initState();
     controller.addListener(() {
-      double value = controller.offset / 119;
+      double value = controller.offset / 1000;
 
       setState(() {
         topContainer = value;
@@ -68,7 +68,7 @@ class _FriendPageState extends State<Friend_Page> {
 
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
-                height: size.height * 0.3,
+                height: size.height * 0.2,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -114,19 +114,12 @@ class _FriendPageState extends State<Friend_Page> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                u.points.toString(),
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              )
                             ],
                           ),
-                          // Image.asset(
-                          //   "assets/images/${post["image"]}",
-                          //   height: double.infinity,
-                          //)
+                          Image.asset(
+                            u.image,
+                            height: double.infinity,
+                          )
                         ]))));
           }
 
@@ -154,8 +147,8 @@ class _FriendPageState extends State<Friend_Page> {
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           double scale = 1.0;
-                          if (topContainer > 0.5) {
-                            scale = index + 0.5 - topContainer;
+                          if (topContainer > 0.1) {
+                            scale = index + 0.1 - topContainer;
                             if (scale < 0) {
                               scale = 0;
                             } else if (scale > 1) {
@@ -169,7 +162,7 @@ class _FriendPageState extends State<Friend_Page> {
                                 ..scale(scale, scale),
                               alignment: Alignment.bottomCenter,
                               child: Align(
-                                  heightFactor: 0.9,
+                                  heightFactor: 0.8,
                                   alignment: Alignment.topCenter,
                                   child: friendbuttons[index]),
                             ),
