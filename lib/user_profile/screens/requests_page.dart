@@ -23,7 +23,7 @@ class _FriendRequestState extends State<Request_Page> {
   final UserDbManager repository = UserDbManager();
   UserDbManager userdb = UserDbManager();
   late List<dynamic> friendData = widget.friendrequests;
-  final List<UserData> listfriends = [];
+  List<UserData> listfriends = [];
   ScrollController controller = ScrollController();
   final List<Widget> friendbuttons = [];
   double topContainer = 0;
@@ -33,7 +33,7 @@ class _FriendRequestState extends State<Request_Page> {
     getUser();
     super.initState();
     controller.addListener(() {
-      double value = controller.offset / 119;
+      double value = controller.offset / 1000;
 
       setState(() {
         topContainer = value;
@@ -75,7 +75,6 @@ class _FriendRequestState extends State<Request_Page> {
           }
 
           friendbuttons.clear();
-
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
                 height: size.height * 0.3,
@@ -125,12 +124,6 @@ class _FriendRequestState extends State<Request_Page> {
                                 buildDivider(),
                                 FloatingActionButton.extended(
                                     onPressed: () {
-                                      showDialog(
-                                          // needs some UI
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              _buildRequestAcceptedDialog(
-                                                  context));
                                       cu.friends.add(u.userid);
                                       u.friends.add(cu.userid);
                                       u.friendrequests
@@ -148,6 +141,18 @@ class _FriendRequestState extends State<Request_Page> {
                                       userdb.collection.doc(cu.userid).update({
                                         "friendrequests": cu.friendrequests
                                       });
+
+                                      Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => Request_Page(
+                                            friendrequests: cu.friendrequests),
+                                      ));
+                                      showDialog(
+                                          // needs some UI
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              _buildRequestAcceptedDialog(
+                                                  context));
                                     },
                                     label: const Text('Accept'),
                                     backgroundColor: Colors.greenAccent)
@@ -195,8 +200,8 @@ class _FriendRequestState extends State<Request_Page> {
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           double scale = 1.0;
-                          if (topContainer > 0.5) {
-                            scale = index + 0.5 - topContainer;
+                          if (topContainer > 0.1) {
+                            scale = index + 0.1 - topContainer;
                             if (scale < 0) {
                               scale = 0;
                             } else if (scale > 1) {
