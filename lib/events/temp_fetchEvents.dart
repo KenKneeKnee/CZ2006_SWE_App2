@@ -50,20 +50,7 @@ class _eventPageState extends State<eventPage> {
             (1 - c((lon2 - lon1) * p))/2;
     return 12742 * asin(sqrt(a)) * 1000;
   }
-
-  Future<void> complete(SportEvent e, String key) async {
-    LocationData userLocation = await checkLocation();
-    DateTime? curTime = DateTime.now();
-    // nid to run a for loop to check whether user is within radius of all facilities??
-    // update inRadius when user change location? keep a list of all facilities/joined events
-    // within radius of user for complete
-    bool inRadius = calculateDistance(userLocation.latitude, userLocation.longitude, lat2 , lon2) < 100;
-    // set a threshold for time after event?
-    if(curTime.isAfter(e.end) & inRadius == true){
-      booking.completeBooking(key);
-      //functions to do once event completed
-    }
-  }
+  
 
 
   @override
