@@ -52,7 +52,6 @@ class _eventPageState extends State<eventPage> {
   }
 
   Future<void> complete(SportEvent e, String key) async {
-    SportsFacility s;
     LocationData userLocation = await checkLocation();
     DateTime? curTime = DateTime.now();
     // nid to run a for loop to check whether user is within radius of all facilities??
