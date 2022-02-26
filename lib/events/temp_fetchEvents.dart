@@ -41,7 +41,6 @@ class _eventPageState extends State<eventPage> {
       repository.updateEvent(e, key);
     }
   }
-  
 
 
   @override
