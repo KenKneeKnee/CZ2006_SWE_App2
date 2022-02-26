@@ -44,16 +44,10 @@ class _eventPageState extends State<eventPage> {
                 userLocation.latitude, userLocation.longitude, lat2, lon2) <
             100;
         if (curTime.isAfter(e.start) & inRadius == true) {
+          //functions to do once event completed
           booking.completeBooking(key);
         }
       }
-      // nid to run a for loop to check whether user is within radius of all facilities??
-      // update inRadius when user change location? keep a list of all facilities/joined events
-      // within radius of user for complete
-
-      // set a threshold for time after event?
-
-      //functions to do once event completed
     }
   }
 
