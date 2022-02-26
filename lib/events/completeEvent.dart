@@ -51,7 +51,6 @@ class _eventPageState extends State<eventPage> {
 
     if(curTime.isAfter(e.end)){
       booking.deleteBooking(uid, key);
-      repository.deleteEvent(e, key);
     }
   }
 
