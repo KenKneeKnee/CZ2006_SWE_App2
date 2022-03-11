@@ -121,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onClick: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   //change to test pages
-                                  builder: (context) => bookingPage()),
+                                  builder: (context) => ViewEventPage()),
                             )),
                     const SizedBox(height: 24),
                     buildAbout(u),
