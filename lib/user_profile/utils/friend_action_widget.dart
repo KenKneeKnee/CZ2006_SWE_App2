@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/user_profile/screens/others_profile_page.dart';
+import 'package:my_app/user_profile/data/user.dart';
+import 'package:my_app/user_profile/data/userDbManager.dart';
 
 class FriendsActionWidget extends StatelessWidget {
-  FriendsActionWidget();
+  UserDbManager userdb = UserDbManager();
+  UserData u;
+  FriendsActionWidget(this.u);
 
   @override
   Widget build(BuildContext context) =>
@@ -17,6 +21,8 @@ class FriendsActionWidget extends StatelessWidget {
         const Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0)),
         FloatingActionButton.extended(
           onPressed: () {
+            u.reports = u.reports + 1;
+            userdb.collection.doc(u.userid).update({"reports": u.reports});
             showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildReportDialog(context));

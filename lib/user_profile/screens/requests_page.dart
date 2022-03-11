@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
-import 'package:my_app/user_profile/screens/profile_page.dart';
-
-import 'others_profile_page.dart';
 
 class Request_Page extends StatefulWidget {
   final List<dynamic> friendrequests;
