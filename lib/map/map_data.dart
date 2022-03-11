@@ -316,6 +316,7 @@ List<SportsFacility> fetchFromList() {
 
 class SportsFacilDataSource {
   Future someFunction() async {
+    print("trying to get some data..");
     List<SportsFacility> someList = await fetchFromJsonAssets();
     List<SportsFacility> anotherList = fetchFromList();
     List<SportsFacility> finalList = someList + anotherList;
