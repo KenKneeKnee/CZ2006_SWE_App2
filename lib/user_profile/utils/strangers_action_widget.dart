@@ -60,6 +60,7 @@ class _StrangersActionWidgetState extends State<StrangersActionWidget> {
         const Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0)),
         FloatingActionButton.extended(
           onPressed: () {
+            userdb.collection.doc(u.userid).update({"reports": u.reports + 1});
             showDialog(
                 context: context,
                 builder: (BuildContext context) => _buildReportDialog(context));
