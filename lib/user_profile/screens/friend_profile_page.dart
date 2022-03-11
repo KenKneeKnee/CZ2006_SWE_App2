@@ -94,7 +94,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('background.png'),
+    image: AssetImage('assets/images/background.png'),
     fit: BoxFit.fitHeight,
   ),
 );

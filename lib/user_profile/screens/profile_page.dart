@@ -164,7 +164,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('background.png'),
+    image: AssetImage('assets/images/background.png'),
     fit: BoxFit.fitHeight,
   ),
 );

@@ -115,7 +115,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('background.png'),
+    image: AssetImage('assets/images/background.png'),
     fit: BoxFit.fitHeight,
   ),
 );

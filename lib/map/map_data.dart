@@ -359,58 +359,58 @@ class SportsFacilDataSource {
 /// Find Marker image path according to the facility Type
 String _FindHoverImage(String facilityType) {
   if (facilityType.contains("Gym")) {
-    return ('gym-hover.png');
+    return ('assets/images/gym-hover.png');
   }
   if (facilityType.contains("wim")) {
-    return ('swimming-hover.png');
+    return ('assets/images/swimming-hover.png');
   }
   if (facilityType.contains("ennis")) {
-    return ('tennis-hover.png');
+    return ('assets/images/tennis-hover.png');
   }
   if (facilityType.contains('all')) {
-    return ('basketball-hover.png');
+    return ('assets/images/basketball-hover.png');
   }
   if (facilityType.contains("tadium")) {
-    return ('stadium-hover.png');
+    return ('assets/images/stadium-hover.png');
   }
   if (facilityType.contains("Playground")) {
-    return ('playground-hover.png');
+    return ('assets/images/playground-hover.png');
   }
   if (facilityType.contains("Park")) {
-    return ('park-hover.png');
+    return ('assets/images/park-hover.png');
   }
 
   if (facilityType.contains("ield")) {
-    return ('soccer-hover.png');
+    return ('assets/images/soccer-hover.png');
   }
-  return ('sports-hover.png');
+  return ('assets/images/sports-hover.png');
 }
 
 /// Find Marker image path according to the facility Type
 String _FindMarkerImage(String facilityType) {
   if (facilityType.contains("Gym")) {
-    return ('gym-marker.png');
+    return ('assets/images/gym-marker.png');
   }
   if (facilityType.contains("wim")) {
-    return ('swimming-marker.png');
+    return ('assets/images/swimming-marker.png');
   }
   if (facilityType.contains("ennis")) {
-    return ('tennis-marker.png');
+    return ('assets/images/tennis-marker.png');
   }
   if (facilityType.contains('all')) {
-    return ('basketball-marker.png');
+    return ('assets/images/basketball-marker.png');
   }
   if (facilityType.contains("tadium")) {
-    return ('stadium-marker.png');
+    return ('assets/images/stadium-marker.png');
   }
   if (facilityType.contains("Playground")) {
-    return ('playground-marker.png');
+    return ('assets/images/playground-marker.png');
   }
   if (facilityType.contains("Park")) {
-    return ('park-marker.png');
+    return ('assets/images/park-marker.png');
   }
   if (facilityType.contains("ield")) {
-    return ('soccer-marker.png');
+    return ('assets/images/soccer-marker.png');
   }
-  return ('sports-marker.png');
+  return ('assets/images/sports-marker.png');
 }

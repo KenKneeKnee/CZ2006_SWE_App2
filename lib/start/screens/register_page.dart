@@ -246,7 +246,7 @@ Container _FormFieldContainer(Widget containerChild) {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('register-background.png'),
+    image: AssetImage('assets/images/register-background.png'),
     fit: BoxFit.fitHeight,
   ),
 );
