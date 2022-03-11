@@ -29,7 +29,6 @@ class _FriendRequestState extends State<Request_Page> {
     super.initState();
     controller.addListener(() {
       double value = controller.offset / 1000;
-
       setState(() {
         topContainer = value;
       });
