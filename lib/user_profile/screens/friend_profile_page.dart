@@ -84,7 +84,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                   const SizedBox(height: 24),
                   FriendsDisplayWidget(u.friends, u.points),
                   const SizedBox(height: 24),
-                  FriendsActionWidget(),
+                  FriendsActionWidget(u),
                   const SizedBox(height: 48),
                   buildAbout(u),
                 ],
