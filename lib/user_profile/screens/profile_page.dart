@@ -73,8 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
               // needs some UI
               context: context,
               builder: (BuildContext context) => _buildWarningDialog(context));
-          u.reports = 0;
-          repository.collection.doc(u.userid).update({"reports": u.reports});
+          repository.collection.doc(u.userid).update({"reports": 0});
         }
 
         return Container(
