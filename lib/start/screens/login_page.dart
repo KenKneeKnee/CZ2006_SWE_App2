@@ -8,7 +8,6 @@ import 'package:my_app/user_profile/screens/profile_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import '../../user_profile/screens/profile_page.dart';
-import 'package:my_app/user_profile/screens/others_profile_page.dart';
 import '../utils/validator.dart';
 
 class LoginPage extends StatefulWidget {
