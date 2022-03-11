@@ -156,26 +156,34 @@ class _ViewEventPageState extends State<ViewEventPage> {
                                         ),
                                         FloatingActionButton.extended(
                                             onPressed: () {
-                                              //       showDialog(
-                                              // context: context,
-                                              // builder: (BuildContext context) {
-
-                                              //   return Dialog(
-                                              //     backgroundColor: Color(0xffE5E8E8),
-                                              //     child: ViewEventPopUp(
-                                              //       placeIndex: int.parse(currentevent.placeId),
-                                              //       event: RetrievedEvent(
-
-                                              //       ),
-                                              //       SportsFacil:
-                                              //           sportsfacil,
-                                              //     ),
-                                              //     shape: RoundedRectangleBorder(
-                                              //         borderRadius: BorderRadius.all(
-                                              //             Radius.circular(20.0))),
-                                              //   );
-                                              // },
-                                              // );
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    backgroundColor:
+                                                        Color(0xffE5E8E8),
+                                                    child: ViewEventPopUp(
+                                                      placeIndex: int.parse(
+                                                          currentevent.placeId),
+                                                      event: RetrievedEvent(
+                                                          currentevent.name,
+                                                          currentevent.start,
+                                                          currentevent.end,
+                                                          currentevent.maxCap,
+                                                          currentevent.curCap,
+                                                          currentevent.placeId,
+                                                          eventid),
+                                                      SportsFacil: sportsfacil,
+                                                    ),
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    20.0))),
+                                                  );
+                                                },
+                                              );
                                             },
                                             label: const Text('View'),
                                             backgroundColor: Colors.orange),
