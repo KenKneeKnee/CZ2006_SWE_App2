@@ -203,7 +203,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('create-event.png'),
+    image: AssetImage('assets/images/create-event.png'),
     alignment: Alignment.topCenter,
     fit: BoxFit.fitWidth,
   ),

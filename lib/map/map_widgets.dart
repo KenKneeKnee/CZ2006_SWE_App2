@@ -260,9 +260,12 @@ class OvernightDialog extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 45,
                         color: Colors.white,
-                        shadows: [Shadow(color: Colors.black87,
-                        offset: Offset(7.5, 7.5),
-                        blurRadius: 15)]),
+                        shadows: [
+                          Shadow(
+                              color: Colors.black87,
+                              offset: Offset(7.5, 7.5),
+                              blurRadius: 15)
+                        ]),
                   ),
                   const SizedBox(height: 15),
                   Text(
@@ -271,9 +274,12 @@ class OvernightDialog extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         color: Colors.white,
-                        shadows: [Shadow(color: Colors.black87,
-                            offset: Offset(2.5, 2.5),
-                            blurRadius: 15)]),
+                        shadows: [
+                          Shadow(
+                              color: Colors.black87,
+                              offset: Offset(2.5, 2.5),
+                              blurRadius: 15)
+                        ]),
                   ),
                 ],
               ),
@@ -289,7 +295,7 @@ class OvernightDialog extends StatelessWidget {
 class DialogBoxDecoration {
   static const BoxDecoration createEventSuccessBg = BoxDecoration(
     image: DecorationImage(
-      image: AssetImage('create-event-success.png'),
+      image: AssetImage('assets/images/create-event-success.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.topCenter,
     ),
@@ -297,7 +303,7 @@ class DialogBoxDecoration {
 
   static const BoxDecoration createEventFailBg = BoxDecoration(
     image: DecorationImage(
-      image: AssetImage('create-event-fail.png'),
+      image: AssetImage('assets/images/create-event-fail.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.topCenter,
     ),
@@ -306,7 +312,7 @@ class DialogBoxDecoration {
   static BoxDecoration joinEventBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('join-event.png'),
+      image: AssetImage('assets/images/join-event.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -314,7 +320,7 @@ class DialogBoxDecoration {
   static BoxDecoration leaveEventBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('leave-event.png'),
+      image: AssetImage('assets/images/leave-event.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -323,7 +329,7 @@ class DialogBoxDecoration {
   static BoxDecoration fullEventBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('full-event.png'),
+      image: AssetImage('assets/images/full-event.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -332,7 +338,7 @@ class DialogBoxDecoration {
   static BoxDecoration notLoggedInBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('not-logged-in.png'),
+      image: AssetImage('assets/images/not-logged-in.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -340,7 +346,7 @@ class DialogBoxDecoration {
   static BoxDecoration clashingSchedBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('clashing-schedules.png'),
+      image: AssetImage('assets/images/clashing-schedules.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -349,7 +355,7 @@ class DialogBoxDecoration {
   static BoxDecoration friendAddedBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('friend-added.png'),
+      image: AssetImage('assets/images/friend-added.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -357,7 +363,7 @@ class DialogBoxDecoration {
   static BoxDecoration userReportedBg = BoxDecoration(
     borderRadius: BorderRadius.circular(20),
     image: const DecorationImage(
-      image: AssetImage('user-reported.png'),
+      image: AssetImage('assets/images/user-reported.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.bottomCenter,
     ),
@@ -365,7 +371,7 @@ class DialogBoxDecoration {
 
   static const BoxDecoration overnightEventBg = BoxDecoration(
     image: DecorationImage(
-      image: AssetImage('overnight-event.png'),
+      image: AssetImage('assets/images/overnight-event.png'),
       fit: BoxFit.fitWidth,
       alignment: Alignment.topCenter,
     ),

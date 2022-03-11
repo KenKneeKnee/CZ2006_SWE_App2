@@ -10,7 +10,6 @@ import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 import 'package:my_app/events/temp_fetchEvents.dart';
 import 'firebase_utils/firebase_options.dart';
-import 'package:my_app/user_profile/screens/others_profile_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,6 +46,6 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        home: FacilitiesMap());
+        home: WelcomePage());
   }
 }

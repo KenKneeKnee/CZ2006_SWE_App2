@@ -28,7 +28,7 @@ LatLng _startingPoint =
 class FacilitiesMap extends StatefulWidget {
   FacilitiesMap({Key? key}) : super(key: key);
 
-  //final User user;
+  final User? user = FirebaseAuth.instance.currentUser;
   //TODO: Put user's profile pic for the location marker icon
 
   @override
@@ -65,6 +65,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   }
 
   ///Fetches User's location
+  ///
   Future getUserLocation() async {
     final _userLocationData = await checkLocation();
     if (_userLocationData == null) {
@@ -76,16 +77,16 @@ class _FacilitiesMapState extends State<FacilitiesMap>
     var _longitude = _userLocationData.longitude;
     var _latitude = _userLocationData.latitude;
     _startingPoint = LatLng(_latitude, _longitude);
-    print('Successfully fetched User\'s location -- ${_startingPoint}');
+    print(
+        'Successfully fetched ${widget.user?.displayName}\'s location -- ${_startingPoint}');
   }
 
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
     final facildata = await sportsfacildatasource.someFunction();
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 3));
     setState(() {
       SportsFacilityList = facildata;
-
       loading = false;
       MarkerList = _buildMapMapMarkers();
     });
@@ -176,7 +177,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                           builder: ((context, scrollController) {
                             return Stack(children: [
                               RoundedBackgroundImage(
-                                  imagePath: 'background.png'),
+                                  imagePath: 'assets/images/background.png'),
                               MapMarkerInfoSheet(
                                   SportsFacil: _sportsFacil,
                                   index: _selectedIndex),

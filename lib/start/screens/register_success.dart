@@ -42,7 +42,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.contain,
-            image: AssetImage('register-success.png'),
+            image: AssetImage('assets/images/register-success.png'),
           ),
         ),
         padding: EdgeInsets.symmetric(horizontal: 50),
