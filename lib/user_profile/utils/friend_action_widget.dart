@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/map/map_widgets.dart';
-import 'package:my_app/user_profile/screens/others_profile_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 

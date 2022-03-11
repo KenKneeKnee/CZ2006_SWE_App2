@@ -14,6 +14,7 @@ import 'edit_profile_page.dart';
 import '../utils/friends_display_widget.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 
+//friendprofilepage
 class FriendProfilePage extends StatefulWidget {
   final UserData u;
   FriendProfilePage({Key? key, required this.u}) : super(key: key);
