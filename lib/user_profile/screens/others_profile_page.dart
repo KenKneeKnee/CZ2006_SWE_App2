@@ -20,8 +20,6 @@ class OtherProfilePage extends StatefulWidget {
 }
 
 class _OtherProfilePageState extends State<OtherProfilePage> {
-  //change to user data. dont pass in User
-
   final UserDbManager repository = UserDbManager();
 
   @override
@@ -69,7 +67,7 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
                     const SizedBox(height: 24),
                     FriendsDisplayWidget(u.friends, u.points),
                     const SizedBox(height: 24),
-                    FriendsActionWidget(),
+                    FriendsActionWidget(u),
                     const SizedBox(height: 48),
                     buildAbout(u),
                   ],
@@ -84,14 +82,14 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
         padding: EdgeInsets.symmetric(horizontal: 48),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             Text(
-              "I like to play football, but i malay. Don't like malay then can get lost",
+              user.about,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
           ],

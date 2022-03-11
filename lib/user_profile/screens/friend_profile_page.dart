@@ -1,15 +1,17 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/utils/friend_action_widget.dart';
+import 'package:my_app/user_profile/utils/other_profile_widget.dart';
+import 'package:my_app/user_profile/utils/strangers_action_widget.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import '../utils/appbar_widget.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_display_widget.dart';
-import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 
 class FriendProfilePage extends StatefulWidget {
@@ -22,41 +24,74 @@ class FriendProfilePage extends StatefulWidget {
 
 class _FriendProfilePageState extends State<FriendProfilePage> {
   late UserData u;
+  late bool isFriends;
 
   @override
   void initState() {
     this.u = widget.u;
+    if (u.friends.contains(FirebaseAuth.instance.currentUser?.email)) {
+      isFriends = true;
+    } else {
+      isFriends = false;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: _background,
-        child: Builder(
-          builder: (context) => Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: buildAppBar(context),
-            body: ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                const OtherProfileWidget(
-                  imagePath:
-                      "https://pbs.twimg.com/profile_images/1453101247217733636/qawViunA_400x400.jpg",
-                ),
-                const SizedBox(height: 24),
-                buildName(u),
-                const SizedBox(height: 24),
-                FriendsDisplayWidget(u.friends, u.points),
-                const SizedBox(height: 24),
-                FriendsActionWidget(),
-                const SizedBox(height: 48),
-                buildAbout(u),
-              ],
+    if (isFriends == false) {
+      return Container(
+          decoration: _background,
+          child: Builder(
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: buildAppBar(context),
+              body: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                  OtherProfileWidget(
+                    imagePath: u.image,
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(u),
+                  const SizedBox(height: 24),
+                  FriendsDisplayWidget(u.friends, u.points),
+                  const SizedBox(height: 24),
+                  StrangersActionWidget(u),
+                  const SizedBox(height: 48),
+                  buildAbout(u),
+                ],
+              ),
             ),
-          ),
-        ));
+          ));
+    } else {
+      return Container(
+          decoration: _background,
+          child: Builder(
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: buildAppBar(context),
+              body: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                  OtherProfileWidget(
+                    imagePath: u.image,
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(u),
+                  const SizedBox(height: 24),
+                  FriendsDisplayWidget(u.friends, u.points),
+                  const SizedBox(height: 24),
+                  FriendsActionWidget(u),
+                  const SizedBox(height: 48),
+                  buildAbout(u),
+                ],
+              ),
+            ),
+          ));
+    }
   }
 
   Widget buildAbout(UserData user) => Container(
@@ -68,7 +103,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
               'About',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               user.about,
               style: TextStyle(fontSize: 16, height: 1.4),

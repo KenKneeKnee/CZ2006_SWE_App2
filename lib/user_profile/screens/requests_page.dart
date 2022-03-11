@@ -1,32 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
-import 'package:my_app/user_profile/screens/profile_page.dart';
 
-import 'others_profile_page.dart';
-
-class Friend_Page extends StatefulWidget {
-  final List<dynamic> friends;
-  const Friend_Page({Key? key, required this.friends}) : super(key: key);
+class Request_Page extends StatefulWidget {
+  final List<dynamic> friendrequests;
+  const Request_Page({Key? key, required this.friendrequests})
+      : super(key: key);
   @override
-  _FriendPageState createState() => _FriendPageState();
+  _FriendRequestState createState() => _FriendRequestState();
 }
 
-class _FriendPageState extends State<Friend_Page> {
+class _FriendRequestState extends State<Request_Page> {
+  late UserData cu;
   final UserDbManager repository = UserDbManager();
-  late List<dynamic> friendData = widget.friends;
-  final List<UserData> listfriends = [];
+  UserDbManager userdb = UserDbManager();
+  late List<dynamic> friendData = widget.friendrequests;
+  List<UserData> listfriends = [];
   ScrollController controller = ScrollController();
   final List<Widget> friendbuttons = [];
   double topContainer = 0;
 
   @override
   void initState() {
+    getUser();
     super.initState();
     controller.addListener(() {
       double value = controller.offset / 1000;
@@ -35,6 +34,13 @@ class _FriendPageState extends State<Friend_Page> {
         topContainer = value;
       });
     });
+  }
+
+  getUser() async {
+    DocumentSnapshot doc = await userdb.collection
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    cu = UserData.fromSnapshot(doc);
   }
 
   @override
@@ -62,13 +68,11 @@ class _FriendPageState extends State<Friend_Page> {
               }
             }
           }
-          print(listfriends.length);
 
           friendbuttons.clear();
-
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
-                height: size.height * 0.2,
+                height: size.height * 0.3,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -100,26 +104,70 @@ class _FriendPageState extends State<Friend_Page> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              FloatingActionButton.extended(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          //change to test pages
-                                          builder: (context) =>
-                                              FriendProfilePage(u: u)),
-                                    );
-                                  },
-                                  label: const Text('Visit'),
-                                  backgroundColor: Colors.orange),
+                              Row(children: <Widget>[
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            //change to test pages
+                                            builder: (context) =>
+                                                FriendProfilePage(u: u)),
+                                      );
+                                    },
+                                    label: const Text('Visit'),
+                                    backgroundColor: Colors.orange),
+                                buildDivider(),
+                                FloatingActionButton.extended(
+                                    onPressed: () {
+                                      cu.friends.add(u.userid);
+                                      u.friends.add(cu.userid);
+                                      u.friendrequests
+                                          .remove(cu.userid); //may not need
+                                      cu.friendrequests.remove(u.userid);
+
+                                      userdb.collection.doc(u.userid).update(
+                                          {"friendrequests": u.friendrequests});
+                                      userdb.collection
+                                          .doc(u.userid)
+                                          .update({"friends": u.friends});
+                                      userdb.collection
+                                          .doc(cu.userid)
+                                          .update({"friends": cu.friends});
+                                      userdb.collection.doc(cu.userid).update({
+                                        "friendrequests": cu.friendrequests
+                                      });
+
+                                      Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => Request_Page(
+                                            friendrequests: cu.friendrequests),
+                                      ));
+                                      showDialog(
+                                          // needs some UI
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              _buildRequestAcceptedDialog(
+                                                  context));
+                                    },
+                                    label: const Text('Accept'),
+                                    backgroundColor: Colors.greenAccent)
+                              ]),
                               const SizedBox(
                                 height: 10,
                               ),
+                              Text(
+                                u.points.toString(),
+                                style: const TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              )
                             ],
                           ),
-                          Image.asset(
-                            u.image,
-                            height: double.infinity,
-                          )
+                          // Image.asset(
+                          //   "assets/images/${post["image"]}",
+                          //   height: double.infinity,
+                          //)
                         ]))));
           }
 
@@ -162,7 +210,7 @@ class _FriendPageState extends State<Friend_Page> {
                                 ..scale(scale, scale),
                               alignment: Alignment.bottomCenter,
                               child: Align(
-                                  heightFactor: 0.8,
+                                  heightFactor: 0.9,
                                   alignment: Alignment.topCenter,
                                   child: friendbuttons[index]),
                             ),
@@ -170,5 +218,29 @@ class _FriendPageState extends State<Friend_Page> {
                         }),
                   )));
         });
+  }
+
+  Widget buildDivider() => Container(
+        height: 12,
+        child: VerticalDivider(),
+      );
+  Widget _buildRequestAcceptedDialog(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const <Widget>[
+          Text("Friend request accepted!"),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
   }
 }
