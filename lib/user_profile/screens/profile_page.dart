@@ -120,7 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onClick: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   //change to test pages
-                                  builder: (context) => bookingPage()),
+                                  builder: (context) => ViewEventPage()),
                             )),
                     const SizedBox(height: 24),
                     buildAbout(u),
@@ -167,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('background.png'),
+    image: AssetImage('assets/images/background.png'),
     fit: BoxFit.fitHeight,
   ),
 );

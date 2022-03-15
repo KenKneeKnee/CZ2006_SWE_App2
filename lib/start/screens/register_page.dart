@@ -223,7 +223,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-//helper functions / UI to keep the main code short
+
+// UI to keep the main code short
 
 Container _FormFieldContainer(Widget containerChild) {
   return Container(
@@ -251,7 +252,7 @@ Container _FormFieldContainer(Widget containerChild) {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('register-background.png'),
+    image: AssetImage('assets/images/register-background.png'),
     fit: BoxFit.fitHeight,
   ),
 );

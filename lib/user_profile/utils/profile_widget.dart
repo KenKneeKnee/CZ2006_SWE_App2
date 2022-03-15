@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
+///Editable Profile Pic
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
   final bool isEdit;

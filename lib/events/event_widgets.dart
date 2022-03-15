@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/retrievedevent.dart';
+import 'package:my_app/homepage.dart';
+import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -191,7 +193,7 @@ Container calendarIcon = Container(
   color: Colors.transparent,
   margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
   height: 50,
-  child: Image.asset('icon-calendar.png'),
+  child: Image.asset('assets/images/icon-calendar.png'),
 );
 
 Icon capIcon = const Icon(Icons.person);
@@ -284,7 +286,8 @@ final _paraStyleBold = TextStyle(
 );
 
 class ReturnToMapButton extends StatelessWidget {
-  const ReturnToMapButton({Key? key}) : super(key: key);
+  ReturnToMapButton({Key? key, required this.dialogContext}) : super(key: key);
+  BuildContext dialogContext;
 
   @override
   Widget build(BuildContext context) {
@@ -295,6 +298,8 @@ class ReturnToMapButton extends StatelessWidget {
       buttonText: "Return to Map",
       onClick: () {
         Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => Homepage()));
       },
     );
   }
@@ -353,14 +358,13 @@ class JoinedEventDialog extends StatelessWidget {
                   paragraph,
                   style: _dialogParaStyleBold,
                 ),
-                //ReturnToMapButton(),
               ],
             ),
           ),
         ),
       ),
       actions: [
-        const ReturnToMapButton(),
+        ReturnToMapButton(dialogContext: context),
       ],
     );
   }
@@ -401,14 +405,13 @@ class LeftEventDialog extends StatelessWidget {
                   paragraph,
                   style: _dialogParaStyleBold,
                 ),
-                //ReturnToMapButton(),
               ],
             ),
           ),
         ),
       ),
       actions: [
-        const ReturnToMapButton(),
+        ReturnToMapButton(dialogContext: context),
       ],
     );
   }
@@ -435,7 +438,7 @@ class DoNothingDialog extends StatelessWidget {
         decoration: bgDeco,
       ),
       actions: [
-        const ReturnToMapButton(),
+        ReturnToMapButton(dialogContext: context),
       ],
     );
   }
@@ -476,7 +479,6 @@ class NotLoggedInDialog extends StatelessWidget {
                   paragraph,
                   style: _dialogParaStyleBold,
                 ),
-                //ReturnToMapButton(),
               ],
             ),
           ),
