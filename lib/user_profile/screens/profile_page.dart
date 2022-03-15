@@ -68,9 +68,9 @@ class _ProfilePageState extends State<ProfilePage> {
             u = UserData.fromSnapshot(doc);
           }
         }
+        print(u.reports);
         if (u.reports >= 5) {
           showDialog(
-              // needs some UI
               context: context,
               builder: (BuildContext context) => _buildWarningDialog(context));
           repository.collection.doc(u.userid).update({"reports": 0});
