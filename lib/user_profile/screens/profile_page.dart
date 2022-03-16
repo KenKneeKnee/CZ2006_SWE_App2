@@ -10,6 +10,7 @@ import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_widget.dart';
+import 'package:my_app/user_profile/screens/view_current_events_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -117,10 +118,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderColor: const Color(0xffE3663E),
                         buttonText: "View Events",
                         textColor: const Color(0xffffffff),
+                        //Currently leads to current event page
                         onClick: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   //change to test pages
-                                  builder: (context) => ViewEventPage()),
+                                  builder: (context) => ViewCurrentEventPage()),
                             )),
                     const SizedBox(height: 24),
                     buildAbout(u),

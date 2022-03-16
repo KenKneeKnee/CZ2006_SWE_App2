@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/sportevent.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
-import 'package:my_app/user_profile/utils/appbar_widget.dart';
+import 'package:my_app/user_profile/screens/friend_invite_page.dart';
+import 'package:my_app/user_profile/data/user.dart';
+import 'package:my_app/user_profile/data/userDbManager.dart';
 
 final uid = FirebaseAuth.instance.currentUser!.email as String;
 
@@ -23,12 +24,21 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
   final BookingRepository booking = BookingRepository();
   late List<SportsFacility> SportsFacilityList;
   late bool loading;
+  UserDbManager userdb = UserDbManager();
+  late UserData cu;
+  getUser() async {
+    DocumentSnapshot doc = await userdb.collection
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    cu = UserData.fromSnapshot(doc);
+  }
 
   ScrollController controller = ScrollController();
   double topContainer = 0;
 
   @override
   void initState() {
+    getUser();
     super.initState();
     loading = true;
     getData();
@@ -84,15 +94,6 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                         }
                       } else {
                         pastEventIds.add(doc['eventId']);
-                      }
-                    }
-
-                    for (String eid in pastEventIds) {
-                      for (DocumentSnapshot doc in EventList) {
-                        if (doc.id == eid) {
-                          SportEvent e = SportEvent.fromSnapshot(doc);
-                          PastEventMap[eid] = e;
-                        }
                       }
                     }
 
@@ -154,42 +155,66 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                         const SizedBox(
                                           height: 10,
                                         ),
-                                        FloatingActionButton.extended(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Dialog(
-                                                    backgroundColor:
-                                                        Color(0xffE5E8E8),
-                                                    child: ViewEventPopUp(
-                                                      placeIndex: int.parse(
-                                                          currentevent.placeId),
-                                                      event: RetrievedEvent(
-                                                          currentevent.name,
-                                                          currentevent.start,
-                                                          currentevent.end,
-                                                          currentevent.maxCap,
-                                                          currentevent.curCap,
-                                                          currentevent.placeId,
-                                                          eventid),
-                                                      SportsFacil: sportsfacil,
-                                                    ),
-                                                    shape: RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    20.0))),
+                                        Row(
+                                          children: <Widget>[
+                                            FloatingActionButton.extended(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            Color(0xffE5E8E8),
+                                                        child: ViewEventPopUp(
+                                                          placeIndex: int.parse(
+                                                              currentevent
+                                                                  .placeId),
+                                                          event: RetrievedEvent(
+                                                              currentevent.name,
+                                                              currentevent
+                                                                  .start,
+                                                              currentevent.end,
+                                                              currentevent
+                                                                  .maxCap,
+                                                              currentevent
+                                                                  .curCap,
+                                                              currentevent
+                                                                  .placeId,
+                                                              eventid),
+                                                          SportsFacil:
+                                                              sportsfacil,
+                                                        ),
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20.0))),
+                                                      );
+                                                    },
                                                   );
                                                 },
-                                              );
-                                            },
-                                            label: const Text('View'),
-                                            backgroundColor: Colors.orange),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
+                                                label: const Text('View'),
+                                                backgroundColor: Colors.orange),
+                                            const SizedBox(
+                                              height: 24,
+                                              child: VerticalDivider(),
+                                            ),
+                                            FloatingActionButton.extended(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Friend_Invite_Page(
+                                                          friends: cu.friends),
+                                                ));
+                                              },
+                                              label: const Text('Invite'),
+                                              backgroundColor:
+                                                  Colors.deepOrangeAccent,
+                                            )
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ]))));
