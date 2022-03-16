@@ -26,6 +26,8 @@ class _HomepageState extends State<Homepage> {
     final pages = [
       FacilitiesMap(),
       ProfilePage(user: _currentUser),
+      //put page here
+      //put another page here
     ];
 
     return Scaffold(
@@ -47,15 +49,15 @@ class _HomepageState extends State<Homepage> {
             const BottomNavigationBarItem(
                 icon: Icon(Icons.people_alt_outlined),
                 label: 'Profile',
+                backgroundColor: Colors.cyan),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.star_border_outlined),
+                label: 'Rewards',
+                backgroundColor: Colors.orange),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.sports_basketball),
+                label: 'Current Events',
                 backgroundColor: Colors.purple),
-            // const BottomNavigationBarItem(
-            //     icon: Icon(Icons.people_alt_outlined),
-            //     label: 'Events',
-            //     backgroundColor: Colors.yellow),
-            // const BottomNavigationBarItem(
-            //     icon: Icon(Icons.people_alt_outlined),
-            //     label: 'Settings',
-            //     backgroundColor: Colors.green),
           ]),
     );
   }
