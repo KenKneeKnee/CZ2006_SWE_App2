@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
-import 'package:my_app/user_profile/screens/view_events_page.dart';
+import 'package:my_app/user_profile/screens/view_past_events_page.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
@@ -68,13 +68,13 @@ class _ProfilePageState extends State<ProfilePage> {
             u = UserData.fromSnapshot(doc);
           }
         }
-        print(u.reports);
-        if (u.reports >= 5) {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildWarningDialog(context));
-          repository.collection.doc(u.userid).update({"reports": 0});
-        }
+        //print(u.reports);
+        //if (u.reports >= 5) {
+        //  showDialog(
+        //      context: context,
+        //      builder: (BuildContext context) => _buildWarningDialog(context));
+        //  repository.collection.doc(u.userid).update({"reports": 0});
+        //}
 
         return Container(
             decoration: _background,
