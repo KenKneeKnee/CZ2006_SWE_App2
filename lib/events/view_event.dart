@@ -208,19 +208,19 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
 /// Find Marker image path according to the facility Type
 String _FindBackgroundImage(String facilityType) {
   if (facilityType.contains("Gym")) {
-    return ('view-event-gym.png');
+    return ('assets/images/view-event-gym.png');
   }
   if (facilityType.contains("wim")) {
-    return ('view-event-swimming.png');
+    return ('assets/images/view-event-swimming.png');
   }
   if (facilityType.contains("ennis")) {
-    return ('view-event-tennis.png');
+    return ('assets/images/view-event-tennis.png');
   }
   if (facilityType.contains('all')) {
-    return ('view-event-basketball.png');
+    return ('assets/images/view-event-basketball.png');
   }
   if (facilityType.contains("tadium")) {
-    return ('stadium-hover.png');
+    return ('assets/images/stadium-hover.png');
   }
-  return ('view-event-soccer.png');
+  return ('assets/images/view-event-soccer.png');
 }

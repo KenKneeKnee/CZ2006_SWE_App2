@@ -24,6 +24,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   late UserData user;
   bool _displayNameValid = true;
   bool _bioValid = true;
+  late final image;
 
   UserDbManager userdb = UserDbManager();
 
@@ -43,6 +44,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     user = UserData.fromSnapshot(doc);
     displayNameController.text = user.username;
     bioController.text = user.about;
+    image = Image.asset(user.image);
 
     setState(() {
       isLoading = false;
@@ -108,7 +110,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         "username": displayNameController.text,
         "about": bioController.text,
       });
-      SnackBar snackbar = SnackBar(content: Text("Profile updated!"));
+      SnackBar snackbar = SnackBar(
+        content: Text("Profile updated!"),
+        backgroundColor: Color(0xffE3663E),
+        duration: Duration(seconds: 2),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
   }
@@ -118,23 +124,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        leading: BackButton(
+            color: Colors.black, onPressed: () => Navigator.of(context).pop()),
+        backgroundColor: Color(0xffE3663E),
         title: Text(
           "Edit Profile",
           style: TextStyle(
             color: Colors.black,
           ),
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.done,
-              size: 30.0,
-              color: Colors.green,
-            ),
-          ),
-        ],
       ),
       body: isLoading
           ? circularProgress()
@@ -151,11 +149,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           child: Material(
                             color: Colors.transparent,
                             child: Ink.image(
-                              image: NetworkImage(
-                                  "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU="),
+                              image: image.image,
                               fit: BoxFit.cover,
                               width: 128,
                               height: 128,
+                              child: InkWell(),
                             ),
                           ),
                         )),
