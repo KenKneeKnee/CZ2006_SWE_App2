@@ -5,14 +5,14 @@ import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
 
-class Friend_Page extends StatefulWidget {
+class Friend_Invite_Page extends StatefulWidget {
   final List<dynamic> friends;
-  const Friend_Page({Key? key, required this.friends}) : super(key: key);
+  const Friend_Invite_Page({Key? key, required this.friends}) : super(key: key);
   @override
-  _FriendPageState createState() => _FriendPageState();
+  _FriendInvitePageState createState() => _FriendInvitePageState();
 }
 
-class _FriendPageState extends State<Friend_Page> {
+class _FriendInvitePageState extends State<Friend_Invite_Page> {
   final myController = TextEditingController();
   final UserDbManager repository = UserDbManager();
   late List<dynamic> friendData = widget.friends;
@@ -104,17 +104,9 @@ class _FriendPageState extends State<Friend_Page> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              //Button to press
                               FloatingActionButton.extended(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          //change to test pages
-                                          builder: (context) =>
-                                              FriendProfilePage(u: u)),
-                                    );
-                                  },
-                                  label: const Text('Visit'),
+                                  onPressed: () {},
+                                  label: const Text('Invite'),
                                   backgroundColor: Colors.orange),
                               const SizedBox(
                                 height: 10,
@@ -138,36 +130,6 @@ class _FriendPageState extends State<Friend_Page> {
                     leading: BackButton(
                         color: Colors.black,
                         onPressed: () => Navigator.of(context).pop()),
-                    title: TextField(
-                      controller: myController,
-                    ),
-                    actions: <Widget>[
-                      IconButton(
-                          onPressed: () {
-                            late UserData su;
-                            for (DocumentSnapshot doc in DocList) {
-                              if (doc["userid"] == myController.text) {
-                                su = UserData.fromSnapshot(doc);
-                              }
-                            }
-
-                            print(su.userid);
-                            try {
-                              if (!cu.friends.contains(su.userid) &&
-                                  cu.userid != su.userid) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      //change to test pages
-                                      builder: (context) =>
-                                          FriendProfilePage(u: su)),
-                                );
-                              }
-                            } finally {
-                              //
-                            }
-                          },
-                          icon: Icon(Icons.search, color: Colors.black))
-                    ],
                   ),
                   body: Container(
                     height: size.height,

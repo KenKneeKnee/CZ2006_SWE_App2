@@ -14,7 +14,7 @@ class FriendsActionWidget extends StatelessWidget {
         //can maybe change to remove friend
         FloatingActionButton.extended(
           onPressed: () {},
-          label: const Text('This bud is your friend!'),
+          label: const Text('Added as friend!'),
           backgroundColor: Colors.lightGreen,
         ),
         const Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0)),
