@@ -105,7 +105,12 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                                 height: 10,
                               ),
                               FloatingActionButton.extended(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            _buildDialog(context));
+                                  },
                                   label: const Text('Invite'),
                                   backgroundColor: Colors.orange),
                               const SizedBox(
@@ -162,5 +167,25 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                         }),
                   )));
         });
+  }
+
+  Widget _buildDialog(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const <Widget>[
+          Text("An invitation has been sent"),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
   }
 }
