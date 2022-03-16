@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/user_profile/screens/profile_page.dart';
+import 'package:my_app/user_profile/screens/view_current_events_page.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key? key}) : super(key: key);
@@ -26,6 +28,9 @@ class _HomepageState extends State<Homepage> {
     final pages = [
       FacilitiesMap(),
       ProfilePage(user: _currentUser),
+
+      RewardsPage(),
+      ViewCurrentEventPage()
       //put page here
       //put another page here
     ];
