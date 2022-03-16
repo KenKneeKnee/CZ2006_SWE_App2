@@ -28,7 +28,6 @@ class _HomepageState extends State<Homepage> {
     final pages = [
       FacilitiesMap(),
       ProfilePage(user: _currentUser),
-
       RewardsPage(),
       ViewCurrentEventPage()
       //put page here
