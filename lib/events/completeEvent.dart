@@ -46,6 +46,9 @@ class _eventPageState extends State<eventPage> {
       //functions to do once event completed
       booking.completeBooking(key);
     }
+    else{
+      print("You cannot complete this event!");
+    }
 
     //auto delete for buds that joined but did not complete
 
