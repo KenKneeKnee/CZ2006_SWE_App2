@@ -209,7 +209,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                           friends: cu.friends),
                                                 ));
                                               },
-                                              label: const Text('Invite'),
+                                              label:
+                                                  const Text('Invite friends'),
                                               backgroundColor:
                                                   Colors.deepOrangeAccent,
                                             )

@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
             u = UserData.fromSnapshot(doc);
           }
         }
-        //print(u.reports);
+
         //if (u.reports >= 5) {
         //  showDialog(
         //      context: context,
@@ -119,11 +119,23 @@ class _ProfilePageState extends State<ProfilePage> {
                         buttonText: "View Events",
                         textColor: const Color(0xffffffff),
                         //Currently leads to current event page
-                        onClick: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  //change to test pages
-                                  builder: (context) => ViewCurrentEventPage()),
-                            )),
+                        onClick: () {
+                          // temporary tag
+                          if (u.reports >= 5) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildWarningDialog(context));
+                            repository.collection
+                                .doc(u.userid)
+                                .update({"reports": 0});
+                          }
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                //change to test pages
+                                builder: (context) => ViewEventPage()),
+                          );
+                        }),
                     const SizedBox(height: 24),
                     buildAbout(u),
                   ],
