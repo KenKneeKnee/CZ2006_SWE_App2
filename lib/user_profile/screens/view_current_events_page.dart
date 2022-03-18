@@ -223,20 +223,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
 
                     return SafeArea(
                         child: Scaffold(
-                            backgroundColor: Colors.white,
-                            appBar: AppBar(
-                              elevation: 0,
-                              backgroundColor: Color(0xffE3663E),
-                              leading: BackButton(
-                                  color: Colors.black,
-                                  onPressed: () => Navigator.of(context).pop()),
-                              actions: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.search, color: Colors.black),
-                                  onPressed: () {},
-                                ),
-                              ],
-                            ),
+                            backgroundColor: Colors.deepPurple,
                             body: Container(
                                 height: size.height,
                                 child: ListView.builder(
