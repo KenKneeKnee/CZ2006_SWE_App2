@@ -36,6 +36,10 @@ dependencies:
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.6
   cloud_firestore: ^3.1.7
+  
+  #rewards page
+  fl_chart: ^0.46.0
+  font_awesome_flutter: '>= 4.7.0'
 
   #notification related
   awesome_notifications: ^0.0.6+10

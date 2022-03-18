@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
-import 'package:my_app/user_profile/screens/profile_page.dart';
 
 class Friend_Page extends StatefulWidget {
   final List<dynamic> friends;
@@ -16,15 +13,25 @@ class Friend_Page extends StatefulWidget {
 }
 
 class _FriendPageState extends State<Friend_Page> {
+  final myController = TextEditingController();
   final UserDbManager repository = UserDbManager();
   late List<dynamic> friendData = widget.friends;
   final List<UserData> listfriends = [];
   ScrollController controller = ScrollController();
   final List<Widget> friendbuttons = [];
   double topContainer = 0;
+  UserDbManager userdb = UserDbManager();
+  late UserData cu;
+  getUser() async {
+    DocumentSnapshot doc = await userdb.collection
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    cu = UserData.fromSnapshot(doc);
+  }
 
   @override
   void initState() {
+    getUser();
     super.initState();
     controller.addListener(() {
       double value = controller.offset / 1000;
@@ -60,7 +67,6 @@ class _FriendPageState extends State<Friend_Page> {
               }
             }
           }
-          print(listfriends.length);
 
           friendbuttons.clear();
 
@@ -98,6 +104,7 @@ class _FriendPageState extends State<Friend_Page> {
                               const SizedBox(
                                 height: 10,
                               ),
+                              //Button to press
                               FloatingActionButton.extended(
                                   onPressed: () {
                                     Navigator.of(context).push(
@@ -121,20 +128,45 @@ class _FriendPageState extends State<Friend_Page> {
                         ]))));
           }
 
+          //Appbar kinda of the page
           return SafeArea(
               child: Scaffold(
                   backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 0,
-                    backgroundColor: Color(0xffE3663E),
+                    backgroundColor: Color.fromRGBO(227, 102, 62, 1),
                     leading: BackButton(
                         color: Colors.black,
                         onPressed: () => Navigator.of(context).pop()),
+                    title: TextField(
+                      controller: myController,
+                    ),
                     actions: <Widget>[
                       IconButton(
-                        icon: Icon(Icons.search, color: Colors.black),
-                        onPressed: () {},
-                      ),
+                          onPressed: () {
+                            late UserData su;
+                            for (DocumentSnapshot doc in DocList) {
+                              if (doc["userid"] == myController.text) {
+                                su = UserData.fromSnapshot(doc);
+                              }
+                            }
+
+                            print(su.userid);
+                            try {
+                              if (!cu.friends.contains(su.userid) &&
+                                  cu.userid != su.userid) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      //change to test pages
+                                      builder: (context) =>
+                                          FriendProfilePage(u: su)),
+                                );
+                              }
+                            } finally {
+                              //
+                            }
+                          },
+                          icon: Icon(Icons.search, color: Colors.black))
                     ],
                   ),
                   body: Container(

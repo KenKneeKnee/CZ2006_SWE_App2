@@ -2,13 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/calendar/grrrrrrr.dart';
-<<<<<<< HEAD
 import 'package:my_app/events/view_event.dart';
-import 'package:my_app/loading_lotties/map_lottie.dart';
-=======
+import 'package:my_app/homepage.dart';
 import 'package:my_app/loading_lotties/loading_lotties.dart';
->>>>>>> master
 import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
@@ -51,11 +49,6 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-<<<<<<< HEAD
-        home: LoginPage()
-    );
-=======
-        home: WelcomePage());
->>>>>>> master
+        home: LoginPage());
   }
 }
