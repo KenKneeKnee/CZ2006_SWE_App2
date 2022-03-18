@@ -7,6 +7,7 @@ import 'package:my_app/reviews/facil_repository.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/reviews/review_page.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
@@ -20,9 +21,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  FacilRepository facils = FacilRepository();
-  Review r = Review('another one', 1, 'it is not nice');
-  facils.addReviewFor("2", r);
+  // FacilRepository facils = FacilRepository();
+  // Review r = Review('another one', 1, 'it is not nice',"rainer");
+  // facils.addReviewFor("2", r);
 
   runApp(SportBuds());
 }
@@ -54,7 +55,7 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        home: LoginPage()
+        home: ReviewPage(),
     );
   }
 }
