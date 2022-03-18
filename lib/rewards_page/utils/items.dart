@@ -24,19 +24,19 @@ class ItemList extends StatelessWidget {
         image: "https://cdn.mos.cms.futurecdn.net/eW8gPh9RFcpAwYDsyM3t7Q.jpg",
         label: "Get 1x Playstation 4",
         description: "Sony Playstation 4",
-        point: 140000,
+        point: 14,
       ),
       Item(
         image: "https://cdn.mos.cms.futurecdn.net/eW8gPh9RFcpAwYDsyM3t7Q.jpg",
         label: "Get 1x Playstation 4",
         description: "Sony Playstation 4",
-        point: 140000,
+        point: 14,
       ),
       Item(
         image: "https://cdn.mos.cms.futurecdn.net/eW8gPh9RFcpAwYDsyM3t7Q.jpg",
         label: "Get 1x Playstation 4",
         description: "Sony Playstation 4",
-        point: 140000,
+        point: 14,
       ),
     ];
 

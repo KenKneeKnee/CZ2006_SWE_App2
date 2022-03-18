@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +11,8 @@ import 'package:my_app/rewards_page/utils/coordinator_layout.dart';
 import 'package:my_app/rewards_page/utils/header.dart';
 import 'package:my_app/rewards_page/utils/items.dart';
 import 'package:my_app/rewards_page/utils/summary_chart.dart';
+import 'package:my_app/user_profile/data/user.dart';
+import 'package:my_app/user_profile/data/userDbManager.dart';
 
 class Menu {
   final IconData icon;
@@ -34,14 +38,32 @@ class _RewardsPageState extends State<RewardsPage> {
 
   late double minHeight;
   late double maxHeight;
+  late bool isLoading = false;
+  late UserData user;
+  UserDbManager userdb = UserDbManager();
 
   int maxValue = 1000;
 
   List<FlSpot> totalReceived = [FlSpot(1, 1), FlSpot(1, 1)];
   List<FlSpot> totalRedeem = [FlSpot(1, 1), FlSpot(1, 1)];
 
+  getUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    DocumentSnapshot doc = await userdb.collection
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    user = UserData.fromSnapshot(doc);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
+    getUser();
     super.initState();
   }
 
@@ -55,43 +77,23 @@ class _RewardsPageState extends State<RewardsPage> {
     minHeight = MediaQuery.of(context).padding.top + kToolbarHeight;
     maxHeight = 360;
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            CoordinatorLayout(
-              snap: true,
-              scrollController: scrollController,
-              header: buildCollapseHeader(context),
-              body: buildMainContent(context),
+    return isLoading
+        ? CircularProgressIndicator()
+        : AnnotatedRegion<SystemUiOverlayStyle>(
+            value: SystemUiOverlayStyle.light,
+            child: Scaffold(
+              body: Stack(
+                children: <Widget>[
+                  CoordinatorLayout(
+                    snap: true,
+                    scrollController: scrollController,
+                    header: buildCollapseHeader(context),
+                    body: buildMainContent(context),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).canvasColor,
-          child: Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    top: BorderSide(color: Theme.of(context).dividerColor))),
-            child: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              unselectedItemColor: Theme.of(context).disabledColor,
-              selectedItemColor: Theme.of(context).accentColor,
-              elevation: 0,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              items: menus
-                  .map((e) => BottomNavigationBarItem(
-                        icon: Icon(e.icon),
-                        label: Text(e.title).toString(),
-                      ))
-                  .toList(),
-            ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   Widget buildSearchBox() {
@@ -202,16 +204,6 @@ class _RewardsPageState extends State<RewardsPage> {
                 ],
               ),
             ),
-            Container(
-              height: 40,
-              child: FloatingActionButton.extended(
-                heroTag: "view-transaction",
-                onPressed: () {
-                  Navigator.of(context).pushNamed("/transaction");
-                },
-                label: Text("View"),
-              ),
-            )
           ],
         ),
       ),
@@ -242,8 +234,8 @@ class _RewardsPageState extends State<RewardsPage> {
                     Expanded(
                       flex: 1,
                       child: buildPointSummary(
-                        title: "Received",
-                        value: 10000 + sum(totalReceived),
+                        title: "Points earned",
+                        value: user.points * 1.0,
                         rate: totalReceived.last.y - totalRedeem.last.y,
                         color: Colors.green,
                         icon: Icon(Icons.arrow_upward),
@@ -287,7 +279,7 @@ class _RewardsPageState extends State<RewardsPage> {
                     centerTitle: false,
                     title: Container(
                       child: Text(
-                        offset == 1 ? "Home" : "Hi Michael,",
+                        offset == 1 ? "Rewards page" : "Hi " + user.username,
                         style: TextStyle(fontSize: 18 + 16 * (1 - offset)),
                       ),
                     ),
