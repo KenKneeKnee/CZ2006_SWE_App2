@@ -4,6 +4,8 @@ import 'package:my_app/create-event/multiform.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/reviews/animatedbutton.dart';
+import 'package:my_app/reviews/view_reviews.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
 class MapMarkerInfoSheet extends StatelessWidget {
@@ -29,7 +31,17 @@ class MapMarkerInfoSheet extends StatelessWidget {
                 borderColor: Color(0xffE96B46),
                 buttonText: "View Reviews",
                 textColor: Color(0xffffffff),
-                onClick: () {},
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReviewPage(
+                        placeId: placeId,
+                        sportsFacility: SportsFacil,
+                      ),
+                    ),
+                  );
+                },
                 icon: Icon(Icons.star),
               ),
               ButtonIcon(

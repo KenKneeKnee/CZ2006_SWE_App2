@@ -55,6 +55,9 @@ dependencies:
   table_calendar: ^3.0.4
   sliding_up_panel: ^2.0.0+1
 
+  #review related
+  flutter_rating_bar: ^4.0.0
+
   #for UI
   simple_animations: ^4.0.1
   intro_slider: ^3.0.3
