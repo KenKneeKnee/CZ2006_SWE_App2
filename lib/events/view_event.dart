@@ -85,7 +85,6 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                                           capIcon)),
                                 ],
                               ),
-                              TextContainer('event description', context),
                               renderButton(curEvent),
                             ],
                           ),

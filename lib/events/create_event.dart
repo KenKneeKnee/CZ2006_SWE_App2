@@ -10,8 +10,6 @@ import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
-import '../map/map_widgets.dart';
-
 class CreateEventForm extends StatefulWidget {
   CreateEventForm({
     Key? key,

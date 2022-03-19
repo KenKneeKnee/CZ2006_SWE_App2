@@ -6,6 +6,7 @@ import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
@@ -36,10 +37,11 @@ class _MultiStepFormState extends State<MultiStepForm> {
   final EventRepository repository = EventRepository();
   final BookingRepository bookings = BookingRepository();
   final uid = FirebaseAuth.instance.currentUser?.email as String;
-  String title = '';
+  String eventTitle = '';
   int maxCap = 0;
   DateTime? startTime;
   DateTime? endTime;
+  String dropdownValue = "Select Sport";
 
   @override
   void initState() {
@@ -65,46 +67,9 @@ class _MultiStepFormState extends State<MultiStepForm> {
                   children: [
                     buildName(),
                     buildMaxCap(),
+                    buildDropdown(),
                     widget.startPicker,
                     widget.endPicker,
-                    // BouncingButton(
-                    //     bgColor: Color(0xffE96B46),
-                    //     borderColor: Color(0xffE96B46),
-                    //     buttonText: "Submit",
-                    //     textColor: Color(0xffffffff),
-                    //     onClick: () async {
-                    //       final isValid = formKey.currentState?.validate();
-                    //       bool overnight = false;
-                    //       setState(() {
-                    //         startTime = widget.startPicker.selectedTime;
-                    //         endTime = widget.endPicker.selectedTime;
-                    //         if (endTime!.isBefore(startTime!)) {
-                    //           overnight = true;
-                    //           Navigator.pop(context, 2);
-                    //         }
-                    //       });
-
-                    //       if (isValid != null && isValid && !overnight) {
-                    //         formKey.currentState?.save();
-                    //         SportEvent newEvent = SportEvent(
-                    //           title,
-                    //           startTime!,
-                    //           endTime!,
-                    //           maxCap,
-                    //           1,
-                    //           widget.placeId, //temporary id
-                    //         );
-
-                    //         DocumentReference addedDocRef =
-                    //             await repository.addEvent(newEvent);
-                    //         String newId = addedDocRef.id;
-                    //         bookings.addBooking(uid, newId);
-
-                    //         Navigator.pop(context, 1);
-                    //       } else {
-                    //         Navigator.pop(context, 0);
-                    //       }
-                    //     }),
                   ],
                 ),
               ),
@@ -113,7 +78,19 @@ class _MultiStepFormState extends State<MultiStepForm> {
             state: _currentStep > 1 ? StepState.complete : StepState.indexed),
         Step(
             title: Text('Complete'),
-            content: Container(),
+            content: (isCompleted)
+                ? Container(
+                    color: Colors.yellow,
+                    child: Column(
+                      children: [
+                        calendarIcon,
+                        SportEventTextWidget.Title(eventTitle),
+                        SportEventTextWidget.Subtitle(
+                            widget.sportsFacility.placeName),
+                      ],
+                    ),
+                  )
+                : Container(color: Colors.black, height: 100),
             isActive: _currentStep >= 2,
             state: _currentStep > 2 ? StepState.complete : StepState.indexed)
       ];
@@ -122,6 +99,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
   Widget build(BuildContext context) {
     final isLastStep = _currentStep == getSteps().length - 1;
     SportsFacility SportsFacil = widget.sportsFacility;
+    SportEvent newEvent;
 
     return StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
@@ -134,7 +112,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
           }
 
           return Scaffold(
-            appBar: AppBar(title: Text('Create Event')),
+            appBar: AppBar(),
             body: Container(
               child: Column(
                 children: [
@@ -154,10 +132,6 @@ class _MultiStepFormState extends State<MultiStepForm> {
                         currentStep: _currentStep,
                         onStepContinue: () {
                           if (isLastStep) {
-                            // setState(() {
-                            //   isCompleted = true;
-                            // });
-
                             Navigator.pop(context);
 
                             showDialog(
@@ -183,6 +157,16 @@ class _MultiStepFormState extends State<MultiStepForm> {
                                   date = widget.grrCalendar.submittedDate;
                                   print(date);
                                 });
+                              } else if (_currentStep == 1) {
+                                setState(() {
+                                  final isValid =
+                                      formKey.currentState?.validate();
+                                  if (isValid != null && isValid) {
+                                    formKey.currentState?.save();
+                                    print('event title is' + eventTitle);
+                                    isCompleted = true;
+                                  }
+                                });
                               }
                               _currentStep += 1;
                             });
@@ -191,7 +175,6 @@ class _MultiStepFormState extends State<MultiStepForm> {
                         onStepCancel: () {
                           if (_currentStep > 0) {
                             setState(() {
-                              print(_currentStep);
                               _currentStep -= 1;
                             });
                           }
@@ -228,9 +211,8 @@ class _MultiStepFormState extends State<MultiStepForm> {
                                             if (isValid != null &&
                                                 isValid &&
                                                 !overnight) {
-                                              formKey.currentState?.save();
-                                              SportEvent newEvent = SportEvent(
-                                                title,
+                                              newEvent = SportEvent(
+                                                eventTitle,
                                                 startTime!,
                                                 endTime!,
                                                 maxCap,
@@ -285,6 +267,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
             prefixIcon: Icon(Icons.sports_basketball_outlined),
             border: OutlineInputBorder(),
           ),
+
           validator: (value) {
             if (value != null && value.length < 4) {
               return 'Enter at least 4 characters';
@@ -295,7 +278,7 @@ class _MultiStepFormState extends State<MultiStepForm> {
           //maxLength: 100,
           //maxLines: 3,
           onSaved: (value) =>
-              setState(() => title = value ??= 'missing event name'),
+              setState(() => eventTitle = value ??= 'missing event name'),
         ),
       );
 
@@ -327,6 +310,41 @@ class _MultiStepFormState extends State<MultiStepForm> {
           }),
         ),
       );
+
+  Widget buildDropdown() => Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.black45),
+            borderRadius: BorderRadius.circular(4)),
+        padding: EdgeInsets.all(10),
+        child: DropdownButton<String>(
+          value: dropdownValue,
+          isExpanded: true,
+          icon: const Icon(Icons.sports_football_outlined),
+          elevation: 16,
+          style: const TextStyle(color: Colors.black),
+          onChanged: (String? newValue) {
+            setState(() {
+              dropdownValue = newValue!;
+            });
+          },
+          items: <String>[
+            "Select Sport",
+            'Gym',
+            'Ball Games',
+            'Aerobic Exercise',
+            'Racket Games',
+            'Water Sports'
+          ].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: Text(value),
+              ),
+            );
+          }).toList(),
+        ),
+      );
 }
 
 const BoxDecoration _background = BoxDecoration(
@@ -338,22 +356,22 @@ const BoxDecoration _background = BoxDecoration(
   borderRadius: BorderRadius.all(Radius.circular(20.0)),
 );
 
-Container _header = Container(
-  padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
-  color: Color(0xffE5E8E8),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: const <Widget>[
-      Text('Create Event', style: _titleStyle),
-      SizedBox(height: 15),
-      Text(
-          'Want to host a game? Fill up this form and wait for SportBuddies to join!',
-          style: _subheadingStyle),
-    ],
-  ),
-);
 const TextStyle _titleStyle = TextStyle(
     fontWeight: FontWeight.bold, fontSize: 50, color: Color(0xffE3663E));
 const TextStyle _subheadingStyle =
     TextStyle(color: Colors.black87, fontSize: 15, fontWeight: FontWeight.bold);
 const TextStyle _infoStyle = TextStyle(color: Colors.black87, fontSize: 15);
+//Container _header = Container(
+//   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
+//   color: Color(0xffE5E8E8),
+//   child: Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: const <Widget>[
+//       Text('Create Event', style: _titleStyle),
+//       SizedBox(height: 15),
+//       Text(
+//           'Want to host a game? Fill up this form and wait for SportBuddies to join!',
+//           style: _subheadingStyle),
+//     ],
+//   ),
+// );

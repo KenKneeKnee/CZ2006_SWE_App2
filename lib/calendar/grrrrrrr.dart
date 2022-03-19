@@ -112,7 +112,7 @@ class _GrrState extends State<Grr> {
     return (!loading)
         ? Container(
             color: Colors.transparent,
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+            //margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
             child: Column(
               children: [
                 TableCalendar<RetrievedEvent>(
