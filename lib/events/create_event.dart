@@ -13,15 +13,19 @@ import 'package:my_app/widgets/time_picker.dart';
 import '../map/map_widgets.dart';
 
 class CreateEventForm extends StatefulWidget {
-  CreateEventForm(
-      {Key? key,
-      required this.date,
-      required this.placeId,
-      required this.placeDetails})
-      : super(key: key);
+  CreateEventForm({
+    Key? key,
+    required this.date,
+    required this.placeId,
+    // required this.placeDetails
+  }) : super(key: key);
   late String placeId;
-  late String placeDetails;
+  // late String placeDetails;
   final DateTime date;
+  TimePicker startPicker = TimePicker(
+      labelText: "Start Time", selectedDate: DateTime.now(), initialise: true);
+  TimePicker endPicker = TimePicker(
+      labelText: "End Time", selectedDate: DateTime.now(), initialise: true);
 
   @override
   _CreateEventFormState createState() => _CreateEventFormState();
@@ -38,19 +42,24 @@ class _CreateEventFormState extends State<CreateEventForm> {
   DateTime? startTime;
   DateTime? endTime;
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   print('initialising');
+  //   widget.startPicker = TimePicker(
+  //     selectedDate: widget.date,
+  //     labelText: "Start Time",
+  //     initialise: true,
+  //   );
+  //   widget.endPicker = TimePicker(
+  //     selectedDate: widget.date,
+  //     labelText: "End Time",
+  //     initialise: false,
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
-    TimePicker startPicker = TimePicker(
-      selectedDate: widget.date,
-      labelText: "Start Time",
-      initialise: true,
-    );
-    TimePicker endPicker = TimePicker(
-      selectedDate: widget.date,
-      labelText: "End Time",
-      initialise: false,
-    );
-
     return StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -65,32 +74,6 @@ class _CreateEventFormState extends State<CreateEventForm> {
             shrinkWrap: true,
             children: <Widget>[
               Container(
-                decoration: _background,
-                height: MediaQuery.of(context).size.height * 0.3,
-              ),
-              _header,
-              Container(
-                margin: const EdgeInsets.all(15.0),
-                padding: const EdgeInsets.all(3.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.orangeAccent,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.location_city),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        "${widget.placeDetails}",
-                        style: _infoStyle,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
                 child: Form(
                   key: formKey,
@@ -99,47 +82,46 @@ class _CreateEventFormState extends State<CreateEventForm> {
                     children: [
                       buildName(),
                       buildMaxCap(),
-                      startPicker,
-                      endPicker,
+                      widget.startPicker,
+                      widget.endPicker,
                       BouncingButton(
-                        bgColor: Color(0xffE96B46),
-                        borderColor: Color(0xffE96B46),
-                        buttonText: "Submit",
-                        textColor: Color(0xffffffff),
-                        onClick: () async {
-                          final isValid = formKey.currentState?.validate();
-                          bool overnight = false;
-                          setState(() {
-                            startTime = startPicker.selectedTime;
-                            endTime = endPicker.selectedTime;
-                            if (endTime!.isBefore(startTime!)) {
-                              overnight = true;
-                              Navigator.pop(context, 2);
+                          bgColor: Color(0xffE96B46),
+                          borderColor: Color(0xffE96B46),
+                          buttonText: "Submit",
+                          textColor: Color(0xffffffff),
+                          onClick: () async {
+                            final isValid = formKey.currentState?.validate();
+                            bool overnight = false;
+                            setState(() {
+                              startTime = widget.startPicker.selectedTime;
+                              endTime = widget.endPicker.selectedTime;
+                              if (endTime!.isBefore(startTime!)) {
+                                overnight = true;
+                                Navigator.pop(context, 2);
+                              }
+                            });
+
+                            if (isValid != null && isValid && !overnight) {
+                              formKey.currentState?.save();
+                              SportEvent newEvent = SportEvent(
+                                title,
+                                startTime!,
+                                endTime!,
+                                maxCap,
+                                1,
+                                widget.placeId, //temporary id
+                              );
+
+                              DocumentReference addedDocRef =
+                                  await repository.addEvent(newEvent);
+                              String newId = addedDocRef.id;
+                              bookings.addBooking(uid, newId);
+
+                              Navigator.pop(context, 1);
+                            } else {
+                              Navigator.pop(context, 0);
                             }
-                          });
-
-                          if (isValid != null && isValid && !overnight) {
-                            formKey.currentState?.save();
-                            SportEvent newEvent = SportEvent(
-                              title,
-                              startTime!,
-                              endTime!,
-                              maxCap,
-                              1,
-                              widget.placeId, //temporary id
-                            );
-
-                            DocumentReference addedDocRef =
-                                await repository.addEvent(newEvent);
-                            String newId = addedDocRef.id;
-                            bookings.addBooking(uid, newId);
-
-                            Navigator.pop(context, 1);
-                          } else {
-                            Navigator.pop(context, 0);
-                          }
-                        },
-                      ),
+                          }),
                     ],
                   ),
                 ),
