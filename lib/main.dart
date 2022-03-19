@@ -49,6 +49,6 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        home: LoginPage());
+        home: WelcomePage());
   }
 }

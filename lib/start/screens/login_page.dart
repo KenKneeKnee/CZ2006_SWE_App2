@@ -98,13 +98,13 @@ class _LoginPageState extends State<LoginPage> {
             if (snapshot.connectionState == ConnectionState.done) {
               return SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(
-                    40, MediaQuery.of(context).size.height * 0.38, 40, 100),
+                    40, MediaQuery.of(context).size.height * 0.37, 40, 100),
                 child: Wrap(
                   runAlignment: WrapAlignment.center,
                   runSpacing: 30,
                   //crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    const Text('Welcome back!',
+                    const Text('Welcome\nback!',
                         style: _titleStyle, textAlign: TextAlign.left),
                     const Text(
                         'Ready for more fun and games? Login to your account now',
@@ -222,7 +222,7 @@ Container _FormFieldContainer(Widget containerChild) {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('login-background.png'),
+    image: AssetImage('assets/images/login-background.png'),
     fit: BoxFit.fitHeight,
   ),
 );
