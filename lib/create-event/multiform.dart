@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/booking_repository.dart';
-import 'package:my_app/events/create_event.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
@@ -13,8 +12,8 @@ import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
-class MultiStepForm extends StatefulWidget {
-  MultiStepForm({Key? key, required this.placeId, required this.sportsFacility})
+class EventStepForm extends StatefulWidget {
+  EventStepForm({Key? key, required this.placeId, required this.sportsFacility})
       : super(key: key);
   final String placeId;
   final SportsFacility sportsFacility;
@@ -25,10 +24,10 @@ class MultiStepForm extends StatefulWidget {
       labelText: "End Time", selectedDate: DateTime.now(), initialise: true);
 
   @override
-  State<MultiStepForm> createState() => _MultiStepFormState();
+  State<EventStepForm> createState() => _EventStepFormState();
 }
 
-class _MultiStepFormState extends State<MultiStepForm> {
+class _EventStepFormState extends State<EventStepForm> {
   int _currentStep = 0;
   bool isCompleted = false;
   DateTime date = DateTime.now();
@@ -361,17 +360,3 @@ const TextStyle _titleStyle = TextStyle(
 const TextStyle _subheadingStyle =
     TextStyle(color: Colors.black87, fontSize: 15, fontWeight: FontWeight.bold);
 const TextStyle _infoStyle = TextStyle(color: Colors.black87, fontSize: 15);
-//Container _header = Container(
-//   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
-//   color: Color(0xffE5E8E8),
-//   child: Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: const <Widget>[
-//       Text('Create Event', style: _titleStyle),
-//       SizedBox(height: 15),
-//       Text(
-//           'Want to host a game? Fill up this form and wait for SportBuddies to join!',
-//           style: _subheadingStyle),
-//     ],
-//   ),
-// );

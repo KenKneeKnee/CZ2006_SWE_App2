@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/create-event/multiform.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
-import 'package:my_app/reviews/animatedbutton.dart';
 import 'package:my_app/reviews/view_reviews.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -54,7 +52,7 @@ class MapMarkerInfoSheet extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MultiStepForm(
+                        builder: (context) => EventStepForm(
                           placeId: placeId,
                           sportsFacility: SportsFacil,
                         ),
