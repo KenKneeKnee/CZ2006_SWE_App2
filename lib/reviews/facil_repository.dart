@@ -26,9 +26,9 @@ class FacilRepository {
     }
   }
 
-  void addReviewFor(String placeId, Review review) {
+  Future<DocumentReference> addReviewFor(String placeId, Review review) {
     Map<String, Object> revjson=review.toJson();
-    collection.doc(placeId).collection("reviews").add(revjson);
+    return collection.doc(placeId).collection("reviews").add(revjson);
   }
 
   // void deleteReviewFor(String placeId, Review review){
