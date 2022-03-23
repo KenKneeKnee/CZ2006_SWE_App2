@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/widgets/background.dart';
+import 'dart:math';
+
+import '../map/facil_map.dart';
 
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
@@ -163,17 +167,42 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
       } else if (status == "joined") {
         return LeaveButton(
           curEvent: _curEvent,
-          leaveFunction: () {
-            String key = _curEvent.eventId;
-            if (_curEvent.curCap > 0) {
-              _curEvent.curCap -= 1;
-              booking.deleteBooking(uid, key);
+          leaveFunction: ()  async {
+             String key = _curEvent.eventId;
+            LocationData userLocation = await checkLocation();
+            var sportsfacildatasource = SportsFacilDataSource();
+            List<SportsFacility> objects = await sportsfacildatasource.someFunction();
+            DateTime? curTime = DateTime.now();
+            SportsFacility obj = objects[15]; // aljunied swimming complex
+            var lat2 = obj.coordinates.latitude;
+            var lon2 = obj.coordinates.longitude;
+            bool inRadius = calculateDistance(
+                userLocation.latitude, userLocation.longitude, lat2, lon2) <-
+                100;
+            if (curTime.isAfter(_curEvent.start) & inRadius == true) {
+              //functions to do once event completed
+              booking.completeBooking(key);
+              //repository.completeEvent(key);
             }
-            if (_curEvent.curCap == 0) {
-              repository.deleteEvent(_curEvent.toSportEvent(), key);
-            } else {
+            else{
               repository.updateEvent(_curEvent.toSportEvent(), key);
             }
+
+
+
+
+            //the correct leave event function
+            // if (_curEvent.curCap > 0) {
+            //   _curEvent.curCap -= 1;
+            //   booking.deleteBooking(uid, key);
+            // }
+            // if (_curEvent.curCap == 0) {
+            //   repository.deleteEvent(_curEvent.toSportEvent(), key);
+            // } else {
+            //   repository.updateEvent(_curEvent.toSportEvent(), key);
+            // }
+
+
           },
         );
       } else if (status == "can join") {
@@ -223,4 +252,13 @@ String _FindBackgroundImage(String facilityType) {
     return ('assets/images/stadium-hover.png');
   }
   return ('assets/images/view-event-soccer.png');
+}
+
+double calculateDistance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;
+  var c = cos;
+  var a = 0.5 -
+      c((lat2 - lat1) * p) / 2 +
+      c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+  return 12742 * asin(sqrt(a)) * 1000;
 }

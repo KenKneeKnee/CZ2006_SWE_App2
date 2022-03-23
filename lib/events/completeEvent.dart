@@ -13,12 +13,12 @@
 //
 // final uid = FirebaseAuth.instance.currentUser?.email as String;
 //
-// class eventPage extends StatefulWidget {
-//   eventPage({Key? key}) : super(key: key);
-//   _eventPageState createState() => _eventPageState();
+// class completeeventPage extends StatefulWidget {
+//   completeeventPage({Key? key}) : super(key: key);
+//   _completeeventPageState createState() => _completeeventPageState();
 // }
 //
-// class _eventPageState extends State<eventPage> {
+// class _completeeventPageState extends State<completeeventPage> {
 //   final EventRepository repository = EventRepository();
 //   final BookingRepository booking = BookingRepository();
 //
@@ -36,18 +36,15 @@
 //     var sportsfacildatasource = SportsFacilDataSource();
 //     List<SportsFacility> objects = await sportsfacildatasource.someFunction();
 //     DateTime? curTime = DateTime.now();
-//     SportsFacility obj = objects[e.placeId];
+//     SportsFacility obj = objects[15]; // aljunied swimming complex
 //     var lat2 = obj.coordinates.latitude;
 //     var lon2 = obj.coordinates.longitude;
 //     bool inRadius = calculateDistance(
 //             userLocation.latitude, userLocation.longitude, lat2, lon2) <
-//         100;
+//         10000;
 //     if (curTime.isAfter(e.start) & inRadius == true) {
 //       //functions to do once event completed
 //       booking.completeBooking(key);
-//     }
-//     else{
-//       print("You cannot complete this event!");
 //     }
 //
 //     //auto delete for buds that joined but did not complete
@@ -77,7 +74,7 @@
 //             List EventList = snapshot.data!.docs;
 //             Map<String, SportEvent> EventMap = {};
 //             for (DocumentSnapshot doc in EventList) {
-//               if (doc['placeId'] == "92") {
+//               if (doc['placeId'] == "15") {
 //                 SportEvent e = SportEvent.fromSnapshot(doc);
 //                 EventMap[doc.id] = e;
 //               }

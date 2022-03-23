@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/calendar/grrrrrrr.dart';
+import 'package:my_app/events/completeEvent.dart';
 import 'package:my_app/reviews/Review.dart';
 import 'package:my_app/reviews/facil_repository.dart';
 import 'package:my_app/events/view_event.dart';
@@ -55,7 +56,7 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        home: ReviewPage(),
+        home: LoginPage(),
     );
   }
 }

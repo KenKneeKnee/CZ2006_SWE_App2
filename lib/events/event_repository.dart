@@ -26,4 +26,12 @@ class EventRepository {
     await collection.doc(key).delete();
   }
 
+  void completeEvent(String key) async {
+    collection.where("eventId", isEqualTo: key).get().then((value) {
+      value.docs.forEach((result) {
+        collection.doc(result.id).update({"active": false});
+      });
+    });
+  }
+
 }
