@@ -127,6 +127,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
                               maxCap,
                               1,
                               widget.placeId, //temporary id
+                              true,
                             );
 
                             DocumentReference addedDocRef =
