@@ -45,7 +45,7 @@ class EventDataFetcher {
       Timestamp _endTS = event.get("end");
       DateTime _end = _endTS.toDate();
       RetrievedEvent re = RetrievedEvent(event.get("name"), _start, _end,
-          event.get("maxCap"), event.get("curCap"), event.get("placeId"), event.id, event.get("active"));
+          event.get("maxCap"), event.get("curCap"), event.get("placeId"), event.get("type"), event.get("active"), event.id);
       gamelist.add(re);
     }
 
