@@ -41,6 +41,7 @@ class _EventStepFormState extends State<EventStepForm> {
   DateTime? startTime;
   DateTime? endTime;
   String dropdownValue = "Select Sport";
+  bool active = false;
 
   @override
   void initState() {
@@ -210,20 +211,29 @@ class _EventStepFormState extends State<EventStepForm> {
                                             if (isValid != null &&
                                                 isValid &&
                                                 !overnight) {
+                                              if (startTime!.isBefore(
+                                                      DateTime.now()) &&
+                                                  (!endTime!.isAfter(
+                                                      DateTime.now()))) {
+                                                active = true;
+                                              }
                                               newEvent = SportEvent(
-                                                eventTitle,
-                                                startTime!,
-                                                endTime!,
-                                                maxCap,
-                                                1,
-                                                widget.placeId, //temporary id
-                                              );
+                                                  name: eventTitle,
+                                                  start: startTime!,
+                                                  end: endTime!,
+                                                  maxCap: maxCap,
+                                                  curCap: 1,
+                                                  placeId: widget
+                                                      .placeId, //temporary id
+                                                  type: dropdownValue,
+                                                  active: active);
 
                                               DocumentReference addedDocRef =
                                                   await repository
                                                       .addEvent(newEvent);
                                               String newId = addedDocRef.id;
-                                              bookings.addBooking(uid, newId);
+                                              bookings.addBooking(
+                                                  uid, newId, true);
 
                                               Navigator.pop(context, 1);
                                             } else {
@@ -315,8 +325,15 @@ class _EventStepFormState extends State<EventStepForm> {
             border: Border.all(color: Colors.black45),
             borderRadius: BorderRadius.circular(4)),
         padding: EdgeInsets.all(10),
-        child: DropdownButton<String>(
+        child: DropdownButtonFormField<String>(
           value: dropdownValue,
+          validator: (value) {
+            if (value == "Select Sport") {
+              return 'Please select sport type for this event';
+            } else {
+              return null;
+            }
+          },
           isExpanded: true,
           icon: const Icon(Icons.sports_football_outlined),
           elevation: 16,

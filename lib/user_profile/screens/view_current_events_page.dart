@@ -171,17 +171,17 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                               currentevent
                                                                   .placeId),
                                                           event: RetrievedEvent(
-                                                              currentevent.name,
-                                                              currentevent
-                                                                  .start,
-                                                              currentevent.end,
-                                                              currentevent
-                                                                  .maxCap,
-                                                              currentevent
-                                                                  .curCap,
-                                                              currentevent
-                                                                  .placeId,
-                                                              eventid),
+                                                            currentevent.name,
+                                                            currentevent.start,
+                                                            currentevent.end,
+                                                            currentevent.maxCap,
+                                                            currentevent.curCap,
+                                                            currentevent
+                                                                .placeId,
+                                                            currentevent.type,
+                                                            currentevent.active,
+                                                            eventid,
+                                                          ),
                                                           SportsFacil:
                                                               sportsfacil,
                                                         ),
