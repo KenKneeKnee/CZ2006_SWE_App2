@@ -21,7 +21,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.2"
   async:
     dependency: transitive
     description:
@@ -140,7 +140,11 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "3.3.7"
+=======
+    version: "3.3.11"
+>>>>>>> ea371f18ff806f52bcbb629b03b4bf119bb487e5
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -365,7 +369,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   platform:
     dependency: transitive
     description:
@@ -475,7 +479,7 @@ packages:
       name: table_calendar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.4"
+    version: "3.0.5"
   term_glyph:
     dependency: transitive
     description:

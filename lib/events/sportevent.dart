@@ -11,6 +11,7 @@ class SportEvent {
   final int maxCap;
   int curCap;
   final String placeId;
+  bool active=true;
 
   /// Description of what will be in the event
   // final String activity;
