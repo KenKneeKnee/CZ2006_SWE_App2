@@ -167,13 +167,14 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
       } else if (status == "joined") {
         return LeaveButton(
           curEvent: _curEvent,
+          //the complete event function
           leaveFunction: ()  async {
              String key = _curEvent.eventId;
             LocationData userLocation = await checkLocation();
             var sportsfacildatasource = SportsFacilDataSource();
             List<SportsFacility> objects = await sportsfacildatasource.someFunction();
             DateTime? curTime = DateTime.now();
-            SportsFacility obj = objects[15]; // aljunied swimming complex
+            SportsFacility obj = objects[265]; // aljunied swimming complex
             var lat2 = obj.coordinates.latitude;
             var lon2 = obj.coordinates.longitude;
             bool inRadius = calculateDistance(
