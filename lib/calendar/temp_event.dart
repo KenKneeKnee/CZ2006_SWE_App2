@@ -27,7 +27,29 @@ final kEvents = LinkedHashMap<DateTime, List<GameEvent>>(
   hashCode: getHashCode,
 )..addAll(_kEventSource);
 
+<<<<<<< Updated upstream
 // final kEvents = Map<DateTime, List<SportEvent>>()..addAll(_sEventSource);
+=======
+    List res = [];
+    List<RetrievedEvent> gamelist = [];
+    await repository.collection
+        .where("placeId", isEqualTo: place)
+        .where("start", isGreaterThanOrEqualTo: timestamp1)
+        .where("start", isLessThan: timestamp2)
+        .get()
+        .then((value) {
+      res = value.docs;
+    });
+    for (DocumentSnapshot event in res) {
+      Timestamp _startTS = event.get("start");
+      DateTime _start = _startTS.toDate();
+      Timestamp _endTS = event.get("end");
+      DateTime _end = _endTS.toDate();
+      RetrievedEvent re = RetrievedEvent(event.get("name"), _start, _end,
+          event.get("maxCap"), event.get("curCap"), event.get("placeId"), event.id, event.get("active"));
+      gamelist.add(re);
+    }
+>>>>>>> Stashed changes
 
 // //Map<DateTime, List<SportEvent>>
 // _fetchEvents() {

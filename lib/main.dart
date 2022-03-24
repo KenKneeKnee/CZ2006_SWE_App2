@@ -42,9 +42,13 @@ class SportBuds extends StatelessWidget {
           ),
           bodyText1: TextStyle(fontSize: 18.0),
         ),
+<<<<<<< Updated upstream
       ),
       //For testing pages
       home: eventPage(),
+=======
+        home: LoginPage(),
+>>>>>>> Stashed changes
     );
   }
 }

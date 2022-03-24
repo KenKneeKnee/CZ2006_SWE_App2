@@ -106,6 +106,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
                           if (isValid != null && isValid) {
                             formKey.currentState?.save();
+<<<<<<< Updated upstream
                             SportEvent newEvent = new SportEvent(
                                 title,
                                 startTime!,
@@ -113,6 +114,17 @@ class _CreateEventFormState extends State<CreateEventForm> {
                                 maxCap,
                                 0,
                                 widget.placeId);
+=======
+                            SportEvent newEvent = SportEvent(
+                              title,
+                              startTime!,
+                              endTime!,
+                              maxCap,
+                              1,
+                              widget.placeId, //temporary id
+                              true
+                            );
+>>>>>>> Stashed changes
 
                             repository.addEvent(newEvent);
                             Navigator.pop(context, true);
