@@ -89,22 +89,32 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
 
                     for (DocumentSnapshot doc in BookingList) {
                       if (doc['userId'] == uid) {
-                        if (doc['active'] == true) {
+                        if (doc['active'] == false) {
                           activeEventIds.add(doc['eventId']);
                         }
-                      } else {
-                        pastEventIds.add(doc['eventId']);
                       }
                     }
+
+                    List tempEventIdlist = [];
 
                     for (String eid in activeEventIds) {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
                           SportEvent e = SportEvent.fromSnapshot(doc);
-                          ActiveEventMap[eid] = e;
+                          DateTime start = e.start;
+                          DateTime end = e.end;
+
+                          DateTime? curTime = DateTime.now();
+                          if (curTime.isBefore(start) == true) {
+                            ActiveEventMap[eid] = e;
+
+                            tempEventIdlist.add(eid);
+                          }
                         }
                       }
                     }
+
+                    activeEventIds = tempEventIdlist;
 
                     for (String eventid in activeEventIds) {
                       SportEvent currentevent =
