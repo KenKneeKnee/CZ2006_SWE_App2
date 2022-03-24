@@ -14,16 +14,21 @@ TextButton CancelTextButton(BuildContext context) {
   );
 }
 
-class JoinButton extends StatelessWidget {
-  JoinButton({Key? key, required this.curEvent, required this.joinFunction})
+class GreenButton extends StatelessWidget {
+  GreenButton(
+      {Key? key,
+      required this.curEvent,
+      required this.buttonFunction,
+      required this.buttontext})
       : super(key: key);
   RetrievedEvent curEvent;
-  void Function() joinFunction;
+  String buttontext;
+  void Function() buttonFunction;
 
   @override
   Widget build(BuildContext context) {
     void function() {
-      joinFunction(); //MUST put bracket for the function to be actually executed
+      buttonFunction(); //MUST put bracket for the function to be actually executed
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -39,7 +44,7 @@ class JoinButton extends StatelessWidget {
       bgColor: Colors.green,
       textColor: Colors.white,
       borderColor: Colors.white,
-      buttonText: "Join Event!",
+      buttonText: buttontext,
       onClick: () {
         showDialog(
           context: context,
@@ -56,6 +61,42 @@ class JoinButton extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class CompleteEventButton extends StatelessWidget {
+  CompleteEventButton(
+      {Key? key,
+      required this.curEvent,
+      required this.buttonFunction,
+      required this.buttontext})
+      : super(key: key);
+  RetrievedEvent curEvent;
+  String buttontext;
+  void Function() buttonFunction;
+
+  @override
+  Widget build(BuildContext context) {
+    void function() {
+      buttonFunction();
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return JoinedEventDialog(
+              bgDeco: DialogBoxDecoration.joinEventBg,
+              title: 'Completed Event!',
+              paragraph: 'Hope you had fun!',
+            );
+          });
+    }
+
+    return BouncingButton(
+      bgColor: Colors.green,
+      textColor: Colors.white,
+      borderColor: Colors.white,
+      buttonText: buttontext,
+      onClick: function,
     );
   }
 }
@@ -86,23 +127,8 @@ class LeaveButton extends StatelessWidget {
       bgColor: Colors.red,
       textColor: Colors.white,
       borderColor: Colors.white,
-      buttonText: "Leave Event!",
-      onClick: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Leave Event'),
-            content: const Text('Confirm?'),
-            actions: <Widget>[
-              CancelTextButton(context),
-              TextButton(
-                onPressed: function,
-                child: const Text('Ok'),
-              ),
-            ],
-          ),
-        );
-      },
+      buttonText: "Leave Event",
+      onClick: function,
     );
   }
 }

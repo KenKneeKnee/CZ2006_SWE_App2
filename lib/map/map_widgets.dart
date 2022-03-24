@@ -59,8 +59,9 @@ class MapMarkerInfoHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(8.0, 10, 0, 10),
+
       height: MediaQuery.of(context).size.height * 0.3,
-      //width: MediaQuery.of(context).size.width * 0.8,
+      // //width: MediaQuery.of(context).size.width * 0.8,
       child: Row(
         children: [
           Expanded(

@@ -9,6 +9,7 @@ import 'package:my_app/calendar/grrrrrrr.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/map/map_data.dart';
+import 'package:my_app/map/map_sheet.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
@@ -126,20 +127,6 @@ class _FacilitiesMapState extends State<FacilitiesMap>
               ],
             )
           : LottieMap(),
-      // : Container(
-      //     child: Center(
-      //       child: Stack(
-      //         children: [
-      //           Lottie.network(
-      //             'https://assets6.lottiefiles.com/packages/lf20_qjeqt7ez.json',
-      //             repeat: true,
-      //             reverse: true,
-      //             animate: true,
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ), //TODO: I THINK SMTH IS NOT RIGHT HERE
     );
   }
 
@@ -200,32 +187,6 @@ class _FacilitiesMapState extends State<FacilitiesMap>
           '${_markerList.length} markers have been created on the map from ${SportsFacilityList.length}!');
     }
     return _markerList;
-  }
-}
-
-class MapMarkerInfoSheet extends StatelessWidget {
-  MapMarkerInfoSheet({Key? key, required this.SportsFacil, required this.index})
-      : super(key: key);
-  final SportsFacility SportsFacil;
-  final int index;
-  late String placeId = index.toString();
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MapMarkerInfoHeader(SportsFacil.placeName, SportsFacil.facilityType,
-              SportsFacil.addressDesc, SportsFacil.hoverImgPath),
-          Grr(
-            placeId: placeId,
-            sportsFacility: SportsFacil,
-          ),
-        ],
-      ),
-    );
   }
 }
 

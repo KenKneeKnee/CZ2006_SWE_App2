@@ -3,13 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
-import 'package:my_app/user_profile/screens/view_events_page.dart';
+import 'package:my_app/user_profile/screens/view_past_events_page.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_widget.dart';
+import 'package:my_app/user_profile/screens/view_current_events_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -68,14 +69,13 @@ class _ProfilePageState extends State<ProfilePage> {
             u = UserData.fromSnapshot(doc);
           }
         }
-        if (u.reports >= 5) {
-          showDialog(
-              // needs some UI
-              context: context,
-              builder: (BuildContext context) => _buildWarningDialog(context));
-          u.reports = 0;
-          repository.collection.doc(u.userid).update({"reports": u.reports});
-        }
+
+        //if (u.reports >= 5) {
+        //  showDialog(
+        //      context: context,
+        //      builder: (BuildContext context) => _buildWarningDialog(context));
+        //  repository.collection.doc(u.userid).update({"reports": 0});
+        //}
 
         return Container(
             decoration: _background,
@@ -118,11 +118,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         borderColor: const Color(0xffE3663E),
                         buttonText: "View Events",
                         textColor: const Color(0xffffffff),
-                        onClick: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  //change to test pages
-                                  builder: (context) => ViewEventPage()),
-                            )),
+                        //Currently leads to current event page
+                        onClick: () {
+                          // temporary tag
+                          if (u.reports >= 5) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildWarningDialog(context));
+                            repository.collection
+                                .doc(u.userid)
+                                .update({"reports": 0});
+                          }
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                //change to test pages
+                                builder: (context) => ViewEventPage()),
+                          );
+                        }),
                     const SizedBox(height: 24),
                     buildAbout(u),
                   ],

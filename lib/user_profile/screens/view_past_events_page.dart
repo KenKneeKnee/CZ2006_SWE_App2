@@ -105,9 +105,9 @@ class _ViewEventPageState extends State<ViewEventPage> {
                       }
                     }
 
-                    for (String eventid in activeEventIds) {
+                    for (String eventid in pastEventIds) {
                       SportEvent currentevent =
-                          ActiveEventMap[eventid] as SportEvent;
+                          PastEventMap[eventid] as SportEvent;
                       SportsFacility sportsfacil =
                           SportsFacilityList[int.parse(currentevent.placeId)];
 

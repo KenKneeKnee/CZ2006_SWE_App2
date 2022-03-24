@@ -1,12 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/widgets/background.dart';
+import 'package:my_app/widgets/bouncing_button.dart';
+import 'dart:math';
+
+import '../map/facil_map.dart';
 
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
@@ -30,11 +35,12 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
   final EventRepository repository = EventRepository();
   final BookingRepository booking = BookingRepository();
   String status = "unchecked";
+  String completeStatus = "unchecked";
 
   @override
   void initState() {
     super.initState();
-    makeChecks(widget.event);
+    JoinLeaveCheck(widget.event);
   }
 
   @override
@@ -57,8 +63,21 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                   return const CircularProgressIndicator();
                 }
 
-                return Card(
-                  child: Stack(
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      curEvent.name,
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.yellow),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                  body: Stack(
                     children: [
                       RoundedBackgroundImage(imagePath: _imagePath),
                       Container(
@@ -74,6 +93,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                               SportEventTextWidget.Title(widget.event.name),
                               SportEventTextWidget.Subtitle(
                                   widget.SportsFacil.addressDesc),
+                              SportEventTextWidget.Subtitle(widget.event.type),
                               Row(
                                 children: [
                                   Flexible(
@@ -85,7 +105,6 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                                           capIcon)),
                                 ],
                               ),
-                              TextContainer('event description', context),
                               renderButton(curEvent),
                             ],
                           ),
@@ -127,17 +146,81 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
     return 0;
   }
 
-  Future makeChecks(RetrievedEvent curEvent) async {
+  Future<String> canCompleteEvent(String uid, RetrievedEvent curEvent) async {
+    LocationData userLocation = await checkLocation();
+    BookingRepository booking = BookingRepository();
+    var sportsfacildatasource = SportsFacilDataSource();
+    List<SportsFacility> objects = await sportsfacildatasource.someFunction();
+    DateTime? curTime = DateTime.now();
+    SportsFacility obj = objects[265]; // aljunied swimming complex
+    var lat2 = obj.coordinates.latitude;
+    var lon2 = obj.coordinates.longitude;
+    bool inRadius = calculateDistance(
+            userLocation.latitude, userLocation.longitude, lat2, lon2) <
+        1000000000;
+    String completeStatus = "error";
+    bool found = false;
+
+    //check in order (1) time (2) location (3) if already completed
+    if (curTime.isAfter(curEvent.start) & curTime.isBefore(curEvent.end)) {
+      if (inRadius) {
+        print("yes in radius");
+        QuerySnapshot zz = await booking.retrievePastEvents(uid);
+        for (DocumentSnapshot doc in zz.docs) {
+          String eid = await doc.get("eventId");
+          if (eid == curEvent.eventId) {
+            completeStatus = "completed";
+            found = true;
+          }
+        }
+
+        if (found == false) {
+          QuerySnapshot ss = await booking
+              .retrieveActiveEvents(uid); // current bookings for this user
+
+          for (DocumentSnapshot doc in ss.docs) {
+            String eid = await doc.get("eventId");
+            if (eid == curEvent.eventId) {
+              bool active = await doc.get('active');
+              found = true;
+              print("booking repo status: ${active}");
+              if (active) {
+                completeStatus = "can complete";
+              }
+            }
+          }
+        }
+      } else {
+        completeStatus = "not at location";
+      }
+    } else {
+      if (curTime.isAfter(curEvent.end)) {
+        completeStatus = "event expired"; //checked
+      } else if (curTime.isBefore(curEvent.start)) {
+        completeStatus = "future event"; //checked
+      } else {
+        completeStatus = "invalid timing"; // probably wont reach here? i think?
+      }
+    }
+    print("canComplete check: ${completeStatus}");
+    return completeStatus;
+  }
+
+  Future JoinLeaveCheck(RetrievedEvent curEvent) async {
     String _newStatus;
+    String _completeStatus = "yooooo";
+
     int hasBooking = await booking.checkUser(uid, curEvent.eventId);
     if (hasBooking == -1) {
       _newStatus = "not logged in";
     } else if (hasBooking == 1) {
       _newStatus = "joined";
+      _completeStatus = await canCompleteEvent(uid, curEvent);
     } else {
       // has not joined this event
       // now must check if user CAN join the event
       int hasClash = await hasActiveEvent(uid, curEvent);
+
       if (curEvent.curCap < curEvent.maxCap) {
         if (hasClash == 0) {
           _newStatus = "can join";
@@ -150,8 +233,9 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
       }
     }
     setState(() {
+      print("join status ${_newStatus}");
       status = _newStatus;
-      print(status);
+      completeStatus = _completeStatus;
     });
   }
 
@@ -161,29 +245,64 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
       if (status == "not logged in") {
         return NotLoggedInButton();
       } else if (status == "joined") {
-        return LeaveButton(
-          curEvent: _curEvent,
-          leaveFunction: () {
-            String key = _curEvent.eventId;
-            if (_curEvent.curCap > 0) {
-              _curEvent.curCap -= 1;
-              booking.deleteBooking(uid, key);
-            }
-            if (_curEvent.curCap == 0) {
-              repository.deleteEvent(_curEvent.toSportEvent(), key);
-            } else {
-              repository.updateEvent(_curEvent.toSportEvent(), key);
-            }
-          },
+        Widget statusChip = Chip(
+          label: Text(completeStatus),
+        );
+
+        if (completeStatus == "not at location") {
+          statusChip = Chip(label: Text("YOU'RE NOT HERE DONT FAKE"));
+        } else if (completeStatus == "event expired") {
+          return Chip(
+              label: Text("EXPIRED EVENT")); //cannot leave this event anymore
+        } else if (completeStatus == "future event") {
+          statusChip = Chip(label: Text("wait la"));
+        } else if (completeStatus == "completed") {
+          return statusChip = Chip(label: Text("Completed"));
+        } else if (completeStatus == "can complete") {
+          statusChip = CompleteEventButton(
+              curEvent: _curEvent,
+              buttonFunction: () async {
+                String key = _curEvent.eventId;
+
+                booking.completeBooking(key);
+              },
+              buttontext: "Complete Event");
+        }
+
+        return Expanded(
+          child: Column(
+            children: [
+              Expanded(
+                child: statusChip,
+              ),
+              Expanded(
+                child: LeaveButton(
+                    curEvent: _curEvent,
+                    leaveFunction: () async {
+                      String key = _curEvent.eventId;
+                      if (_curEvent.curCap > 0) {
+                        _curEvent.curCap -= 1;
+                        booking.deleteBooking(uid, key);
+                      }
+                      if (_curEvent.curCap == 0) {
+                        repository.deleteEvent(_curEvent.toSportEvent(), key);
+                      } else {
+                        repository.updateEvent(_curEvent.toSportEvent(), key);
+                      }
+                    }),
+              ),
+            ],
+          ),
         );
       } else if (status == "can join") {
-        return JoinButton(
+        return GreenButton(
           curEvent: _curEvent,
-          joinFunction: () {
+          buttontext: "Join Event",
+          buttonFunction: () {
             String key = _curEvent.eventId;
             if (_curEvent.curCap < _curEvent.maxCap) {
               _curEvent.curCap += 1;
-              bool active=DateTime.now().isAfter(_curEvent.start);
+              bool active = DateTime.now().isAfter(_curEvent.start);
               booking.addBooking(uid, key, active);
               repository.updateEvent(_curEvent.toSportEvent(), key);
               print('hello ${uid}. Added booking successfully!');
@@ -223,4 +342,13 @@ String _FindBackgroundImage(String facilityType) {
     return ('assets/images/stadium-hover.png');
   }
   return ('assets/images/view-event-soccer.png');
+}
+
+double calculateDistance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;
+  var c = cos;
+  var a = 0.5 -
+      c((lat2 - lat1) * p) / 2 +
+      c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
+  return 12742 * asin(sqrt(a)) * 1000;
 }
