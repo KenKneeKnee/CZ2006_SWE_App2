@@ -20,10 +20,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // FacilRepository facils = FacilRepository();
-  // Review r = Review('another one', 1, 'it is not nice',"rainer");
-  // facils.addReviewFor("2", r);
-
   runApp(SportBuds());
 }
 
