@@ -180,7 +180,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
             bool inRadius = calculateDistance(
                 userLocation.latitude, userLocation.longitude, lat2, lon2) <-
                 100;
-            if (curTime.isAfter(_curEvent.start) & inRadius == true) {
+            if (curTime.isAfter(_curEvent.start) & inRadius == true & curTime.isBefore(_curEvent.end)) {
               //functions to do once event completed
               booking.completeBooking(key);
               //repository.completeEvent(key);
