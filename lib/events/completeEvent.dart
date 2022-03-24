@@ -36,7 +36,7 @@ class _eventPageState extends State<eventPage> {
     var sportsfacildatasource = SportsFacilDataSource();
     List<SportsFacility> objects = await sportsfacildatasource.someFunction();
     DateTime? curTime = DateTime.now();
-    SportsFacility obj = objects[e.placeId];
+    SportsFacility obj = objects[e.placeId as int];
     var lat2 = obj.coordinates.latitude;
     var lon2 = obj.coordinates.longitude;
     bool inRadius = calculateDistance(
@@ -45,14 +45,13 @@ class _eventPageState extends State<eventPage> {
     if (curTime.isAfter(e.start) & inRadius == true) {
       //functions to do once event completed
       booking.completeBooking(key);
-    }
-    else{
+    } else {
       print("You cannot complete this event!");
     }
 
     //auto delete for buds that joined but did not complete
 
-    if(curTime.isAfter(e.end)){
+    if (curTime.isAfter(e.end)) {
       booking.deleteBooking(uid, key);
     }
   }
