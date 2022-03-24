@@ -25,7 +25,7 @@ class _CoordinatorLayoutState extends State<CoordinatorLayout> {
   @override
   void initState() {
     super.initState();
-    scrollController = widget.scrollController ?? ScrollController();
+    scrollController = ScrollController();
   }
 
   @override
