@@ -37,6 +37,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
   int maxCap = 0;
   DateTime? startTime;
   DateTime? endTime;
+  String type='Water Sports';
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +127,8 @@ class _CreateEventFormState extends State<CreateEventForm> {
                               endTime!,
                               maxCap,
                               1,
-                              widget.placeId, //temporary id
+                              widget.placeId,
+                              type,//temporary id
                             );
 
                             DocumentReference addedDocRef =

@@ -12,12 +12,13 @@ class SportEvent {
   int curCap;
   final String placeId;
   bool active=true;
+  final String type;
 
   /// Description of what will be in the event
   // final String activity;
 
   SportEvent(
-      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId);
+      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId, this.type);
 
   factory SportEvent.fromSnapshot(DocumentSnapshot snapshot) {
     final newEvent =
@@ -56,6 +57,7 @@ SportEvent _EventFromJson(Map<String, dynamic> json) {
     json['maxCap'] as int,
     json['curCap'] as int,
     json['placeId'] as String,
+    json['type'] as String,
   );
 }
 
@@ -67,4 +69,5 @@ Map<String, dynamic> _EventToJson(SportEvent instance) => <String, dynamic>{
   'maxCap': instance.maxCap,
   'curCap': instance.curCap,
   'placeId': instance.placeId,
+  'type':instance.type,
 };

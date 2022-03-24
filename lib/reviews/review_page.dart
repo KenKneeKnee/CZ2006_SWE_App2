@@ -3,16 +3,21 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/reviews/facil_repository.dart';
 import 'package:my_app/reviews/storage_repository.dart';
+import '../map/map_data.dart';
 import 'Review.dart';
 
 final Storage storage = Storage();
 class ReviewPage extends StatefulWidget {
+  ReviewPage({Key? key, required this.placeId,}) //required this.sportsFacility})
+      : super(key: key);
+  final String placeId;
+  //final SportsFacility sportsFacility;
   @override
-  _ReviewPageState createState() => _ReviewPageState();
-  final String placeId="1";
+  State<ReviewPage> createState() => _ReviewPageState();
 }
 
 class _ReviewPageState extends State<ReviewPage> {
@@ -23,6 +28,18 @@ class _ReviewPageState extends State<ReviewPage> {
     // TODO: implement build
     return MaterialApp(
         home: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Review Page',
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.yellow),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
           body: FutureBuilder<QuerySnapshot>(
               future: facils.getReviewsFor(widget.placeId),
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
@@ -40,9 +57,43 @@ class _ReviewPageState extends State<ReviewPage> {
                     Review retrieved = ReviewFromJson(doc.data() as Map<String,dynamic>);
                     reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
                   }
-                  return ListView(
-                        children: reviewlist,
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: reviewlist.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 18.0,
+                          vertical: 10.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 1,
+                              color: Colors.grey,
+                              offset: const Offset(0, 1),
+                              blurRadius: 3,
+                            )
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              fit: FlexFit.tight,
+                              child: GestureDetector(
+                                onTap: () {
+                                  print("${index} was tapped");
+                                },
+                                child: reviewlist[index],
+                              ),
+                            ),],
+                        ),
                       );
+                    },
+                  );
                 }
               },
             ),
@@ -129,38 +180,79 @@ class ReviewWidget extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (!snapshot.hasData) {
               return Container(
-                  height: 100,
-                  padding: EdgeInsets.all(5.0),
-                  child:ListView(
-                    children: [
-                      Text(review.title),
-                      Text(review.rating.toString()),
-                      Text(review.desc),
-                      //Text(review.user),
-                    ],
-                ),
+                  padding: EdgeInsets.fromLTRB(10,10,10,10),
+                  child: Expanded(
+                      child: Row(
+                          children:[
+                            Expanded(flex:1, child: Text(review.user, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,))),
+                            Expanded(flex:4, child:Column(
+                              //mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:[
+                                  RatingBarIndicator(
+                                    rating:
+                                    review.rating*1.0,
+                                    itemBuilder:
+                                        (context, index) =>
+                                        Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                    itemCount: 5,
+                                    itemSize: 20.0,
+                                    direction:
+                                    Axis.horizontal,
+                                  ),
+                                  Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
+                                  SizedBox(height:4),
+                                  Text(review.desc,),
+                                ]
+                            ))
+                          ]
+                      )
+                  )
               );
             }
             else {
               return Container(
-                  height: 100,
-                  padding: EdgeInsets.all(5.0),
-                  child: ListView(
-                    children: [
-                      Text(review.title),
-                      Text(review.rating.toString()),
-                      Text(review.desc),
-                      //Text(review.user),
-                      Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            alignment: Alignment.center,
-                            image: NetworkImage(snapshot.data!))
-                        ),
-                      )
+                padding: EdgeInsets.fromLTRB(10,10,10,10),
+                child: Expanded(
+                  child: Row(
+                    children:[
+                      Expanded(flex:1, child: Text(review.user, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,))),
+                      Expanded(flex:4, child:Column(
+                        //mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:[
+                          RatingBarIndicator(
+                            rating:
+                            review.rating*1.0,
+                            itemBuilder:
+                                (context, index) =>
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                            itemCount: 5,
+                            itemSize: 20.0,
+                            direction:
+                            Axis.horizontal,
+                          ),
+                          Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
+                          SizedBox(height:4),
+                          Text(review.desc,),
+                          Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      alignment: Alignment.center,
+                                      image: NetworkImage(snapshot.data!))
+                              ),),
+                        ]
+                      ))
                     ]
                   )
+                )
               );
             }
           }
