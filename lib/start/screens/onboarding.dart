@@ -132,7 +132,7 @@ class _OnboardingState extends State<Onboarding> {
             child: Stack(
               children: <Widget>[
                 Image.asset(
-                  currentSlide.backgroundImage ??= 'images/background.png',
+                  currentSlide.backgroundImage ??= 'assets/images/background.png',
                 ),
                 Column(
                   children: [

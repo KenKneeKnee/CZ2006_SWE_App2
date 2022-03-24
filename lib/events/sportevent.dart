@@ -1,28 +1,23 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class SportEvent {
   final String name;
-  // late String id;
   final DateTime start;
   final DateTime end;
   final int maxCap;
   int curCap;
   final String placeId;
-<<<<<<< Updated upstream
-=======
-  bool active;
+  bool active=true;
 
   /// Description of what will be in the event
   // final String activity;
->>>>>>> Stashed changes
 
   SportEvent(
-      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId, this.active);
+      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId);
 
   factory SportEvent.fromSnapshot(DocumentSnapshot snapshot) {
     final newEvent =
@@ -36,7 +31,20 @@ class SportEvent {
   Map<String, dynamic> toJson() => _EventToJson(this);
 
   @override
-  String toString() => 'Event<$SportEvent>';
+  String toString() {
+    final DateFormat formatter = DateFormat.jm();
+    return ('${name} \n ${formatter.format(start)} - ${formatter.format(end)} \n ${curCap}/${maxCap}');
+  }
+
+  String toTime() {
+    final DateFormat formatter = DateFormat.jm();
+    return ('${formatter.format(start)} - ${formatter.format(end)}');
+  }
+
+  String toCap() {
+    final DateFormat formatter = DateFormat.jm();
+    return ('${curCap}/${maxCap}');
+  }
 }
 
 // 1
@@ -48,28 +56,15 @@ SportEvent _EventFromJson(Map<String, dynamic> json) {
     json['maxCap'] as int,
     json['curCap'] as int,
     json['placeId'] as String,
-    json['active'] as bool,
   );
 }
 
 // 2
 Map<String, dynamic> _EventToJson(SportEvent instance) => <String, dynamic>{
-<<<<<<< Updated upstream
-      'name': instance.name,
-      //'id': instance.id,
-      'start': instance.start,
-      'end': instance.end,
-      'maxCap': instance.maxCap,
-      'curCap': instance.curCap,
-      'placeId': instance.placeId
-    };
-=======
   'name': instance.name,
   'start': instance.start,
   'end': instance.end,
   'maxCap': instance.maxCap,
   'curCap': instance.curCap,
   'placeId': instance.placeId,
-  'active': instance.active
 };
->>>>>>> Stashed changes

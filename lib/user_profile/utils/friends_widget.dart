@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/user_profile/screens/friend_page.dart';
+import 'package:my_app/user_profile/screens/requests_page.dart';
 
 class FriendsWidget extends StatelessWidget {
   List<dynamic> friends;
@@ -11,12 +13,12 @@ class FriendsWidget extends StatelessWidget {
   Widget build(BuildContext context) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          buildButton(context, friends.length.toString(), 'Friends'),
+          buildFButton(context, friends.length.toString(), 'Friends'),
           buildDivider(),
-          buildButton(
+          buildRButton(
               context, friendrequests.length.toString(), 'Friend Requests'),
           buildDivider(),
-          buildButton(context, points.toString(), 'Points')
+          buildFButton(context, points.toString(), 'Points')
         ],
       );
   Widget buildDivider() => Container(
@@ -24,10 +26,40 @@ class FriendsWidget extends StatelessWidget {
         child: VerticalDivider(),
       );
 
-  Widget buildButton(BuildContext context, String value, String text) =>
+  Widget buildFButton(BuildContext context, String value, String text) =>
       MaterialButton(
         padding: EdgeInsets.symmetric(vertical: 4),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Friend_Page(friends: friends),
+          ));
+        },
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              value,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            SizedBox(height: 2),
+            Text(
+              text,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildRButton(BuildContext context, String value, String text) =>
+      MaterialButton(
+        padding: EdgeInsets.symmetric(vertical: 4),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Request_Page(friendrequests: friendrequests),
+          ));
+        },
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
           mainAxisSize: MainAxisSize.min,

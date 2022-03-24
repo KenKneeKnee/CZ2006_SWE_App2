@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/sportevent.dart';
 
 class BookingRepository {
   // 1
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('bookings');
+
+  final EventRepository eventRepository = EventRepository();
 
   // 2
   Stream<QuerySnapshot> getStream() {
@@ -51,42 +55,40 @@ class BookingRepository {
     });
   }
 
-  Future<int> checkUser (String uid, String key) async{
-    int res=0;
+  /// Checks the Bookings DB
+  /// Returns -1 if user is not logged in
+  /// Returns 0 if user is logged in but has not joined event
+  /// Returns 1 if user is logged in and has joined event already
+  Future<int> checkUser(String uid, String key) async {
+    int res = 0;
+    if (uid == null) {
+      return -1;
+    }
     await collection
         .where("userId", isEqualTo: uid)
         .where("eventId", isEqualTo: key)
         .get()
         .then((value) {
-          res = value.docs.length;
-      });
+      res = value.docs.length;
+    });
     return res;
   }
-/*
-  void retrieveUsers(String key) async{
-    collection.where("EventId", isEqualTo: key).get().then((value){
-      value.docs.forEach((element) {
-        print(element.data()["userid"]);
-      });
 
-    });
+  void retrieveUsers(String key) async {
+    collection.where("eventId", isEqualTo: key).get();
   }
 
-  void retrieveActiveEvents(String key) async{
-    collection.where("active", isEqualTo: true).get().then((value){
-      value.docs.forEach((result) {
-        print(result.data()["key"]);
-      });
-    });
+  Future<QuerySnapshot> retrieveActiveEvents(String uid) async {
+    return collection
+        .where("active", isEqualTo: true)
+        .where('userId', isEqualTo: uid)
+        .get();
   }
 
-  void retrievePastEvents(String key) async{
-    collection.where("active", isEqualTo: false).get().then((value){
-      value.docs.forEach((result) {
-       print(result.data()["key"]);
-      });
-    });
+  Future<QuerySnapshot> retrievePastEvents(String uid) async {
+    return collection
+        .where("active", isEqualTo: false)
+        .where('userId', isEqualTo: uid)
+        .get();
   }
-
- */
 }

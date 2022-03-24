@@ -173,9 +173,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
                                                           currentevent.maxCap,
                                                           currentevent.curCap,
                                                           currentevent.placeId,
-                                                          eventid,
-                                                          currentevent.active
-                                                      ),
+                                                          eventid),
                                                       SportsFacil: sportsfacil,
                                                     ),
                                                     shape: RoundedRectangleBorder(

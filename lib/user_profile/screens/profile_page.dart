@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
-import 'package:my_app/start/utils/fire_auth.dart';
+import 'package:my_app/user_profile/screens/view_events_page.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
-import '../utils/appbar_widget.dart';
+import 'package:my_app/widgets/bouncing_button.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_widget.dart';
 
@@ -21,7 +21,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
   late User _currentUser;
@@ -32,6 +31,21 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     _currentUser = widget.user;
     super.initState();
+  }
+
+  logout() async {
+    setState(() {
+      _isSigningOut = true;
+    });
+    await FirebaseAuth.instance.signOut();
+    setState(() {
+      _isSigningOut = false;
+    });
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
   }
 
   @override
@@ -54,33 +68,67 @@ class _ProfilePageState extends State<ProfilePage> {
             u = UserData.fromSnapshot(doc);
           }
         }
+        if (u.reports >= 5) {
+          showDialog(
+              // needs some UI
+              context: context,
+              builder: (BuildContext context) => _buildWarningDialog(context));
+          u.reports = 0;
+          repository.collection.doc(u.userid).update({"reports": u.reports});
+        }
 
         return Container(
+            decoration: _background,
             child: Builder(
-          builder: (context) => Scaffold(
-            appBar: buildAppBar(context),
-            body: ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                ProfileWidget(
-                  imagePath:
-                      "https://media.istockphoto.com/photos/white-gibbon-monkeyland-south-africa-picture-id171573599?k=20&m=171573599&s=612x612&w=0&h=FryqWJlMtlWNYM4quWNxU7rJMYQ3CtlgJ_6tU8-R9BU=",
-                  onClicked: () {
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(builder: (context) => EditProfilePage()),
-                    // );
-                  },
+              builder: (context) => Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: AppBar(
+                  title: const Text('Profile'),
+                  leading: _isSigningOut
+                      ? CircularProgressIndicator()
+                      : IconButton(
+                          icon: const Icon(Icons.logout),
+                          color: Colors.black,
+                          onPressed: logout),
+                  foregroundColor: Colors.black,
+                  backgroundColor: Color(0xffE3663E),
+                  elevation: 0,
+                  actions: [],
                 ),
-                const SizedBox(height: 24),
-                buildName(u),
-                const SizedBox(height: 24),
-                FriendsWidget(u.friends, u.friendrequests, u.points),
-                const SizedBox(height: 48),
-                buildAbout(u),
-              ],
-            ),
-          ),
-        ));
+                body: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                    ProfileWidget(
+                      imagePath: u.image,
+                      onClicked: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => EditProfilePage()),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    buildName(u),
+                    const SizedBox(height: 24),
+                    FriendsWidget(u.friends, u.friendrequests, u.points),
+                    const SizedBox(height: 48),
+                    BouncingButton(
+                        bgColor: const Color(0xffE3663E),
+                        borderColor: const Color(0xffE3663E),
+                        buttonText: "View Events",
+                        textColor: const Color(0xffffffff),
+                        onClick: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  //change to test pages
+                                  builder: (context) => ViewEventPage()),
+                            )),
+                    const SizedBox(height: 24),
+                    buildAbout(u),
+                  ],
+                ),
+              ),
+            ));
       },
     );
   }
@@ -96,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 16),
             Text(
-              "I like to play football, dont add me if you are malay thank you",
+              user.about,
               style: TextStyle(fontSize: 16, height: 1.4),
             ),
           ],
@@ -118,101 +166,30 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 }
 
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Profile'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             Text(
-//               'NAME: ${_currentUser.displayName}',
-//               style: Theme.of(context).textTheme.bodyText1,
-//             ),
-//             SizedBox(height: 16.0),
-//             Text(
-//               'EMAIL: ${_currentUser.email}',
-//               style: Theme.of(context).textTheme.bodyText1,
-//             ),
-//             SizedBox(height: 16.0),
-//             _currentUser.emailVerified
-//                 ? Text(
-//                     'Email verified',
-//                     style: Theme.of(context)
-//                         .textTheme
-//                         .bodyText1!
-//                         .copyWith(color: Colors.green),
-//                   )
-//                 : Text(
-//                     'Email not verified',
-//                     style: Theme.of(context)
-//                         .textTheme
-//                         .bodyText1!
-//                         .copyWith(color: Colors.red),
-//                   ),
-//             SizedBox(height: 16.0),
-//             _isSendingVerification
-//                 ? CircularProgressIndicator()
-//                 : Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     children: [
-//                       ElevatedButton(
-//                         onPressed: () async {
-//                           setState(() {
-//                             _isSendingVerification = true;
-//                           });
-//                           await _currentUser.sendEmailVerification();
-//                           setState(() {
-//                             _isSendingVerification = false;
-//                           });
-//                         },
-//                         child: Text('Verify email'),
-//                       ),
-//                       SizedBox(width: 8.0),
-//                       IconButton(
-//                         icon: Icon(Icons.refresh),
-//                         onPressed: () async {
-//                           User? user = await FireAuth.refreshUser(_currentUser);
+const BoxDecoration _background = BoxDecoration(
+  image: DecorationImage(
+    image: AssetImage('assets/images/background.png'),
+    fit: BoxFit.fitHeight,
+  ),
+);
 
-//                           if (user != null) {
-//                             setState(() {
-//                               _currentUser = user;
-//                             });
-//                           }
-//                         },
-//                       ),
-//                     ],
-//                   ),
-//             SizedBox(height: 16.0),
-//             _isSigningOut
-//                 ? CircularProgressIndicator()
-//                 : ElevatedButton(
-//                     onPressed: () async {
-//                       setState(() {
-//                         _isSigningOut = true;
-//                       });
-//                       await FirebaseAuth.instance.signOut();
-//                       setState(() {
-//                         _isSigningOut = false;
-//                       });
-//                       Navigator.of(context).pushReplacement(
-//                         MaterialPageRoute(
-//                           builder: (context) => LoginPage(),
-//                         ),
-//                       );
-//                     },
-//                     child: Text('Sign out'),
-//                     style: ElevatedButton.styleFrom(
-//                       primary: Colors.red,
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(30),
-//                       ),
-//                     ),
-//                   ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+Widget _buildWarningDialog(BuildContext context) {
+  return AlertDialog(
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const <Widget>[
+        Text(
+            "Hold it right there bud! It seems like you have been reported many times over the last few day. You need to be better"),
+      ],
+    ),
+    actions: <Widget>[
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('Yes sir, I will do better :('),
+      ),
+    ],
+  );
+}

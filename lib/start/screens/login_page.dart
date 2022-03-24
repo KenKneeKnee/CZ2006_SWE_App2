@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/homepage.dart';
+import '../utils/fire_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/screens/profile_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import '../../user_profile/screens/profile_page.dart';
-import '../utils/fire_auth.dart';
 import '../utils/validator.dart';
 
 class LoginPage extends StatefulWidget {
@@ -31,11 +32,11 @@ class _LoginPageState extends State<LoginPage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
+      //change back to pushReplacement after testing
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ProfilePage(
-            user: user,
-          ),
+          //change to test pages
+          builder: (context) => Homepage(),
         ),
       );
     }
@@ -149,8 +150,8 @@ class _LoginPageState extends State<LoginPage> {
                                       if (user != null) {
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfilePage(user: user),
+                                            //Can be changed for
+                                            builder: (context) => Homepage(),
                                           ),
                                         );
                                       }

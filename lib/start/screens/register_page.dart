@@ -150,14 +150,25 @@ class _RegisterPageState extends State<RegisterPage> {
                                       password: _passwordTextController.text,
                                     );
 
-                                    await userdb.add(UserData(
-                                            _emailTextController.text,
-                                            _nameTextController.text,
-                                            0,
-                                            0,
-                                            List<dynamic>.empty(),
-                                            List<dynamic>.empty())
-                                        .toJson());
+                                    List<String> pictures = [
+                                      "assets/images/1573252249390.jpeg",
+                                      "assets/images/celerystick.jpg"
+                                    ];
+
+                                    UserData newuser = new UserData(
+                                        _emailTextController.text,
+                                        _nameTextController.text,
+                                        0,
+                                        0,
+                                        List<dynamic>.empty(),
+                                        List<dynamic>.empty(),
+                                        "",
+                                        "assets/images/celerystick.jpg");
+
+                                    await userdb
+                                        .doc(_emailTextController.text)
+                                        .set(newuser
+                                            .toJson()); //adds new user and sets custom ID
 
                                     setState(() {
                                       _isProcessing = false;
@@ -212,7 +223,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-//helper functions / UI to keep the main code short
+
+// UI to keep the main code short
 
 Container _FormFieldContainer(Widget containerChild) {
   return Container(
@@ -240,7 +252,7 @@ Container _FormFieldContainer(Widget containerChild) {
 
 const BoxDecoration _background = BoxDecoration(
   image: DecorationImage(
-    image: AssetImage('register-background.png'),
+    image: AssetImage('assets/images/register-background.png'),
     fit: BoxFit.fitHeight,
   ),
 );

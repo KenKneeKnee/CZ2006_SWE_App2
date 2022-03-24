@@ -1,6 +1,7 @@
 //----------------------------------------------------
 // UI widgets for the alert dialog of event creation
 import 'package:flutter/material.dart';
+import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/hovering_image.dart';
 
@@ -129,37 +130,53 @@ class OkButton extends StatelessWidget {
       borderColor: const Color(0xffD56F2F),
       buttonText: "Got it!",
       onClick: () {
-        Navigator.of(context, rootNavigator: true).pop('dialog');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => FacilitiesMap()), //return to map
+        );
       },
     );
   }
 }
 
 class SuccessDialog extends StatelessWidget {
-  const SuccessDialog({Key? key}) : super(key: key);
+  SuccessDialog(
+      {Key? key,
+      required this.bgDeco,
+      required this.paragraph,
+      required this.title})
+      : super(key: key);
+  String paragraph;
+  String title;
+  BoxDecoration bgDeco;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        contentPadding: EdgeInsets.zero,
         content: Container(
           height: 350,
-          decoration: _successBackground,
+          decoration: bgDeco,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-                const Text(
-                  'Event Created!',
-                  style: _titleStyle,
-                ),
-                const SizedBox(height: 15),
-                const Text(
-                  'Now all that\'s left is getting fellow SportBuddies to join your event!',
-                  style: _paraStyleBold,
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+                  Text(
+                    title,
+                    style: dialogTitleStyle,
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    paragraph,
+                    style: dialogParaStyleBold,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -170,27 +187,37 @@ class SuccessDialog extends StatelessWidget {
 }
 
 class FailDialog extends StatelessWidget {
-  const FailDialog({Key? key}) : super(key: key);
+  FailDialog(
+      {Key? key,
+      required this.bgDeco,
+      required this.paragraph,
+      required this.title})
+      : super(key: key);
+  String paragraph;
+  String title;
+  BoxDecoration bgDeco;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        contentPadding: EdgeInsets.zero,
         content: Container(
           height: 240,
-          decoration: _failBackground,
+          decoration: bgDeco,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-              const Text(
-                'Error!',
-                style: _titleStyle,
+              Text(
+                title,
+                style: dialogTitleStyle,
               ),
               const SizedBox(height: 15),
-              const Text(
-                'Something went wrong. I\'m sorry :(',
-                style: _paraStyleBold,
+              Text(
+                paragraph,
+                style: dialogParaStyleBold,
               ),
             ],
           ),
@@ -201,26 +228,161 @@ class FailDialog extends StatelessWidget {
   }
 }
 
-const BoxDecoration _successBackground = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('create-event-success.png'),
-    fit: BoxFit.fitWidth,
-    alignment: Alignment.topCenter,
-  ),
-);
-const BoxDecoration _failBackground = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('create-event-fail.png'),
-    fit: BoxFit.fitWidth,
-    alignment: Alignment.topCenter,
-  ),
-);
+class OvernightDialog extends StatelessWidget {
+  OvernightDialog(
+      {Key? key,
+      required this.bgDeco,
+      required this.paragraph,
+      required this.title})
+      : super(key: key);
+  String paragraph;
+  String title;
+  BoxDecoration bgDeco;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        contentPadding: EdgeInsets.zero,
+        content: Container(
+          height: 350,
+          decoration: bgDeco,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.22),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 45,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                              color: Colors.black87,
+                              offset: Offset(7.5, 7.5),
+                              blurRadius: 15)
+                        ]),
+                  ),
+                  const SizedBox(height: 15),
+                  Text(
+                    paragraph,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                              color: Colors.black87,
+                              offset: Offset(2.5, 2.5),
+                              blurRadius: 15)
+                        ]),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          const OkButton(),
+        ]);
+  }
+}
+
+class DialogBoxDecoration {
+  static const BoxDecoration createEventSuccessBg = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/images/create-event-success.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
+    ),
+  );
+
+  static const BoxDecoration createEventFailBg = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/images/create-event-fail.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
+    ),
+  );
+
+  static BoxDecoration joinEventBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/join-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+  static BoxDecoration leaveEventBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/leave-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static BoxDecoration fullEventBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/full-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static BoxDecoration notLoggedInBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/not-logged-in.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+  static BoxDecoration clashingSchedBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/clashing-schedules.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static BoxDecoration friendAddedBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/friend-added.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+  static BoxDecoration userReportedBg = BoxDecoration(
+    borderRadius: BorderRadius.circular(20),
+    image: const DecorationImage(
+      image: AssetImage('assets/images/user-reported.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.bottomCenter,
+    ),
+  );
+
+  static const BoxDecoration overnightEventBg = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage('assets/images/overnight-event.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
+    ),
+  );
+}
 
 //Text Styles
-const TextStyle _titleStyle = TextStyle(
+const TextStyle dialogTitleStyle = TextStyle(
     fontWeight: FontWeight.bold, fontSize: 45, color: Color(0xffE3663E));
 
-const TextStyle _paraStyleBold = TextStyle(
+const TextStyle dialogParaStyleBold = TextStyle(
   color: Colors.black87,
   fontSize: 15,
   fontWeight: FontWeight.bold,

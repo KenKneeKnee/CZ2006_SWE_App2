@@ -21,14 +21,14 @@ class _WelcomePageState extends State<WelcomePage> {
       body: Container(
         child: Stack(
           children: [
-            BackgroundImage(imagePath: 'background.png'),
-            BackgroundImage(imagePath: 'welcome-player1.png'),
-            BackgroundImage(imagePath: 'welcome-player2.png'),
-            BackgroundImage(imagePath: 'welcome-player3.png'),
-            BackgroundImage(imagePath: 'welcome-player4.png'),
+            BackgroundImage(imagePath: 'assets/images/background.png'),
+            BackgroundImage(imagePath: 'assets/images/welcome-player1.png'),
+            BackgroundImage(imagePath: 'assets/images/welcome-player2.png'),
+            BackgroundImage(imagePath: 'assets/images/welcome-player3.png'),
+            BackgroundImage(imagePath: 'assets/images/welcome-player4.png'),
             Positioned(
               child: Image.asset(
-                'sportsbuds-logo.png',
+                'assets/images/sportsbuds-logo.png',
                 height: 230,
               ),
               top: MediaQuery.of(context).size.height * 0.3,

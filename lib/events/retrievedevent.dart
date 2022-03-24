@@ -9,13 +9,12 @@ class RetrievedEvent {
   int curCap;
   final String placeId;
   final String eventId;
-  bool active;
 
   /// Description of what will be in the event
   // final String activity;
 
   RetrievedEvent(
-      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId, this.eventId, this.active);
+      this.name, this.start, this.end, this.maxCap, this.curCap, this.placeId, this.eventId);
 
   @override
   String toString() {
@@ -34,6 +33,6 @@ class RetrievedEvent {
   }
 
   SportEvent toSportEvent() {
-    return SportEvent(name, start, end, maxCap, curCap, placeId, active);
+    return SportEvent(name, start, end, maxCap, curCap, placeId);
   }
 }
