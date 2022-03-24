@@ -183,8 +183,8 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
             String key = _curEvent.eventId;
             if (_curEvent.curCap < _curEvent.maxCap) {
               _curEvent.curCap += 1;
-
-              booking.addBooking(uid, key);
+              bool active=DateTime.now().isAfter(_curEvent.start);
+              booking.addBooking(uid, key, active);
               repository.updateEvent(_curEvent.toSportEvent(), key);
               print('hello ${uid}. Added booking successfully!');
             }

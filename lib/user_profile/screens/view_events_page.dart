@@ -174,6 +174,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
                                                           currentevent.curCap,
                                                           currentevent.placeId,
                                                           currentevent.type,
+                                                          currentevent.active,
                                                           eventid),
                                                       SportsFacil: sportsfacil,
                                                     ),
