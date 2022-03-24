@@ -151,15 +151,27 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // ignore: prefer_const_constructors
+            Center(
+              child: const Text('About',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center),
             ),
+
             const SizedBox(height: 16),
-            Text(
+            Center(
+                child: Text(
               user.about,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
+              style: TextStyle(
+                  fontSize: 16,
+                  height: 1.4,
+                  background: Paint()
+                    ..strokeWidth = 30.0
+                    ..color = Colors.white
+                    ..style = PaintingStyle.stroke
+                    ..strokeJoin = StrokeJoin.round),
+              textAlign: TextAlign.center,
+            )),
           ],
         ),
       );
