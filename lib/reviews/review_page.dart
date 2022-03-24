@@ -1,5 +1,3 @@
-import 'dart:collection';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +12,10 @@ import 'Review.dart';
 
 final Storage storage = Storage();
 class ReviewPage extends StatefulWidget {
-  ReviewPage({Key? key, required this.placeId,}) //required this.sportsFacility})
+  ReviewPage({Key? key, required this.placeId, required this.sportsFacility})
       : super(key: key);
   final String placeId;
-  //final SportsFacility sportsFacility;
+  final SportsFacility sportsFacility;
   @override
   State<ReviewPage> createState() => _ReviewPageState();
 }
@@ -65,12 +63,12 @@ class _ReviewPageState extends State<ReviewPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                    //   Expanded(
-                    //   child: RatingChart(
-                    //   sportsFacility: SportsFacil,
-                    //   ),
-                    //   flex: 5,
-                    // ),
+                      Expanded(
+                      child: RatingChart(
+                      sportsFacility: widget.sportsFacility,
+                      ),
+                      flex: 5,
+                    ),
                 BouncingButton(
                 bgColor: Colors.black,
                 borderColor: Colors.black,

@@ -5,6 +5,7 @@ import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/reviews/view_reviews.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
+import 'package:my_app/reviews/review_page.dart';
 
 class MapMarkerInfoSheet extends StatelessWidget {
   MapMarkerInfoSheet({Key? key, required this.SportsFacil, required this.index})
