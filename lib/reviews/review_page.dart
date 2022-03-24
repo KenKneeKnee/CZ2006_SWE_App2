@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/reviews/facil_repository.dart';
+import 'package:my_app/reviews/ratingchart.dart';
 import 'package:my_app/reviews/storage_repository.dart';
 import '../map/map_data.dart';
+import '../widgets/bouncing_button.dart';
 import 'Review.dart';
 
 final Storage storage = Storage();
@@ -40,63 +42,91 @@ class _ReviewPageState extends State<ReviewPage> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          body: FutureBuilder<QuerySnapshot>(
-              future: facils.getReviewsFor(widget.placeId),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
-              {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                else {
-                  final revs = snapshot.data;
-                  List<Widget> reviewlist=[];
-                  for (DocumentSnapshot doc in revs!.docs) {
-                    String imageid = doc.id;
-                    Review retrieved = ReviewFromJson(doc.data() as Map<String,dynamic>);
-                    reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
+          body:Expanded(
+            child: Column(children:[
+              Container(
+              color: Colors.white,
+              child: Column(
+              children: [
+              //Expanded(
+              //child: RatingChart(
+              //sportsFacility: widget.sportsFacility,
+              //),
+              //flex: 5,
+              //),
+              Expanded(
+              flex: 4,
+              child: Container(
+              child: SingleChildScrollView(
+              child: Column(
+              children: [
+              BouncingButton(
+              bgColor: Colors.black,
+              borderColor: Colors.black,
+              buttonText: "Write Review",
+              textColor: Colors.white,
+              onClick: () {}),
+                SizedBox(height: 30),],),),),),]),),
+              FutureBuilder<QuerySnapshot>(
+                future: facils.getReviewsFor(widget.placeId),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
+                {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: reviewlist.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 18.0,
-                          vertical: 10.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12.0),
-                          boxShadow: [
-                            BoxShadow(
-                              spreadRadius: 1,
-                              color: Colors.grey,
-                              offset: const Offset(0, 1),
-                              blurRadius: 3,
-                            )
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.tight,
-                              child: GestureDetector(
-                                onTap: () {
-                                  print("${index} was tapped");
-                                },
-                                child: reviewlist[index],
-                              ),
-                            ),],
-                        ),
-                      );
-                    },
-                  );
-                }
-              },
+                  else {
+                    final revs = snapshot.data;
+                    List<Widget> reviewlist=[];
+                    for (DocumentSnapshot doc in revs!.docs) {
+                      String imageid = doc.id;
+                      Review retrieved = ReviewFromJson(doc.data() as Map<String,dynamic>);
+                      reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: reviewlist.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 18.0,
+                            vertical: 10.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12.0),
+                            boxShadow: [
+                              BoxShadow(
+                                spreadRadius: 1,
+                                color: Colors.grey,
+                                offset: const Offset(0, 1),
+                                blurRadius: 3,
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    print("${index} was tapped");
+                                  },
+                                  child: reviewlist[index],
+                                ),
+                              ),],
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ]
             ),
+          ),
           floatingActionButton: FloatingActionButton(onPressed: () {
             final title = TextEditingController();
             final rating = TextEditingController();
@@ -153,7 +183,6 @@ class _ReviewPageState extends State<ReviewPage> {
 
   void postReview(String title, int rating, String desc, String user, XFile? imageFile) async{
     Review r = Review(title, rating, desc, user);
-    /// hardcoded place id here
     DocumentReference docref = await facils.addReviewFor(widget.placeId, r);
     if (imageFile!=null) {
       await storage.uploadFile(imageFile.path, docref.id); // image is uploaded with same doc id as review
