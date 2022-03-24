@@ -42,91 +42,86 @@ class _ReviewPageState extends State<ReviewPage> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          body:Expanded(
-            child: Column(children:[
-              Container(
-              color: Colors.white,
-              child: Column(
-              children: [
-              //Expanded(
-              //child: RatingChart(
-              //sportsFacility: widget.sportsFacility,
-              //),
-              //flex: 5,
-              //),
-              Expanded(
-              flex: 4,
-              child: Container(
-              child: SingleChildScrollView(
-              child: Column(
-              children: [
-              BouncingButton(
-              bgColor: Colors.black,
-              borderColor: Colors.black,
-              buttonText: "Write Review",
-              textColor: Colors.white,
-              onClick: () {}),
-                SizedBox(height: 30),],),),),),]),),
-              FutureBuilder<QuerySnapshot>(
-                future: facils.getReviewsFor(widget.placeId),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
-                {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+          body: FutureBuilder<QuerySnapshot>(
+              future: facils.getReviewsFor(widget.placeId),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)
+              {
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                else {
+                  final revs = snapshot.data;
+                  List<Widget> reviewlist=[];
+                  for (DocumentSnapshot doc in revs!.docs) {
+                    String imageid = doc.id;
+                    Review retrieved = ReviewFromJson(doc.data() as Map<String,dynamic>);
+                    reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
                   }
-                  else {
-                    final revs = snapshot.data;
-                    List<Widget> reviewlist=[];
-                    for (DocumentSnapshot doc in revs!.docs) {
-                      String imageid = doc.id;
-                      Review retrieved = ReviewFromJson(doc.data() as Map<String,dynamic>);
-                      reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
-                    }
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: reviewlist.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 18.0,
-                            vertical: 10.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.0),
-                            boxShadow: [
-                              BoxShadow(
-                                spreadRadius: 1,
-                                color: Colors.grey,
-                                offset: const Offset(0, 1),
-                                blurRadius: 3,
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Flexible(
-                                fit: FlexFit.tight,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    print("${index} was tapped");
-                                  },
-                                  child: reviewlist[index],
+                  return Container(
+                  color: Colors.white,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                    //   Expanded(
+                    //   child: RatingChart(
+                    //   sportsFacility: SportsFacil,
+                    //   ),
+                    //   flex: 5,
+                    // ),
+                BouncingButton(
+                bgColor: Colors.black,
+                borderColor: Colors.black,
+                buttonText: "Write Review",
+                textColor: Colors.white,
+                onClick: () {}),
+                SizedBox(height: 30),
+                      ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: reviewlist.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 18.0,
+                                  vertical: 10.0,
                                 ),
-                              ),],
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
-            ]
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      spreadRadius: 1,
+                                      color: Colors.grey,
+                                      offset: const Offset(0, 1),
+                                      blurRadius: 3,
+                                    )
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          print("${index} was tapped");
+                                        },
+                                        child: reviewlist[index],
+                                      ),
+                                    ),],
+                                ),
+                              );
+                            },
+                      ),
+                    ],
+                    ),
+                  ),);
+                }
+              },
             ),
-          ),
+
           floatingActionButton: FloatingActionButton(onPressed: () {
             final title = TextEditingController();
             final rating = TextEditingController();

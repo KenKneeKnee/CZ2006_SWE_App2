@@ -51,7 +51,7 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        home: ReviewPage(placeId: "1",),
+        home: ReviewPage(placeId: "1", ),
     );
   }
 }
