@@ -196,18 +196,24 @@ class _GrrState extends State<Grr> {
                                         builder: (BuildContext context) {
                                           print(
                                               'preparing dialog for place ${value[index]} || ${widget.sportsFacility.placeName}');
-                                          return Dialog(
-                                            backgroundColor: Color(0xffE5E8E8),
-                                            child: ViewEventPopUp(
-                                              placeIndex: index,
-                                              event: value[index],
-                                              SportsFacil:
-                                                  widget.sportsFacility,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20.0))),
+                                          return ViewEventPopUp(
+                                            placeIndex: index,
+                                            event: value[index],
+                                            SportsFacil: widget.sportsFacility,
                                           );
+
+                                          // Dialog(
+                                          //   backgroundColor: Color(0xffE5E8E8),
+                                          //   child: ViewEventPopUp(
+                                          //     placeIndex: index,
+                                          //     event: value[index],
+                                          //     SportsFacil:
+                                          //         widget.sportsFacility,
+                                          //   ),
+                                          //   shape: RoundedRectangleBorder(
+                                          //       borderRadius: BorderRadius.all(
+                                          //           Radius.circular(20.0))),
+                                          //);
                                         },
                                       );
                                     },

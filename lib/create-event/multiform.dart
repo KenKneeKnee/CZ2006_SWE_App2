@@ -79,11 +79,11 @@ class _EventStepFormState extends State<EventStepForm> {
             title: Text('Complete'),
             content: (isCompleted)
                 ? Container(
-                    color: Colors.yellow,
                     child: Column(
                       children: [
                         calendarIcon,
-                        SportEventTextWidget.Title(eventTitle),
+                        SportEventTextWidget.Title("Confirm Details"),
+                        SportEventTextWidget.Subtitle(eventTitle),
                         SportEventTextWidget.Subtitle(
                             widget.sportsFacility.placeName),
                       ],
