@@ -6,6 +6,7 @@ import 'package:my_app/events/view_event.dart';
 import 'package:my_app/homepage.dart';
 import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/reviews/review_page.dart';
 import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/start/screens/register_page.dart';
@@ -50,6 +51,6 @@ class SportBuds extends StatelessWidget {
             bodyText1: TextStyle(fontSize: 18.0),
           ),
         ),
-        home: Homepage());
+        home: FacilitiesMap());
   }
 }

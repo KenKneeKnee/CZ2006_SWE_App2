@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/reviews/facil_repository.dart';
@@ -52,30 +53,110 @@ class _ReviewPageState extends State<ReviewPage> {
                 else {
                   final revs = snapshot.data;
                   List<Widget> reviewlist=[];
+                  Map ratings={}; // rating:count
                   for (DocumentSnapshot doc in revs!.docs) {
                     String imageid = doc.id;
                     Review retrieved = ReviewFromJson(doc.data() as Map<String,dynamic>);
+                    if (ratings[retrieved.rating]!=null) {
+                      ratings[retrieved.rating]+=1;
+                    } else {
+                      ratings[retrieved.rating]=1;
+                    }
                     reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
                   }
                   return Container(
-                  color: Colors.white,
-                  child: SingleChildScrollView(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                      Expanded(
-                      child: RatingChart(
-                      sportsFacility: widget.sportsFacility,
+                      SizedBox(
+                        height: 375,
+                        child: RatingChart(
+                          stardata: ratings,
+                          sportsFacility: widget.sportsFacility,
+                        ),
                       ),
-                      flex: 5,
-                    ),
-                BouncingButton(
-                bgColor: Colors.black,
-                borderColor: Colors.black,
-                buttonText: "Write Review",
-                textColor: Colors.white,
-                onClick: () {}),
-                SizedBox(height: 30),
+                    BouncingButton(
+                    bgColor: Colors.black,
+                    borderColor: Colors.black,
+                    buttonText: "Write Review",
+                    textColor: Colors.white,
+                    onClick: () {
+                      final title = TextEditingController();
+                      final rating = TextEditingController();
+                      final desc = TextEditingController();
+                      final user = TextEditingController();
+                      XFile? imageFile;
+
+                      showDialog(context: context, builder: (BuildContext context){
+                        return Dialog(
+                            child: Form(
+                                child: Column(
+                                  children: [
+                                    Flexible(
+                                      child: TextFormField(
+                                          controller: title,
+                                          decoration: const InputDecoration(
+                                              hintText: 'Enter title')
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: TextFormField(
+                                          controller: rating,
+                                          decoration: const InputDecoration(
+                                              hintText: 'Enter rating')
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: TextFormField(
+                                          controller: desc,
+                                          decoration: const InputDecoration(
+                                              hintText: 'Enter desc')
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child: TextFormField(
+                                          controller: user,
+                                          decoration: const InputDecoration(
+                                              hintText: 'Enter name')
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    BouncingButton(
+                                      bgColor: Color.fromRGBO(135, 180, 187, 1),
+                                      borderColor: Color.fromRGBO(135, 180, 187, 1),
+                                      buttonText: "Add a photo?",
+                                      textColor: Color(0xffffffff),
+                                      onClick: () async{
+                                      final pickedFile = await ImagePicker().pickImage(
+                                        source: ImageSource.gallery,
+                                      );
+                                      imageFile=pickedFile!;
+
+                                    },),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    BouncingButton(
+                                      bgColor: Color(0xffE96B46),
+                                      borderColor: Color(0xffE96B46),
+                                      buttonText: "Post!",
+                                      textColor: Color(0xffffffff),
+                                      onClick: () {
+                                      postReview(title.text, int.parse(rating.text), desc.text, user.text, imageFile);
+                                      Navigator.pop(context);
+                                    },)
+                                  ],
+                                )
+                            )
+                        );
+
+                      });
+                    }),
+                    SizedBox(height: 30,),
                       ListView.builder(
                             shrinkWrap: true,
                             itemCount: reviewlist.length,
@@ -119,57 +200,6 @@ class _ReviewPageState extends State<ReviewPage> {
                 }
               },
             ),
-
-          floatingActionButton: FloatingActionButton(onPressed: () {
-            final title = TextEditingController();
-            final rating = TextEditingController();
-            final desc = TextEditingController();
-            final user = TextEditingController();
-            XFile? imageFile;
-
-            showDialog(context: context, builder: (BuildContext context){
-              return Dialog(
-                child: Form(
-                    child: Column(
-                      children: [
-                        TextFormField(
-                            controller: title,
-                            decoration: const InputDecoration(
-                                hintText: 'Enter title')
-                        ),
-                        TextFormField(
-                            controller: rating,
-                            decoration: const InputDecoration(
-                                hintText: 'Enter rating')
-                        ),
-                        TextFormField(
-                            controller: desc,
-                            decoration: const InputDecoration(
-                                hintText: 'Enter desc')
-                        ),
-                        TextFormField(
-                            controller: user,
-                            decoration: const InputDecoration(
-                                hintText: 'Enter name')
-                        ),
-                        ElevatedButton(onPressed: () async{
-                          final pickedFile = await ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                          );
-                          imageFile=pickedFile!;
-
-                        }, child: Text("upload photo")),
-                        ElevatedButton(onPressed: () {
-                          postReview(title.text, int.parse(rating.text), desc.text, user.text, imageFile);
-                          Navigator.pop(context);
-                        }, child: Text("post!!!"))
-                      ],
-                    )
-                )
-              );
-
-            });
-          }, child: Text("Post")),
           ),
     );
   }
@@ -196,89 +226,86 @@ class ReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-          child: FutureBuilder(
-          future: storage.downloadURL(imageid),
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            if (!snapshot.hasData) {
-              return Container(
-                  padding: EdgeInsets.fromLTRB(10,10,10,10),
-                  child: Expanded(
-                      child: Row(
-                          children:[
-                            Expanded(flex:1, child: Text(review.user, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,))),
-                            Expanded(flex:4, child:Column(
-                              //mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children:[
-                                  RatingBarIndicator(
-                                    rating:
-                                    review.rating*1.0,
-                                    itemBuilder:
-                                        (context, index) =>
-                                        Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                        ),
-                                    itemCount: 5,
-                                    itemSize: 20.0,
-                                    direction:
-                                    Axis.horizontal,
-                                  ),
-                                  Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
-                                  SizedBox(height:4),
-                                  Text(review.desc,),
-                                ]
-                            ))
-                          ]
-                      )
-                  )
-              );
-            }
-            else {
-              return Container(
-                padding: EdgeInsets.fromLTRB(10,10,10,10),
-                child: Expanded(
-                  child: Row(
+    return FutureBuilder(
+    future: storage.downloadURL(imageid),
+    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      if (!snapshot.hasData) {
+        return Container(
+            padding: EdgeInsets.fromLTRB(10,10,10,10),
+            child: Expanded(
+                child: Row(
                     children:[
                       Expanded(flex:1, child: Text(review.user, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,))),
                       Expanded(flex:4, child:Column(
-                        //mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:[
-                          RatingBarIndicator(
-                            rating:
-                            review.rating*1.0,
-                            itemBuilder:
-                                (context, index) =>
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                            itemCount: 5,
-                            itemSize: 20.0,
-                            direction:
-                            Axis.horizontal,
-                          ),
-                          Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
-                          SizedBox(height:4),
-                          Text(review.desc,),
-                          Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      alignment: Alignment.center,
-                                      image: NetworkImage(snapshot.data!))
-                              ),),
-                        ]
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children:[
+                            RatingBarIndicator(
+                              rating:
+                              review.rating*1.0,
+                              itemBuilder:
+                                  (context, index) =>
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                              itemCount: 5,
+                              itemSize: 20.0,
+                              direction:
+                              Axis.horizontal,
+                            ),
+                            Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
+                            SizedBox(height:4),
+                            Text(review.desc,),
+                          ]
                       ))
                     ]
-                  )
                 )
-              );
-            }
-          }
-        )
-      );
+            )
+        );
+      }
+      else {
+        return Container(
+          padding: EdgeInsets.fromLTRB(10,10,10,10),
+          child: Expanded(
+            child: Row(
+              children:[
+                Expanded(flex:1, child: Text(review.user, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,))),
+                Expanded(flex:4, child:Column(
+                  //mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:[
+                    RatingBarIndicator(
+                      rating:
+                      review.rating*1.0,
+                      itemBuilder:
+                          (context, index) =>
+                          Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                      itemCount: 5,
+                      itemSize: 20.0,
+                      direction:
+                      Axis.horizontal,
+                    ),
+                    Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
+                    SizedBox(height:4),
+                    Text(review.desc,),
+                    Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                alignment: Alignment.center,
+                                image: NetworkImage(snapshot.data!))
+                        ),),
+                  ]
+                ))
+              ]
+            )
+          )
+        );
+      }
+    }
+        );
   }
 }
