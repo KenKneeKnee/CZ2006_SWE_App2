@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/reviews/facil_repository.dart';
@@ -11,6 +11,7 @@ import '../map/map_data.dart';
 import '../widgets/bouncing_button.dart';
 import 'Review.dart';
 
+final uid = FirebaseAuth.instance.currentUser?.email as String;
 final Storage storage = Storage();
 class ReviewPage extends StatefulWidget {
   ReviewPage({Key? key, required this.placeId, required this.sportsFacility})
@@ -23,6 +24,7 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   final FacilRepository facils = FacilRepository();
+  String rating = "Rate this facility";
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,6 @@ class _ReviewPageState extends State<ReviewPage> {
                     textColor: Colors.white,
                     onClick: () {
                       final title = TextEditingController();
-                      final rating = TextEditingController();
                       final desc = TextEditingController();
                       final user = TextEditingController();
                       XFile? imageFile;
@@ -92,36 +93,40 @@ class _ReviewPageState extends State<ReviewPage> {
                       showDialog(context: context, builder: (BuildContext context){
                         return Dialog(
                             child: Form(
-                                child: Column(
+                                child: ListView(
+                                  shrinkWrap: true,
                                   children: [
-                                    Flexible(
-                                      child: TextFormField(
-                                          controller: title,
-                                          decoration: const InputDecoration(
-                                              hintText: 'Enter title')
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: TextFormField(
-                                          controller: rating,
-                                          decoration: const InputDecoration(
-                                              hintText: 'Enter rating')
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: TextFormField(
-                                          controller: desc,
-                                          decoration: const InputDecoration(
-                                              hintText: 'Enter desc')
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: TextFormField(
-                                          controller: user,
-                                          decoration: const InputDecoration(
-                                              hintText: 'Enter name')
-                                      ),
-                                    ),
+                                    buildTitle(title),
+                                    buildRating(),
+                                    buildDesc(desc),
+                                    // Flexible(
+                                    //   child: TextFormField(
+                                    //       controller: title,
+                                    //       decoration: const InputDecoration(
+                                    //           hintText: 'Enter title')
+                                    //   ),
+                                    // ),
+                                    // Flexible(
+                                    //   child: TextFormField(
+                                    //       controller: rating,
+                                    //       decoration: const InputDecoration(
+                                    //           hintText: 'Enter rating')
+                                    //   ),
+                                    // ),
+                                    // Flexible(
+                                    //   child: TextFormField(
+                                    //       controller: desc,
+                                    //       decoration: const InputDecoration(
+                                    //           hintText: 'Enter desc')
+                                    //   ),
+                                    // ),
+                                    // Flexible(
+                                    //   child: TextFormField(
+                                    //       controller: user,
+                                    //       decoration: const InputDecoration(
+                                    //           hintText: 'Enter name')
+                                    //   ),
+                                    // ),
                                     SizedBox(
                                       height: 20,
                                     ),
@@ -146,7 +151,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                       buttonText: "Post!",
                                       textColor: Color(0xffffffff),
                                       onClick: () {
-                                      postReview(title.text, int.parse(rating.text), desc.text, user.text, imageFile);
+                                      postReview(title.text, int.parse(rating[0]), desc.text, uid, imageFile);
                                       Navigator.pop(context);
                                     },)
                                   ],
@@ -212,7 +217,89 @@ class _ReviewPageState extends State<ReviewPage> {
     }
   }
 
+  Widget buildTitle(title) => Flexible(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: TextFormField(
+        decoration: const InputDecoration(
+          labelText: 'Review title',
+          prefixIcon: Icon(Icons.sports_basketball_outlined),
+          border: OutlineInputBorder(),
+        ),
+        validator: (value) {
+          if (value != null && value.length < 4 ||  value != null && value.length > 50){
+            return 'Enter between 4-50 characters';
+          } else {
+            return null;
+          }
+        },
+      ),
+    ),
+  );
+
+  Widget buildRating() => Container(
+    decoration: BoxDecoration(
+        border: Border.all(color: Colors.black45),
+        borderRadius: BorderRadius.circular(4)),
+    padding: EdgeInsets.all(10),
+    child: DropdownButtonFormField<String>(
+      value: rating,
+      validator: (value) {
+        if (value == "Select a rating") {
+          return 'Please select a rating for this facility';
+        } else {
+          return null;
+        }
+      },
+      isExpanded: true,
+      icon: const Icon(Icons.sports_football_outlined),
+      elevation: 16,
+      style: const TextStyle(color: Colors.black),
+      onChanged: (String? newValue) {
+        setState(() {
+           rating = newValue!;
+        });
+      },
+      items: <String>[
+        "1 star",
+        '2 star',
+        '3 star',
+        '4 star',
+        '5 star',
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: Text(value),
+          ),
+        );
+      }).toList(),
+    ),
+  );
+
+  Widget buildDesc(desc) => Flexible(
+    child: Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: TextFormField(
+        decoration: const InputDecoration(
+          labelText: 'Describe your time here!',
+          prefixIcon: Icon(Icons.sports_basketball_outlined),
+          border: OutlineInputBorder(),
+        ),
+        validator: (value) {
+          if (value != null && value.length > 300) {
+            return 'Please keep to a character limit of 300.';
+          } else {
+            return null;
+          }
+        },
+      ),
+    ),
+  );
+
 }
+
 
 class ReviewWidget extends StatelessWidget {
   ReviewWidget(
