@@ -21,8 +21,9 @@ class StarSeries {
 }
 
 class RatingChart extends StatelessWidget {
-  RatingChart({Key? key, required this.sportsFacility, required this.stardata}) : super(key: key);
+  RatingChart({Key? key, required this.sportsFacility, required this.stardata, required this.total}) : super(key: key);
   final Map stardata;
+  final int total;
   SportsFacility sportsFacility;
   final chartColors={
     1: charts.ColorUtil.fromDartColor(Colors.redAccent),
@@ -50,8 +51,7 @@ class RatingChart extends StatelessWidget {
           colorFn: (StarSeries series, _) => series.barColor)
     ];
 
-    double avgRating = calcAvgRating(data);
-    int total = data.length;
+    double avgRating = calcAvgRating(data, total);
     return Container(
       height: MediaQuery.of(context).size.height,
       color: Colors.transparent,
@@ -145,14 +145,14 @@ class RatingChart extends StatelessWidget {
   }
 }
 
-double calcAvgRating(List<StarSeries> data) {
+double calcAvgRating(List<StarSeries> data, int total) {
   int sumRating = 0;
 
   for (int i = 0; i < data.length; i++) {
     sumRating += (data[i].score*data[i].count);
   }
 
-  double average = (sumRating / data.length);
+  double average = (sumRating / total);
   return dp(average, 1);
 }
 

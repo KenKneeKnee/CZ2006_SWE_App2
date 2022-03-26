@@ -75,6 +75,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       SizedBox(
                         height: 375,
                         child: RatingChart(
+                          total: reviewlist.length,
                           stardata: ratings,
                           sportsFacility: widget.sportsFacility,
                         ),
@@ -87,7 +88,6 @@ class _ReviewPageState extends State<ReviewPage> {
                     onClick: () {
                       final title = TextEditingController();
                       final desc = TextEditingController();
-                      final user = TextEditingController();
                       XFile? imageFile;
 
                       showDialog(context: context, builder: (BuildContext context){
@@ -97,36 +97,48 @@ class _ReviewPageState extends State<ReviewPage> {
                                   shrinkWrap: true,
                                   children: [
                                     buildTitle(title),
-                                    buildRating(),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.black45),
+                                          borderRadius: BorderRadius.circular(4)),
+                                      padding: EdgeInsets.all(10),
+                                      child: DropdownButtonFormField<String>(
+                                        value: rating,
+                                        validator: (value) {
+                                          if (value == "Select a rating") {
+                                            return 'Please select a rating for this facility';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        isExpanded: true,
+                                        icon: const Icon(Icons.sports_football_outlined),
+                                        elevation: 16,
+                                        style: const TextStyle(color: Colors.black),
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            rating = newValue!;
+                                          });
+                                        },
+                                        items: <String>[
+                                          "Rate this facility",
+                                          "1 star",
+                                          '2 star',
+                                          '3 star',
+                                          '4 star',
+                                          '5 star',
+                                        ].map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                              child: Text(value),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
                                     buildDesc(desc),
-                                    // Flexible(
-                                    //   child: TextFormField(
-                                    //       controller: title,
-                                    //       decoration: const InputDecoration(
-                                    //           hintText: 'Enter title')
-                                    //   ),
-                                    // ),
-                                    // Flexible(
-                                    //   child: TextFormField(
-                                    //       controller: rating,
-                                    //       decoration: const InputDecoration(
-                                    //           hintText: 'Enter rating')
-                                    //   ),
-                                    // ),
-                                    // Flexible(
-                                    //   child: TextFormField(
-                                    //       controller: desc,
-                                    //       decoration: const InputDecoration(
-                                    //           hintText: 'Enter desc')
-                                    //   ),
-                                    // ),
-                                    // Flexible(
-                                    //   child: TextFormField(
-                                    //       controller: user,
-                                    //       decoration: const InputDecoration(
-                                    //           hintText: 'Enter name')
-                                    //   ),
-                                    // ),
                                     SizedBox(
                                       height: 20,
                                     ),
@@ -221,6 +233,7 @@ class _ReviewPageState extends State<ReviewPage> {
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextFormField(
+        controller: title,
         decoration: const InputDecoration(
           labelText: 'Review title',
           prefixIcon: Icon(Icons.sports_basketball_outlined),
@@ -237,7 +250,7 @@ class _ReviewPageState extends State<ReviewPage> {
     ),
   );
 
-  Widget buildRating() => Container(
+  Widget buildRating(rating)=> Container(
     decoration: BoxDecoration(
         border: Border.all(color: Colors.black45),
         borderRadius: BorderRadius.circular(4)),
@@ -257,10 +270,11 @@ class _ReviewPageState extends State<ReviewPage> {
       style: const TextStyle(color: Colors.black),
       onChanged: (String? newValue) {
         setState(() {
-           rating = newValue!;
+          rating = newValue!;
         });
       },
       items: <String>[
+        "Rate this facility",
         "1 star",
         '2 star',
         '3 star',
@@ -282,6 +296,7 @@ class _ReviewPageState extends State<ReviewPage> {
     child: Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
+        controller: desc,
         decoration: const InputDecoration(
           labelText: 'Describe your time here!',
           prefixIcon: Icon(Icons.sports_basketball_outlined),
