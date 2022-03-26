@@ -15,11 +15,11 @@ class BookingRepository {
   }
 
   // 4
-  void addBooking(String uid, String key) async {
+  void addBooking(String uid, String key, bool active) async {
     collection.add({
       "userId": uid,
       "eventId": key,
-      "active": true,
+      "active": active,
     });
     /*
         .then((_) {

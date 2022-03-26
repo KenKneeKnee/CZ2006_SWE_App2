@@ -25,7 +25,8 @@ class _eventPageState extends State<eventPage> {
   void join(SportEvent e, String key) {
     if (e.curCap < e.maxCap) {
       e.curCap += 1;
-      booking.addBooking(uid, key);
+      bool active = DateTime.now().isAfter(e.start);
+      booking.addBooking(uid, key, active);
       repository.updateEvent(e, key);
     }
   }

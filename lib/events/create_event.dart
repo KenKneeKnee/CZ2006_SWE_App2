@@ -39,6 +39,8 @@ class _CreateEventFormState extends State<CreateEventForm> {
   int maxCap = 0;
   DateTime? startTime;
   DateTime? endTime;
+  String type = 'insert type here';
+  bool active = false;
 
   // @override
   // void initState() {
@@ -101,19 +103,26 @@ class _CreateEventFormState extends State<CreateEventForm> {
 
                             if (isValid != null && isValid && !overnight) {
                               formKey.currentState?.save();
+                              if (startTime!.isBefore(DateTime.now()) &&
+                                  (!widget.date.isAfter(DateTime.now()))) {
+                                active = true;
+                              }
                               SportEvent newEvent = SportEvent(
-                                title,
-                                startTime!,
-                                endTime!,
-                                maxCap,
-                                1,
-                                widget.placeId, //temporary id
+                                name: title,
+                                start: startTime!,
+                                end: endTime!,
+                                maxCap: maxCap,
+                                curCap: 1,
+                                placeId: widget.placeId,
+                                type: type,
+                                active: active,
+                                //temporary id
                               );
 
                               DocumentReference addedDocRef =
                                   await repository.addEvent(newEvent);
                               String newId = addedDocRef.id;
-                              bookings.addBooking(uid, newId);
+                              bookings.addBooking(uid, newId, active);
 
                               Navigator.pop(context, 1);
                             } else {
