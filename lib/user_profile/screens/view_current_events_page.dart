@@ -81,32 +81,160 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                     List BookingList = snapshot1.data!.docs;
                     Map<String, SportEvent> PastEventMap = {};
                     Map<String, SportEvent> ActiveEventMap = {};
+                    List futureEventIds = [];
                     List activeEventIds = [];
-                    List pastEventIds = [];
                     final Size size = MediaQuery.of(context).size;
 
                     List<Widget> eventbuttons = [];
 
                     for (DocumentSnapshot doc in BookingList) {
                       if (doc['userId'] == uid) {
-                        if (doc['active'] == true) {
+                        if (doc['active'] == false) {
+                          futureEventIds.add(doc['eventId']);
+                        } else {
                           activeEventIds.add(doc['eventId']);
                         }
-                      } else {
-                        pastEventIds.add(doc['eventId']);
                       }
                     }
 
-                    for (String eid in activeEventIds) {
+                    //card for active event
+                    for (String eventid in activeEventIds) {
+                      SportEvent currentevent =
+                          ActiveEventMap[eventid] as SportEvent;
+                      SportsFacility sportsfacil =
+                          SportsFacilityList[int.parse(currentevent.placeId)];
+
+                      eventbuttons.add(Container(
+                          height: size.height * 0.2,
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withAlpha(100),
+                                    blurRadius: 10.0),
+                              ]),
+                          child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          currentevent.name.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SportEventTextWidget.Subtitle(
+                                            sportsfacil.facilityType),
+                                        Text(
+                                          "Current capacity: " +
+                                              currentevent.curCap.toString() +
+                                              "/" +
+                                              currentevent.maxCap.toString(),
+                                          style: const TextStyle(
+                                              fontSize: 17, color: Colors.grey),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            FloatingActionButton.extended(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Dialog(
+                                                        backgroundColor:
+                                                            Color(0xffE5E8E8),
+                                                        child: ViewEventPopUp(
+                                                          placeIndex: int.parse(
+                                                              currentevent
+                                                                  .placeId),
+                                                          event: RetrievedEvent(
+                                                              currentevent.name,
+                                                              currentevent
+                                                                  .start,
+                                                              currentevent.end,
+                                                              currentevent
+                                                                  .maxCap,
+                                                              currentevent
+                                                                  .curCap,
+                                                              currentevent
+                                                                  .placeId,
+                                                              eventid),
+                                                          SportsFacil:
+                                                              sportsfacil,
+                                                        ),
+                                                        shape: const RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                    Radius.circular(
+                                                                        20.0))),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                label: const Text('View'),
+                                                backgroundColor: Colors.orange),
+                                            const SizedBox(
+                                              height: 24,
+                                              child: VerticalDivider(),
+                                            ),
+                                            FloatingActionButton.extended(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Friend_Invite_Page(
+                                                          friends: cu.friends),
+                                                ));
+                                              },
+                                              label:
+                                                  const Text('Invite friends'),
+                                              backgroundColor:
+                                                  Colors.deepOrangeAccent,
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ]))));
+                    }
+                    //Processsing future events
+                    List tempEventIdlist = [];
+
+                    for (String eid in futureEventIds) {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
                           SportEvent e = SportEvent.fromSnapshot(doc);
-                          ActiveEventMap[eid] = e;
+                          DateTime start = e.start;
+                          DateTime end = e.end;
+
+                          DateTime? curTime = DateTime.now();
+                          if (curTime.isBefore(start) == true) {
+                            ActiveEventMap[eid] = e;
+
+                            tempEventIdlist.add(eid);
+                          }
                         }
                       }
                     }
 
-                    for (String eventid in activeEventIds) {
+                    futureEventIds = tempEventIdlist;
+
+                    for (String eventid in futureEventIds) {
                       SportEvent currentevent =
                           ActiveEventMap[eventid] as SportEvent;
                       SportsFacility sportsfacil =

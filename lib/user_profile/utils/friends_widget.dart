@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 import 'package:my_app/user_profile/screens/requests_page.dart';
 
@@ -18,7 +19,7 @@ class FriendsWidget extends StatelessWidget {
           buildRButton(
               context, friendrequests.length.toString(), 'Friend Requests'),
           buildDivider(),
-          buildFButton(context, points.toString(), 'Points')
+          buildPButton(context, points.toString(), 'Points')
         ],
       );
   Widget buildDivider() => Container(
@@ -59,6 +60,32 @@ class FriendsWidget extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => Request_Page(friendrequests: friendrequests),
           ));
+        },
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              value,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            SizedBox(height: 2),
+            Text(
+              text,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildPButton(BuildContext context, String value, String text) =>
+      MaterialButton(
+        padding: EdgeInsets.symmetric(vertical: 4),
+        onPressed: () {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (context) => RewardsPage(),
+          // ));
         },
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         child: Column(
