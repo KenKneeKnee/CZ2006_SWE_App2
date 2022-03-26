@@ -3,8 +3,8 @@ import 'package:my_app/create-event/multiform.dart';
 import 'package:my_app/events/create_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
-import 'package:my_app/reviews/view_reviews.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
+import 'package:my_app/reviews/review_page.dart';
 
 class MapMarkerInfoSheet extends StatelessWidget {
   MapMarkerInfoSheet({Key? key, required this.SportsFacil, required this.index})
@@ -34,8 +34,8 @@ class MapMarkerInfoSheet extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ReviewPage(
-                        placeId: placeId,
-                        sportsFacility: SportsFacil,
+                          placeId: placeId,
+                          sportsFacility: SportsFacil,
                       ),
                     ),
                   );
