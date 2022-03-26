@@ -77,104 +77,154 @@ class _ProfilePageState extends State<ProfilePage> {
         //  repository.collection.doc(u.userid).update({"reports": 0});
         //}
 
-        return Container(
-            decoration: _background,
-            child: Builder(
-              builder: (context) => Scaffold(
-                backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                  title: const Text('Profile'),
-                  leading: _isSigningOut
-                      ? CircularProgressIndicator()
-                      : IconButton(
-                          icon: const Icon(Icons.logout),
-                          color: Colors.black,
-                          onPressed: logout),
-                  foregroundColor: Colors.black,
-                  backgroundColor: Color(0xffE3663E),
-                  elevation: 0,
-                  actions: [],
-                ),
-                body: ListView(
-                  physics: BouncingScrollPhysics(),
-                  children: [
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                    ProfileWidget(
-                      imagePath: u.image,
-                      onClicked: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => EditProfilePage()),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    buildName(u),
-                    const SizedBox(height: 24),
-                    FriendsWidget(u.friends, u.friendrequests, u.points),
-                    const SizedBox(height: 48),
-                    BouncingButton(
-                        bgColor: const Color(0xffE3663E),
-                        borderColor: const Color(0xffE3663E),
-                        buttonText: "View Events",
-                        textColor: const Color(0xffffffff),
-                        //Currently leads to current event page
-                        onClick: () {
-                          // temporary tag
-                          if (u.reports >= 5) {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    _buildWarningDialog(context));
-                            repository.collection
-                                .doc(u.userid)
-                                .update({"reports": 0});
-                          }
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                //change to test pages
-                                builder: (context) => ViewEventPage()),
-                          );
-                        }),
-                    const SizedBox(height: 24),
-                    buildAbout(u),
-                  ],
-                ),
+        return Builder(
+          builder: (context) => Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              actions: <Widget>[
+                _isSigningOut
+                    ? CircularProgressIndicator()
+                    : TextButton.icon(
+                        style: TextButton.styleFrom(
+                          textStyle: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onPressed: logout,
+                        icon: Icon(
+                          Icons.logout,
+                        ),
+                        label: Text(
+                          'LOGOUT',
+                        ),
+                      ),
+              ],
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF60d5df),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    bottomRight: Radius.circular(0.0),
+                    topLeft: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(0.0)),
               ),
-            ));
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0)),
+                  ProfileWidget(
+                    imagePath: u.image,
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(u),
+                  const SizedBox(height: 24),
+                  Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40.0),
+                            bottomRight: Radius.circular(0.0),
+                            topLeft: Radius.circular(40.0),
+                            bottomLeft: Radius.circular(0.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            spreadRadius: 2,
+                            color: Colors.grey,
+                            offset: const Offset(0, 1),
+                            blurRadius: 5,
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          buildAbout(u),
+                          const SizedBox(height: 10),
+                          FriendsWidget(u.friends, u.friendrequests, u.points),
+                          const SizedBox(height: 100),
+                        ],
+                      ))
+
+                  // BouncingButton(
+                  //     bgColor: Color.fromARGB(255, 65, 37, 28),
+                  //     borderColor: const Color(0xffE3663E),
+                  //     buttonText: "View Past Events",
+                  //     textColor: const Color(0xffffffff),
+                  //     //Currently leads to current event page
+                  //     onClick: () {
+                  //       // temporary tag
+                  //       if (u.reports >= 5) {
+                  //         showDialog(
+                  //             context: context,
+                  //             builder: (BuildContext context) =>
+                  //                 _buildWarningDialog(context));
+                  //         repository.collection
+                  //             .doc(u.userid)
+                  //             .update({"reports": 0});
+                  //       }
+                  //       Navigator.of(context).push(
+                  //         MaterialPageRoute(
+                  //             //change to test pages
+                  //             builder: (context) => ViewEventPage()),
+                  //       );
+                  //     }),
+                ],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
 
   Widget buildAbout(UserData user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ignore: prefer_const_constructors
-            Center(
-              child: const Text('About',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center),
+      padding: EdgeInsets.symmetric(horizontal: 28),
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: 80,
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            padding: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              shape: BoxShape.rectangle,
             ),
-
-            const SizedBox(height: 16),
-            Center(
+          ),
+          Positioned(
+              left: 30,
+              top: 12,
+              child: Container(
+                padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                color: Colors.white,
                 child: Text(
-              user.about,
+                  'Your Bio',
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+          Center(
+              child: Container(
+            padding: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 12),
+            color: Colors.white,
+            child: Text(
+              'Nothing to see here!',
               style: TextStyle(
-                  fontSize: 16,
-                  height: 1.4,
-                  background: Paint()
-                    ..strokeWidth = 30.0
-                    ..color = Colors.white
-                    ..style = PaintingStyle.stroke
-                    ..strokeJoin = StrokeJoin.round),
-              textAlign: TextAlign.center,
-            )),
-          ],
-        ),
-      );
+                color: Colors.black,
+                fontSize: 14,
+              ),
+            ),
+          )),
+        ],
+      ));
 
   Widget buildName(UserData user) => Column(
         children: [
@@ -185,18 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 4),
           Text(
             user.userid.toString(),
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.black, fontSize: 16),
           )
         ],
       );
 }
-
-const BoxDecoration _background = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('assets/images/background.png'),
-    fit: BoxFit.fitHeight,
-  ),
-);
 
 Widget _buildWarningDialog(BuildContext context) {
   return AlertDialog(
