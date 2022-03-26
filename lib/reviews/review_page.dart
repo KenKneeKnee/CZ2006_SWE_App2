@@ -97,7 +97,47 @@ class _ReviewPageState extends State<ReviewPage> {
                                   shrinkWrap: true,
                                   children: [
                                     buildTitle(title),
-                                    buildRating(),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black45),
+                                    borderRadius: BorderRadius.circular(4)),
+                                    padding: EdgeInsets.all(10),
+                                    child: DropdownButtonFormField<String>(
+                                      value: rating,
+                                      validator: (value) {
+                                      if (value == "Select a rating") {
+                                        return 'Please select a rating for this facility';
+                                      } else {
+                                        return null;
+                                        }
+                                      },
+                                  isExpanded: true,
+                                  icon: const Icon(Icons.sports_football_outlined),
+                                  elevation: 16,
+                                  style: const TextStyle(color: Colors.black),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      rating = newValue!;
+                                    });
+                                  },
+                                  items: <String>[
+                                    "Rate this facility",
+                                    "1 star",
+                                    '2 star',
+                                    '3 star',
+                                    '4 star',
+                                    '5 star',
+                                  ].map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                        child: Text(value),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
                                     buildDesc(desc),
                                     // Flexible(
                                     //   child: TextFormField(
@@ -237,46 +277,6 @@ class _ReviewPageState extends State<ReviewPage> {
     ),
   );
 
-  Widget buildRating() => Container(
-    decoration: BoxDecoration(
-        border: Border.all(color: Colors.black45),
-        borderRadius: BorderRadius.circular(4)),
-    padding: EdgeInsets.all(10),
-    child: DropdownButtonFormField<String>(
-      value: rating,
-      validator: (value) {
-        if (value == "Select a rating") {
-          return 'Please select a rating for this facility';
-        } else {
-          return null;
-        }
-      },
-      isExpanded: true,
-      icon: const Icon(Icons.sports_football_outlined),
-      elevation: 16,
-      style: const TextStyle(color: Colors.black),
-      onChanged: (String? newValue) {
-        setState(() {
-           rating = newValue!;
-        });
-      },
-      items: <String>[
-        "1 star",
-        '2 star',
-        '3 star',
-        '4 star',
-        '5 star',
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Text(value),
-          ),
-        );
-      }).toList(),
-    ),
-  );
 
   Widget buildDesc(desc) => Flexible(
     child: Padding(
