@@ -1,4 +1,6 @@
 /// Horizontal bar chart example
+import 'dart:math';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -17,39 +19,6 @@ class StarSeries {
     required this.barColor,
   });
 }
-
-// List<StarSeries> stardata = [
-//   StarSeries(
-//     star: "1 star",
-//     score: 1,
-//     count: 11,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.red),
-//   ),
-//   StarSeries(
-//     star: "2 star",
-//     score: 2,
-//     count: 12,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.orange),
-//   ),
-//   StarSeries(
-//     star: "3 star",
-//     score: 3,
-//     count: 15,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.blue),
-//   ),
-//   StarSeries(
-//     star: "4 star",
-//     score: 4,
-//     count: 18,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.green),
-//   ),
-//   StarSeries(
-//     star: "5 star",
-//     score: 5,
-//     count: 13,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.purple),
-//   )
-// ];
 
 class RatingChart extends StatelessWidget {
   RatingChart({Key? key, required this.sportsFacility, required this.stardata}) : super(key: key);
@@ -184,5 +153,10 @@ double calcAvgRating(List<StarSeries> data) {
   }
 
   double average = (sumRating / data.length);
-  return average;
+  return dp(average, 1);
+}
+
+double dp(double val, int places){
+  num mod = pow(10.0, places);
+  return ((val * mod).round().toDouble() / mod);
 }
