@@ -191,7 +191,6 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
 
 
 
-
             //the correct leave event function
             // if (_curEvent.curCap > 0) {
             //   _curEvent.curCap -= 1;
