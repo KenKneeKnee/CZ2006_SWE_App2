@@ -22,7 +22,8 @@ class CategoriesList extends StatelessWidget {
       Category(Icon(FontAwesomeIcons.luggageCart), "Travel"),
     ];
     return Container(
-      height: 120,
+      height: 140,
+      padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
