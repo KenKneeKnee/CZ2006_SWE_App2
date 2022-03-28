@@ -51,43 +51,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  Column buildDisplayNameField() {
+  Column buildField(String title, String hint, TextEditingController controller,
+      bool check, String warning) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
             padding: EdgeInsets.only(top: 12.0),
             child: Text(
-              "username",
-              style: TextStyle(color: Colors.grey),
+              title,
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
             )),
-        TextField(
-          controller: displayNameController,
-          decoration: InputDecoration(
-            hintText: "Edit username",
-            errorText: _displayNameValid ? null : "username too short",
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+          decoration: BoxDecoration(
+            color: Colors.white10,
+            borderRadius: BorderRadius.circular(24.0),
+            border: Border.all(
+              color: Colors.grey,
+            ),
           ),
-        )
-      ],
-    );
-  }
-
-  Column buildBioField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 12.0),
-          child: Text(
-            "About",
-            style: TextStyle(color: Colors.grey),
-          ),
-        ),
-        TextField(
-          controller: bioController,
-          decoration: InputDecoration(
-            hintText: "Change About",
-            errorText: _bioValid ? null : "Bio too long",
+          child: Container(
+            margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: hint,
+                errorText: check ? null : warning,
+              ),
+            ),
           ),
         )
       ],
@@ -119,31 +114,41 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  Color _getTextColor(Set<MaterialState> states) => states.any(<MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      }.contains)
+          ? Colors.green
+          : Colors.lightGreen;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         leading: BackButton(
-            color: Colors.black, onPressed: () => Navigator.of(context).pop()),
-        backgroundColor: Color(0xffE3663E),
+            color: Colors.white, onPressed: () => Navigator.of(context).pop()),
+        backgroundColor: Color(0xFF049cac),
         title: Text(
           "Edit Profile",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
+        elevation: 0,
       ),
       body: isLoading
           ? circularProgress()
-          : ListView(
-              children: <Widget>[
-                Container(
-                  child: Column(children: <Widget>[
+          : Container(
+              color: Color(0xFF049cac),
+              child: ListView(
+                children: <Widget>[
+                  Column(children: <Widget>[
                     Padding(
                         padding: EdgeInsets.only(
                           top: 16.0,
-                          bottom: 8.0,
+                          bottom: 28.0,
                         ),
                         child: ClipOval(
                           child: Material(
@@ -153,28 +158,60 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               fit: BoxFit.cover,
                               width: 128,
                               height: 128,
-                              child: InkWell(),
                             ),
                           ),
                         )),
-                    Padding(
-                      padding: EdgeInsets.all(16.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40.0),
+                            bottomRight: Radius.circular(0.0),
+                            topLeft: Radius.circular(40.0),
+                            bottomLeft: Radius.circular(0.0)),
+                      ),
+                      padding: EdgeInsets.all(36.0),
                       child: Column(
                         children: <Widget>[
-                          buildDisplayNameField(),
-                          buildBioField(),
+                          buildField(
+                              "Username",
+                              "Change username",
+                              displayNameController,
+                              _displayNameValid,
+                              "Username is too short"),
+                          buildField("About", "Talk about yourself...",
+                              bioController, _bioValid, "Bio is too long"),
+                          SizedBox(
+                            height: 100,
+                          ),
+                          ElevatedButton.icon(
+                              onPressed: updateProfileData,
+                              icon: Icon(Icons.edit),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13.0),
+                                )),
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                    _getTextColor),
+                              ),
+                              label: Text(
+                                "SAVE",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
                         ],
                       ),
                     ),
-                    BouncingButton(
-                        onClick: updateProfileData,
-                        bgColor: const Color(0xffE3663E),
-                        borderColor: const Color(0xffE3663E),
-                        buttonText: 'Confirm',
-                        textColor: Color(0xffffffff)),
-                  ]),
-                )
-              ],
+                  ])
+                ],
+              ),
             ),
     );
   }

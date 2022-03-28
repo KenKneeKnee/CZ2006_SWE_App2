@@ -1,4 +1,6 @@
 /// Horizontal bar chart example
+import 'dart:math';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -18,42 +20,10 @@ class StarSeries {
   });
 }
 
-// List<StarSeries> stardata = [
-//   StarSeries(
-//     star: "1 star",
-//     score: 1,
-//     count: 11,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.red),
-//   ),
-//   StarSeries(
-//     star: "2 star",
-//     score: 2,
-//     count: 12,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.orange),
-//   ),
-//   StarSeries(
-//     star: "3 star",
-//     score: 3,
-//     count: 15,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.blue),
-//   ),
-//   StarSeries(
-//     star: "4 star",
-//     score: 4,
-//     count: 18,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.green),
-//   ),
-//   StarSeries(
-//     star: "5 star",
-//     score: 5,
-//     count: 13,
-//     barColor: charts.ColorUtil.fromDartColor(Colors.purple),
-//   )
-// ];
-
 class RatingChart extends StatelessWidget {
-  RatingChart({Key? key, required this.sportsFacility, required this.stardata}) : super(key: key);
+  RatingChart({Key? key, required this.sportsFacility, required this.stardata, required this.total}) : super(key: key);
   final Map stardata;
+  final int total;
   SportsFacility sportsFacility;
   final chartColors={
     1: charts.ColorUtil.fromDartColor(Colors.redAccent),
@@ -81,8 +51,7 @@ class RatingChart extends StatelessWidget {
           colorFn: (StarSeries series, _) => series.barColor)
     ];
 
-    double avgRating = calcAvgRating(data);
-    int total = data.length;
+    double avgRating = calcAvgRating(data, total);
     return Container(
       height: MediaQuery.of(context).size.height,
       color: Colors.transparent,
@@ -176,13 +145,18 @@ class RatingChart extends StatelessWidget {
   }
 }
 
-double calcAvgRating(List<StarSeries> data) {
+double calcAvgRating(List<StarSeries> data, int total) {
   int sumRating = 0;
 
   for (int i = 0; i < data.length; i++) {
     sumRating += (data[i].score*data[i].count);
   }
 
-  double average = (sumRating / data.length);
-  return average;
+  double average = (sumRating / total);
+  return dp(average, 1);
+}
+
+double dp(double val, int places){
+  num mod = pow(10.0, places);
+  return ((val * mod).round().toDouble() / mod);
 }

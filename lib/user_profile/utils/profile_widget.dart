@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/user_profile/screens/edit_profile_page.dart';
 
 ///Editable Profile Pic
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
   final bool isEdit;
-  final VoidCallback onClicked;
+  //final VoidCallback onClicked;
 
-  const ProfileWidget({
+  ProfileWidget({
     Key? key,
     required this.imagePath,
     this.isEdit = false,
-    required this.onClicked,
+    //required this.onClicked,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,14 @@ class ProfileWidget extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: 4,
-            child: buildEditIcon(color),
+            child: GestureDetector(
+              child: buildEditIcon(color),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => EditProfilePage()),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -42,7 +50,7 @@ class ProfileWidget extends StatelessWidget {
           fit: BoxFit.cover,
           width: 128,
           height: 128,
-          child: InkWell(onTap: onClicked),
+          // child: InkWell(onTap: onClicked),
         ),
       ),
     );
