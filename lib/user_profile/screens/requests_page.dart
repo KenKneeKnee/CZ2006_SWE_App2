@@ -179,12 +179,6 @@ class _FriendRequestState extends State<Request_Page> {
                     leading: BackButton(
                         color: Colors.black,
                         onPressed: () => Navigator.of(context).pop()),
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.search, color: Colors.black),
-                        onPressed: () {},
-                      ),
-                    ],
                   ),
                   body: Container(
                     height: size.height,

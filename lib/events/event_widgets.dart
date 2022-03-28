@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/events/booking_repository.dart';
+import 'package:my_app/events/completeEvent.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/homepage.dart';
@@ -79,16 +80,20 @@ class CompleteEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void function() {
-      buttonFunction();
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return JoinedEventDialog(
-              bgDeco: DialogBoxDecoration.joinEventBg,
-              title: 'Completed Event!',
-              paragraph: 'Hope you had fun!',
-            );
-          });
+      buttonFunction(); //deals with database
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CompleteEventPage()),
+      );
+      // showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) {
+      //       return JoinedEventDialog(
+      //         bgDeco: DialogBoxDecoration.joinEventBg,
+      //         title: 'Completed Event!',
+      //         paragraph: 'Hope you had fun!',
+      //       );
+      //     });
     }
 
     return BouncingButton(

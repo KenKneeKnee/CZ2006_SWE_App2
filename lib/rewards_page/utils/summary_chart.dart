@@ -5,7 +5,7 @@ ThemeData createTheme([Brightness? brightness]) {
   return ThemeData(
     brightness: brightness,
     fontFamily: "Quicksand",
-    primarySwatch: Colors.indigo,
+    primarySwatch: Colors.deepOrange,
     accentColor: Colors.deepOrangeAccent,
     // This makes the visual density adapt to the platform that you run
     // the app on. For desktop platforms, the controls will be smaller and

@@ -110,7 +110,7 @@ class _RewardsPageState extends State<RewardsPage> {
           autofocus: false,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.only(top: 16, bottom: 14),
-            hintText: "What you wish for?",
+            hintText: "What are you looking for?",
             suffixIcon: Icon(Icons.search),
             border: InputBorder.none,
           ),
@@ -234,7 +234,7 @@ class _RewardsPageState extends State<RewardsPage> {
                     Expanded(
                       flex: 1,
                       child: buildPointSummary(
-                        title: "Points earned",
+                        title: "Total Points",
                         value: user.points * 1.0,
                         rate: totalReceived.last.y - totalRedeem.last.y,
                         color: Colors.green,
@@ -301,14 +301,9 @@ class _RewardsPageState extends State<RewardsPage> {
                   child: Container(
                     child: Opacity(
                       opacity: 1 - offset,
-                      child: SummaryChart(
-                        data1: totalReceived,
-                        data2: totalRedeem,
-                        maxValue: maxValue,
-                      ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

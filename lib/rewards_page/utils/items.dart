@@ -21,22 +21,25 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Item> items = [
       Item(
-        image: "https://cdn.mos.cms.futurecdn.net/eW8gPh9RFcpAwYDsyM3t7Q.jpg",
-        label: "Get 1x Playstation 4",
-        description: "Sony Playstation 4",
-        point: 14,
+        image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlJuFWkBGj7q3J9JXfFO9y2SVfpF9FQ2vCJg&usqp=CAU",
+        label: "Get 1x 5kg dumbbells",
+        description: "5kg dumbbells",
+        point: 20,
       ),
       Item(
-        image: "https://cdn.mos.cms.futurecdn.net/eW8gPh9RFcpAwYDsyM3t7Q.jpg",
-        label: "Get 1x Playstation 4",
-        description: "Sony Playstation 4",
-        point: 14,
+        image:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8zsvVBbx488ALKEXIDnMwcC-J3B3SXcVWzQ&usqp=CAU",
+        label: "Get 1x Shaker bottle",
+        description: "Shaker bottle",
+        point: 10,
       ),
       Item(
-        image: "https://cdn.mos.cms.futurecdn.net/eW8gPh9RFcpAwYDsyM3t7Q.jpg",
-        label: "Get 1x Playstation 4",
-        description: "Sony Playstation 4",
-        point: 14,
+        image:
+            "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQDb9y79RWeFw3xY76OuSOZ-SzJtv2-bCYUF2AGOqB9weofOlvrOosUJ6GCGtRNsF87uOAoN5-oaO98&usqp=CAc",
+        label: "Get 1x whey protein",
+        description: "Protein powder",
+        point: 50,
       ),
     ];
 
