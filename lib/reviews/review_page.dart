@@ -46,18 +46,18 @@ class _ReviewPageState extends State<ReviewPage> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          body: FutureBuilder<QuerySnapshot>(//<List<dynamic>>(
-              future: facils.getReviewsFor(widget.placeId),//Future.wait([facils.getReviewsFor(widget.placeId), userDb.collection.doc(uid).get()]),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot)//AsyncSnapshot<List<dynamic>> snapshot)
+          body: FutureBuilder (
+              future: Future.wait([facils.getReviewsFor(widget.placeId), userDb.collection.doc(uid).get()]),
+              builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot)
               {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
                 else {
-                  final revs = snapshot.data;
-                  //final String userPic =
+                  final revs = snapshot.data![0];
+                  final UserData user = UserData.fromSnapshot(snapshot.data![1]);
                   List<Widget> reviewlist=[];
                   if (revs!.docs.isEmpty) {
                     return Container(
@@ -89,7 +89,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     } else {
                       ratings[retrieved.rating]=1;
                     }
-                    reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid,));
+                    reviewlist.add(ReviewWidget(review: retrieved, imageid: imageid, user: user));
                   }
                   return Container(
                     color: Colors.white,
@@ -110,6 +110,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       ListView.builder(
                             shrinkWrap: true,
                             itemCount: reviewlist.length,
+                            physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Container(
                                 margin: const EdgeInsets.symmetric(
@@ -347,11 +348,13 @@ class ReviewWidget extends StatelessWidget {
   ReviewWidget(
       {Key? key,
         required this.review,
-        required this.imageid,})
+        required this.imageid,
+        required this.user,})
       : super(key: key);
 
   final Review review;
   final String imageid;
+  final UserData user;
 
   @override
   Widget build(BuildContext context) {
@@ -361,30 +364,41 @@ class ReviewWidget extends StatelessWidget {
 
       if (!snapshot.hasData) {
         return Container(
-            padding: EdgeInsets.fromLTRB(10,10,10,10),
+            padding: EdgeInsets.fromLTRB(5,10,5,10),
             child: Expanded(
                 child: Row(
                     children:[
-                      RatingBarIndicator(
-                        rating:
-                        review.rating*1.0,
-                        itemBuilder:
-                            (context, index) =>
-                            Icon(
-                              Icons.star,
-                              color: Colors.amber,
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          children:[
+                            SizedBox(
+                              height: 75,
+                              width: 75,
+                              child: Image.asset(user.image, fit: BoxFit.cover),
                             ),
-                        itemCount: 5,
-                        itemSize: 13.0,
-                        direction:
-                        Axis.horizontal,
+                            RatingBarIndicator(
+                              rating:
+                              review.rating*1.0,
+                              itemBuilder:
+                                  (context, index) =>
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                              itemCount: 5,
+                              itemSize: 13.0,
+                              direction:
+                              Axis.horizontal,
+                            )]
+                        ),
                       ),
-                      SizedBox(width:10),
+                      const SizedBox(width:10),
                       Expanded(flex:4, child:Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:[
                             Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
-                            Text('posted by ${uid}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,)),
+                            Text('posted by ${user.username}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,)),
                             SizedBox(height:4),
                             Text(review.desc,),
                           ]
@@ -396,33 +410,50 @@ class ReviewWidget extends StatelessWidget {
       }
       else {
         return Container(
-          padding: EdgeInsets.fromLTRB(10,10,10,10),
-          child: Expanded(
-            child: Row(
-              children:[
-                RatingBarIndicator(
-                rating: review.rating*1.0,
-                itemBuilder: (context, index) =>
-                Icon(Icons.star, color: Colors.amber, ),
-                itemCount: 5,
-                itemSize: 13.0,
-                direction:
-                Axis.horizontal ),
-                SizedBox(width:10),
-                Expanded(flex:4, child:Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            padding: EdgeInsets.fromLTRB(5,10,5,10),
+            child: Expanded(
+              child: Row(
                 children:[
-                  Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
-                  Text('posted by ${removeEmail(review.user)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,)),
-                  SizedBox(height:4),
-                  Text(review.desc,),
-                  SizedBox(height:8),
-                  Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                        children:[
+                          SizedBox(
+                            height: 75,
+                            width: 75,
+                            child: Image.asset(user.image, fit: BoxFit.cover),
+                          ),
+                          RatingBarIndicator(
+                            rating:
+                            review.rating*1.0,
+                            itemBuilder:
+                                (context, index) =>
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                            itemCount: 5,
+                            itemSize: 13.0,
+                            direction:
+                            Axis.horizontal,
+                          )]
+                    ),
+                  ),
+                  const SizedBox(width:10),
+                  Expanded(flex:4, child:Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[
+                      Text(review.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,)),
+                      Text('posted by ${user.username}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14,)),
+                      SizedBox(height:4),
+                      Text(review.desc,),
+                      SizedBox(height: 10),
+                    Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
                           alignment: Alignment.center,
-                          image: NetworkImage(snapshot.data![0]),
+                          image: NetworkImage(snapshot.data!),
                           fit: BoxFit.cover),
                       border: Border.all(
                         color: Colors.lightBlueAccent,
