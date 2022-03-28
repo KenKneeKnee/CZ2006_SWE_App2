@@ -79,9 +79,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                     }
                     List EventList = snapshot.data!.docs;
                     List BookingList = snapshot1.data!.docs;
-                    Map<String, SportEvent> PastEventMap = {};
                     Map<String, SportEvent> ActiveEventMap = {};
-                    List futureEventIds = [];
                     List activeEventIds = [];
                     final Size size = MediaQuery.of(context).size;
 
