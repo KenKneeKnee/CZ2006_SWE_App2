@@ -23,7 +23,7 @@ Review ReviewFromJson(Map<String, dynamic> json) {
     json['title'] as String,
     json['rating'] as int,
     json['desc'] as String,
-    json['uid'] as String,
+    json['user'] as String,
   );
 }
 
