@@ -50,6 +50,7 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
                     controller: ratingController,
                   ),
                   RatingBar.builder(
+                    itemSize: 30,
                     initialRating: 3,
                     minRating: 1,
                     direction: Axis.horizontal,
@@ -75,7 +76,6 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
         Step(
             title: Text('Description'),
             content: Container(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 50),
               child: Form(
                 key: formKey,
                 child: ListView(
@@ -133,111 +133,119 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
   @override
   Widget build(BuildContext context) {
     final isLastStep = _currentStep == getSteps().length - 1;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: BackButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-      ),
-      body: FutureBuilder<QuerySnapshot>(builder:
-          (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        return Stepper(
-            type: StepperType.vertical,
-            steps: getSteps(),
-            currentStep: _currentStep,
-            onStepContinue: () {
-              setState(() {
-                if (_currentStep == 0) {
-                  print(ratingController.text);
-                } else if (_currentStep == 2) {
-                  print("last step!");
+    return Container(
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   leading: BackButton(
+      //       color: Colors.white,
+      //       onPressed: () {
+      //         Navigator.of(context).pop();
+      //       }),
+      // ),
+      //body:
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          Container(
+              color: Colors.blue,
+              child: Image.asset(
+                'assets/images/write-review.png',
+              ),
+              padding: EdgeInsets.all(8)),
+          FutureBuilder<QuerySnapshot>(builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            return Stepper(
+                type: StepperType.vertical,
+                steps: getSteps(),
+                currentStep: _currentStep,
+                onStepContinue: () {
+                  setState(() {
+                    if (_currentStep == 0) {
+                      print(ratingController.text);
+                    } else if (_currentStep == 2) {
+                      final isValid = formKey.currentState?.validate();
+                      if (isValid != null && isValid) {
+                        formKey.currentState?.save();
+                        postReview(
+                            titleController.text,
+                            int.parse(ratingController.text[0]),
+                            descController.text,
+                            uid,
+                            imageFile);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      } else {
+                        //some function to tell user their form is wrong
+                      }
+                    }
+                    print("the current state is ${_currentStep}");
+                    if (!isLastStep) _currentStep += 1;
+                  });
+                },
+                onStepCancel: () {
+                  if (_currentStep > 0) {
+                    setState(() {
+                      _currentStep -= 1;
+                    });
+                  }
+                },
+                onStepTapped: (step) => setState(() {
+                      _currentStep = step;
+                    }),
+                controlsBuilder:
+                    (BuildContext context, ControlsDetails controls) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: controls.onStepContinue,
+                            //  (!isLastStep)
+                            //     ? controls.onStepContinue
+                            //     : () async {
 
-                  // final isValid = formKey.currentState?.validate();
-                  // if (isValid != null && isValid) {
-                  //   formKey.currentState?.save();
-                  // }
-
-                  postReview(
-                      titleController.text,
-                      int.parse(ratingController.text[0]),
-                      descController.text,
-                      uid,
-                      imageFile);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                } else {
-                  print(titleController.text);
-                  print(descController.text);
-                }
-                print("the current state is ${_currentStep}");
-                if (!isLastStep) _currentStep += 1;
-              });
-            },
-            onStepCancel: () {
-              if (_currentStep > 0) {
-                setState(() {
-                  _currentStep -= 1;
-                });
-              }
-            },
-            onStepTapped: (step) => setState(() {
-                  _currentStep = step;
-                }),
-            controlsBuilder: (BuildContext context, ControlsDetails controls) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: controls.onStepContinue,
-                        //  (!isLastStep)
-                        //     ? controls.onStepContinue
-                        //     : () async {
-
-                        //     },
-                        style: ElevatedButton.styleFrom(
-                            primary: Color(0xffE96B46),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
-                            textStyle: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold)),
-                        child: Text(
-                          isLastStep ? 'SUBMIT' : 'NEXT',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    (_currentStep != 0)
-                        ? Expanded(
-                            child: TextButton(
-                              onPressed: controls.onStepCancel,
-                              child: const Text(
-                                'BACK',
-                              ),
+                            //     },
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xffE96B46),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                textStyle: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold)),
+                            child: Text(
+                              isLastStep ? 'SUBMIT' : 'NEXT',
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
                             ),
-                          )
-                        : Expanded(
-                            child: Container(),
                           ),
-                  ],
-                ),
-              );
-            });
-      }),
+                        ),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        (_currentStep != 0)
+                            ? Expanded(
+                                child: TextButton(
+                                  onPressed: controls.onStepCancel,
+                                  child: const Text(
+                                    'BACK',
+                                  ),
+                                ),
+                              )
+                            : Expanded(
+                                child: Container(),
+                              ),
+                      ],
+                    ),
+                  );
+                });
+          }),
+        ],
+      ),
     );
   }
 }
 
 Widget buildTitle(title) => Container(
-      //width: 100,
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextFormField(
         controller: title,
@@ -267,7 +275,6 @@ Widget buildDesc(desc) => Flexible(
           maxLines: 8, // when user presses enter it will adapt to it
           decoration: const InputDecoration(
             labelText: 'Describe your time here!',
-            //prefixIcon: Icon(Icons.sports_volleyball),
             border: OutlineInputBorder(),
           ),
           validator: (value) {

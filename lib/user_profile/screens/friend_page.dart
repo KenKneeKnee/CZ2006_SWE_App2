@@ -45,6 +45,7 @@ class _FriendPageState extends State<Friend_Page> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    double height = 48;
     return StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -102,20 +103,26 @@ class _FriendPageState extends State<Friend_Page> {
                                     fontSize: 10, color: Colors.grey),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
-                              //Button to press
-                              // FloatingActionButton.extended(
-                              //     onPressed: () {
-                              //       Navigator.of(context).push(
-                              //         MaterialPageRoute(
-                              //             //change to test pages
-                              //             builder: (context) =>
-                              //                 FriendProfilePage(u: u)),
-                              //       );
-                              //     },
-                              //     label: const Text('Visit'),
-                              //     backgroundColor: Colors.orange),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        //change to test pages
+                                        builder: (context) =>
+                                            FriendProfilePage(u: u)),
+                                  );
+                                },
+                                child: const Text('Visit'),
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color.fromRGBO(135, 180, 187, 1),
+                                    // padding: EdgeInsets.symmetric(
+                                    //     horizontal: 5, vertical: 2),
+                                    textStyle: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold)),
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -150,6 +157,7 @@ class _FriendPageState extends State<Friend_Page> {
                         flex: 2,
                         child: Container(
                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                           alignment: Alignment.bottomLeft,
                           child: Text(
                             "Invite more friends",
@@ -160,22 +168,23 @@ class _FriendPageState extends State<Friend_Page> {
                       ),
                       Expanded(
                         flex: 2,
-                        child: Container(
+                        child: Card(
+                          elevation: 2,
                           margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white10,
-                            borderRadius: BorderRadius.circular(24.0),
-                            border: Border.all(
-                              color: Colors.grey,
-                            ),
-                          ),
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          // decoration: BoxDecoration(
+                          //   color: Colors.white10,
+                          //   borderRadius: BorderRadius.circular(24.0),
+                          //   border: Border.all(
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
+                          // padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 5,
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                child: Container(
+                                  padding: EdgeInsets.fromLTRB(15, 0, 0, 10),
                                   child: TextField(
                                     controller: myController,
                                   ),
@@ -229,47 +238,48 @@ class _FriendPageState extends State<Friend_Page> {
                       ),
                       Expanded(
                         flex: 8,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black45),
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30.0),
-                                bottomRight: Radius.circular(0.0),
-                                topLeft: Radius.circular(30.0),
-                                bottomLeft: Radius.circular(0.0)),
-                          ),
-                          margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
-                          child: SizedBox(
-                            height: 300,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                controller: controller,
-                                itemCount: friendbuttons.length,
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  double scale = 1.0;
-                                  if (topContainer > 0.1) {
-                                    scale = index + 0.1 - topContainer;
-                                    if (scale < 0) {
-                                      scale = 0;
-                                    } else if (scale > 1) {
-                                      scale = 1;
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20))),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black45),
+                            ),
+                            margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+                            child: SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: controller,
+                                  itemCount: friendbuttons.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    double scale = 1.0;
+                                    if (topContainer > 0.1) {
+                                      scale = index + 0.1 - topContainer;
+                                      if (scale < 0) {
+                                        scale = 0;
+                                      } else if (scale > 1) {
+                                        scale = 1;
+                                      }
                                     }
-                                  }
-                                  return Opacity(
-                                    opacity: scale,
-                                    child: Transform(
-                                      transform: Matrix4.identity()
-                                        ..scale(scale, scale),
-                                      alignment: Alignment.bottomCenter,
-                                      child: Align(
-                                          heightFactor: 0.8,
-                                          alignment: Alignment.topCenter,
-                                          child: friendbuttons[index]),
-                                    ),
-                                  );
-                                }),
+                                    return Opacity(
+                                      opacity: scale,
+                                      child: Transform(
+                                        transform: Matrix4.identity()
+                                          ..scale(scale, scale),
+                                        alignment: Alignment.bottomCenter,
+                                        child: Align(
+                                            heightFactor: 0.8,
+                                            alignment: Alignment.topCenter,
+                                            child: friendbuttons[index]),
+                                      ),
+                                    );
+                                  }),
+                            ),
                           ),
                         ),
                       ),

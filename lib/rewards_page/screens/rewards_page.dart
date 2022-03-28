@@ -128,12 +128,12 @@ class _RewardsPageState extends State<RewardsPage> {
               height: 16,
             ),
             CategoriesList(),
-            buildSearchBox(),
+            //buildSearchBox(),
             SizedBox(
               height: 24,
             ),
-            ItemList(label: "New"),
-            ItemList(label: "Hot"),
+            ItemList(label: "Rewards"),
+            // ItemList(label: "Hot"),
           ],
         ),
       ),
@@ -257,7 +257,11 @@ class _RewardsPageState extends State<RewardsPage> {
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/rewards.png"),
+                fit: BoxFit.cover),
             gradient: LinearGradient(colors: [
+              Colors.amber,
               Theme.of(context).primaryColor,
               Theme.of(context).primaryColorDark,
             ]),
@@ -278,18 +282,22 @@ class _RewardsPageState extends State<RewardsPage> {
                     elevation: 0,
                     centerTitle: false,
                     title: Container(
+                      color: Colors.white10,
                       child: Text(
-                        offset == 1 ? "Rewards page" : "Hi " + user.username,
-                        style: TextStyle(fontSize: 18 + 16 * (1 - offset)),
+                        offset == 1 ? "Rewards Page" : "Hi " + user.username,
+                        style: TextStyle(
+                          fontSize: 18 + 16 * (1 - offset),
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     actions: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.notifications),
-                        onPressed: () {
-                          debugPrint("clicl");
-                        },
-                      )
+                      // IconButton(
+                      //   icon: Icon(Icons.notifications),
+                      //   onPressed: () {
+                      //     debugPrint("clicl");
+                      //   },
+                      // )
                     ],
                   ),
                 ),

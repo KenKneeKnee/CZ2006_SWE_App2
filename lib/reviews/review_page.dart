@@ -33,134 +33,137 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Reviews",
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Review Page",
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        body: FutureBuilder(
-          future: Future.wait([
-            facils.getReviewsFor(widget.placeId),
-            userDb.collection.doc(uid).get()
-          ]),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              final revs = snapshot.data![0];
-              final UserData user = UserData.fromSnapshot(snapshot.data![1]);
-              List<Widget> reviewlist = [];
-              if (revs!.docs.isEmpty) {
-                return Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('assets/images/background.png'),
-                          fit: BoxFit.fitWidth)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("No reviews yet!",
-                          style: TextStyle(
-                              color: Colors.deepOrangeAccent,
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      postButton("Post one?")
-                    ],
-                  ),
-                );
-              }
-              Map ratings = {
-                1: 0,
-                2: 0,
-                3: 0,
-                4: 0,
-                5: 0,
-              }; // rating:count
-              for (DocumentSnapshot doc in revs.docs) {
-                String imageid = doc.id;
-                Review retrieved =
-                    ReviewFromJson(doc.data() as Map<String, dynamic>);
-                if (ratings[retrieved.rating] != null) {
-                  ratings[retrieved.rating] += 1;
-                } else {
-                  ratings[retrieved.rating] = 1;
-                }
-                reviewlist.add(ReviewWidget(
-                    review: retrieved, imageid: imageid, user: user));
-              }
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      body: FutureBuilder(
+        future: Future.wait([
+          facils.getReviewsFor(widget.placeId),
+          userDb.collection.doc(uid).get()
+        ]),
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            final revs = snapshot.data![0];
+            final UserData user = UserData.fromSnapshot(snapshot.data![1]);
+            List<Widget> reviewlist = [];
+            if (revs!.docs.isEmpty) {
               return Container(
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 375,
-                        child: RatingChart(
-                          total: reviewlist.length,
-                          stardata: ratings,
-                          sportsFacility: widget.sportsFacility,
-                        ),
-                      ),
-                      postButton("Write Review!"),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: reviewlist.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 18.0,
-                              vertical: 10.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  spreadRadius: 1,
-                                  color: Colors.grey,
-                                  offset: const Offset(0, 1),
-                                  blurRadius: 3,
-                                )
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      print("${index} was tapped");
-                                    },
-                                    child: reviewlist[index],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/background.png'),
+                        fit: BoxFit.fitWidth)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("No reviews yet!",
+                        style: TextStyle(
+                            color: Colors.deepOrangeAccent,
+                            fontSize: 36,
+                            fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    postButton("Post one?")
+                  ],
                 ),
               );
             }
-          },
-        ),
+            Map ratings = {
+              1: 0,
+              2: 0,
+              3: 0,
+              4: 0,
+              5: 0,
+            }; // rating:count
+            for (DocumentSnapshot doc in revs.docs) {
+              String imageid = doc.id;
+              Review retrieved =
+                  ReviewFromJson(doc.data() as Map<String, dynamic>);
+              if (ratings[retrieved.rating] != null) {
+                ratings[retrieved.rating] += 1;
+              } else {
+                ratings[retrieved.rating] = 1;
+              }
+              reviewlist.add(ReviewWidget(
+                  review: retrieved, imageid: imageid, user: user));
+            }
+            return Container(
+              color: Colors.white,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 375,
+                      child: RatingChart(
+                        total: reviewlist.length,
+                        stardata: ratings,
+                        sportsFacility: widget.sportsFacility,
+                      ),
+                    ),
+                    postButton("Write Review!"),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: reviewlist.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 18.0,
+                            vertical: 10.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12.0),
+                            boxShadow: [
+                              BoxShadow(
+                                spreadRadius: 1,
+                                color: Colors.grey,
+                                offset: const Offset(0, 1),
+                                blurRadius: 3,
+                              )
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    print("${index} was tapped");
+                                  },
+                                  child: reviewlist[index],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -184,13 +187,18 @@ class _ReviewPageState extends State<ReviewPage> {
         final title = TextEditingController();
         final desc = TextEditingController();
         XFile? imageFile;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CreateReviewForm(
-                    placeId: widget.placeId,
-                  )),
-        );
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(child: CreateReviewForm(placeId: widget.placeId));
+            });
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) => CreateReviewForm(
+        //             placeId: widget.placeId,
+        //           )),
+        // );
       });
 
   Widget buildTitle(title) => Flexible(

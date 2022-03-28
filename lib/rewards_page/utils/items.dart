@@ -48,7 +48,7 @@ class ItemList extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 12),
+            margin: EdgeInsets.symmetric(horizontal: 20).copyWith(bottom: 30),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -61,21 +61,22 @@ class ItemList extends StatelessWidget {
                         ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Text(
-                    "See all",
-                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
-                )
+                // InkWell(
+                //   onTap: () {},
+                //   child: Text(
+                //     "See all",
+                //     style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                //         color: Theme.of(context).colorScheme.secondary),
+                //   ),
+                // )
               ],
             ),
           ),
           Container(
-            height: 160,
+            height: 260,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
               itemBuilder: (context, index) {
                 Item item = items[index];
                 return buildItem(context, item, index);
