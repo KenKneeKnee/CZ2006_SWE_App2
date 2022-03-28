@@ -1,4 +1,6 @@
 /// Horizontal bar chart example
+import 'dart:math';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,51 +8,40 @@ import 'package:my_app/map/map_data.dart';
 
 class StarSeries {
   final String star;
+  final int score;
   final int count;
   final charts.Color barColor;
 
   StarSeries({
     required this.star,
+    required this.score,
     required this.count,
     required this.barColor,
   });
 }
 
-List<StarSeries> stardata = [
-  StarSeries(
-    star: "1 star",
-    count: 11,
-    barColor: charts.ColorUtil.fromDartColor(Colors.red),
-  ),
-  StarSeries(
-    star: "2 star",
-    count: 12,
-    barColor: charts.ColorUtil.fromDartColor(Colors.orange),
-  ),
-  StarSeries(
-    star: "3 star",
-    count: 15,
-    barColor: charts.ColorUtil.fromDartColor(Colors.blue),
-  ),
-  StarSeries(
-    star: "4 star",
-    count: 18,
-    barColor: charts.ColorUtil.fromDartColor(Colors.green),
-  ),
-  StarSeries(
-    star: "5 star",
-    count: 13,
-    barColor: charts.ColorUtil.fromDartColor(Colors.purple),
-  )
-];
-
 class RatingChart extends StatelessWidget {
-  RatingChart({Key? key, required this.sportsFacility}) : super(key: key);
-  final List<StarSeries> data = stardata;
+  RatingChart({Key? key, required this.sportsFacility, required this.stardata, required this.total}) : super(key: key);
+  final Map stardata;
+  final int total;
   SportsFacility sportsFacility;
-
+  final chartColors={
+    1: charts.ColorUtil.fromDartColor(Colors.redAccent),
+    2: charts.ColorUtil.fromDartColor(Colors.orangeAccent),
+    3: charts.ColorUtil.fromDartColor(Colors.blueAccent),
+    4: charts.ColorUtil.fromDartColor(Colors.greenAccent),
+    5: charts.ColorUtil.fromDartColor(Colors.purpleAccent),
+  };
   @override
   Widget build(BuildContext context) {
+    List<StarSeries> data=[];
+    for (int rating in stardata.keys) {
+      data.add(StarSeries(
+          star: "${rating} star",
+          score: rating,
+          count: stardata[rating],
+          barColor: chartColors[rating]!));
+    }
     List<charts.Series<StarSeries, String>> series = [
       charts.Series(
           id: "Stars",
@@ -60,8 +51,7 @@ class RatingChart extends StatelessWidget {
           colorFn: (StarSeries series, _) => series.barColor)
     ];
 
-    double avgRating = calcAvgRating();
-    int total = 100;
+    double avgRating = calcAvgRating(data, total);
     return Container(
       height: MediaQuery.of(context).size.height,
       color: Colors.transparent,
@@ -77,14 +67,14 @@ class RatingChart extends StatelessWidget {
                 color: Colors.red,
               ),
               Text(
-                "facility name",
+                sportsFacility.placeName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),
               Text(
-                "Facility address",
+                sportsFacility.facilityType,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 10,
@@ -155,14 +145,18 @@ class RatingChart extends StatelessWidget {
   }
 }
 
-double calcAvgRating() {
+double calcAvgRating(List<StarSeries> data, int total) {
   int sumRating = 0;
-  List<int> listRating = [1, 4, 2, 5, 2, 1];
 
-  for (var i = 0; i < listRating.length; i++) {
-    sumRating += listRating[i];
+  for (int i = 0; i < data.length; i++) {
+    sumRating += (data[i].score*data[i].count);
   }
 
-  var average = (sumRating / listRating.length);
-  return average;
+  double average = (sumRating / total);
+  return dp(average, 1);
+}
+
+double dp(double val, int places){
+  num mod = pow(10.0, places);
+  return ((val * mod).round().toDouble() / mod);
 }

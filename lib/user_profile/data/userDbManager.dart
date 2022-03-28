@@ -18,7 +18,7 @@ class UserDbManager {
     print('aa');
   }
 
-  VisitUserProfile() {
+  DocumentReference VisitUserProfile() {
     String? userid = FirebaseAuth.instance.currentUser?.email;
     return collection.doc(userid);
   }

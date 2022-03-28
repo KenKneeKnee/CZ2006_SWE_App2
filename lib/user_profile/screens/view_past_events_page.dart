@@ -79,35 +79,35 @@ class _ViewEventPageState extends State<ViewEventPage> {
 
                     for (DocumentSnapshot doc in BookingList) {
                       if (doc['userId'] == uid) {
-                        if (doc['active'] == true) {
-                          activeEventIds.add(doc['eventId']);
+                        if (doc['active'] == false) {
+                          pastEventIds.add(doc['eventId']);
                         }
-                      } else {
-                        pastEventIds.add(doc['eventId']);
                       }
                     }
+
+                    List tempEventIdlist = [];
 
                     for (String eid in pastEventIds) {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
                           SportEvent e = SportEvent.fromSnapshot(doc);
-                          PastEventMap[eid] = e;
+                          DateTime start = e.start;
+                          DateTime end = e.end;
+
+                          DateTime? curTime = DateTime.now();
+                          if (curTime.isAfter(end) == true) {
+                            PastEventMap[eid] = e;
+                            tempEventIdlist.add(eid);
+                          }
                         }
                       }
                     }
 
-                    for (String eid in activeEventIds) {
-                      for (DocumentSnapshot doc in EventList) {
-                        if (doc.id == eid) {
-                          SportEvent e = SportEvent.fromSnapshot(doc);
-                          ActiveEventMap[eid] = e;
-                        }
-                      }
-                    }
+                    pastEventIds = tempEventIdlist;
 
-                    for (String eventid in activeEventIds) {
+                    for (String eventid in pastEventIds) {
                       SportEvent currentevent =
-                          ActiveEventMap[eventid] as SportEvent;
+                          PastEventMap[eventid] as SportEvent;
                       SportsFacility sportsfacil =
                           SportsFacilityList[int.parse(currentevent.placeId)];
 

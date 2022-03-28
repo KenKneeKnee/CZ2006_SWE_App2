@@ -5,23 +5,29 @@ import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
 
-class Request_Page extends StatefulWidget {
-  final List<dynamic> friendrequests;
-  const Request_Page({Key? key, required this.friendrequests})
-      : super(key: key);
+class Friend_Invite_Page extends StatefulWidget {
+  final List<dynamic> friends;
+  const Friend_Invite_Page({Key? key, required this.friends}) : super(key: key);
   @override
-  _FriendRequestState createState() => _FriendRequestState();
+  _FriendInvitePageState createState() => _FriendInvitePageState();
 }
 
-class _FriendRequestState extends State<Request_Page> {
-  late UserData cu;
+class _FriendInvitePageState extends State<Friend_Invite_Page> {
+  final myController = TextEditingController();
   final UserDbManager repository = UserDbManager();
-  UserDbManager userdb = UserDbManager();
-  late List<dynamic> friendData = widget.friendrequests;
-  List<UserData> listfriends = [];
+  late List<dynamic> friendData = widget.friends;
+  final List<UserData> listfriends = [];
   ScrollController controller = ScrollController();
   final List<Widget> friendbuttons = [];
   double topContainer = 0;
+  UserDbManager userdb = UserDbManager();
+  late UserData cu;
+  getUser() async {
+    DocumentSnapshot doc = await userdb.collection
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    cu = UserData.fromSnapshot(doc);
+  }
 
   @override
   void initState() {
@@ -29,17 +35,11 @@ class _FriendRequestState extends State<Request_Page> {
     super.initState();
     controller.addListener(() {
       double value = controller.offset / 1000;
+
       setState(() {
         topContainer = value;
       });
     });
-  }
-
-  getUser() async {
-    DocumentSnapshot doc = await userdb.collection
-        .doc(FirebaseAuth.instance.currentUser?.email)
-        .get();
-    cu = UserData.fromSnapshot(doc);
   }
 
   @override
@@ -69,9 +69,10 @@ class _FriendRequestState extends State<Request_Page> {
           }
 
           friendbuttons.clear();
+
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
-                height: size.height * 0.3,
+                height: size.height * 0.2,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
@@ -103,79 +104,34 @@ class _FriendRequestState extends State<Request_Page> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Row(children: <Widget>[
-                                FloatingActionButton.extended(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            //change to test pages
-                                            builder: (context) =>
-                                                FriendProfilePage(u: u)),
-                                      );
-                                    },
-                                    label: const Text('Visit'),
-                                    backgroundColor: Colors.orange),
-                                buildDivider(),
-                                FloatingActionButton.extended(
-                                    onPressed: () {
-                                      cu.friends.add(u.userid);
-                                      u.friends.add(cu.userid);
-                                      u.friendrequests
-                                          .remove(cu.userid); //may not need
-                                      cu.friendrequests.remove(u.userid);
-
-                                      userdb.collection.doc(u.userid).update(
-                                          {"friendrequests": u.friendrequests});
-                                      userdb.collection
-                                          .doc(u.userid)
-                                          .update({"friends": u.friends});
-                                      userdb.collection
-                                          .doc(cu.userid)
-                                          .update({"friends": cu.friends});
-                                      userdb.collection.doc(cu.userid).update({
-                                        "friendrequests": cu.friendrequests
-                                      });
-
-                                      Navigator.of(context)
-                                          .pushReplacement(MaterialPageRoute(
-                                        builder: (context) => Request_Page(
-                                            friendrequests: cu.friendrequests),
-                                      ));
-                                      showDialog(
-                                          // needs some UI
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              _buildRequestAcceptedDialog(
-                                                  context));
-                                    },
-                                    label: const Text('Accept'),
-                                    backgroundColor: Colors.greenAccent)
-                              ]),
+                              FloatingActionButton.extended(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            _buildDialog(context));
+                                  },
+                                  label: const Text('Invite'),
+                                  backgroundColor: Colors.orange),
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                u.points.toString(),
-                                style: const TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold),
-                              )
                             ],
                           ),
-                          // Image.asset(
-                          //   "assets/images/${post["image"]}",
-                          //   height: double.infinity,
-                          //)
+                          Image.asset(
+                            u.image,
+                            height: double.infinity,
+                          )
                         ]))));
           }
 
+          //Appbar kinda of the page
           return SafeArea(
               child: Scaffold(
                   backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 0,
-                    backgroundColor: Color(0xffE3663E),
+                    backgroundColor: Color.fromRGBO(227, 102, 62, 1),
                     leading: BackButton(
                         color: Colors.black,
                         onPressed: () => Navigator.of(context).pop()),
@@ -203,7 +159,7 @@ class _FriendRequestState extends State<Request_Page> {
                                 ..scale(scale, scale),
                               alignment: Alignment.bottomCenter,
                               child: Align(
-                                  heightFactor: 0.9,
+                                  heightFactor: 0.8,
                                   alignment: Alignment.topCenter,
                                   child: friendbuttons[index]),
                             ),
@@ -213,17 +169,13 @@ class _FriendRequestState extends State<Request_Page> {
         });
   }
 
-  Widget buildDivider() => Container(
-        height: 12,
-        child: VerticalDivider(),
-      );
-  Widget _buildRequestAcceptedDialog(BuildContext context) {
+  Widget _buildDialog(BuildContext context) {
     return AlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const <Widget>[
-          Text("Friend request accepted!"),
+          Text("An invitation has been sent"),
         ],
       ),
       actions: <Widget>[

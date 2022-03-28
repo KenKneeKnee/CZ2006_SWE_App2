@@ -3,13 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/login_page.dart';
-import 'package:my_app/user_profile/screens/view_events_page.dart';
+import 'package:my_app/user_profile/screens/view_past_events_page.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'edit_profile_page.dart';
 import '../utils/friends_widget.dart';
+import 'package:my_app/user_profile/screens/view_current_events_page.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -68,88 +69,158 @@ class _ProfilePageState extends State<ProfilePage> {
             u = UserData.fromSnapshot(doc);
           }
         }
-        if (u.reports >= 5) {
-          showDialog(
-              // needs some UI
-              context: context,
-              builder: (BuildContext context) => _buildWarningDialog(context));
-          u.reports = 0;
-          repository.collection.doc(u.userid).update({"reports": u.reports});
-        }
 
-        return Container(
-            decoration: _background,
-            child: Builder(
-              builder: (context) => Scaffold(
-                backgroundColor: Colors.transparent,
-                appBar: AppBar(
-                  title: const Text('Profile'),
-                  leading: _isSigningOut
-                      ? CircularProgressIndicator()
-                      : IconButton(
-                          icon: const Icon(Icons.logout),
-                          color: Colors.black,
-                          onPressed: logout),
-                  foregroundColor: Colors.black,
-                  backgroundColor: Color(0xffE3663E),
-                  elevation: 0,
-                  actions: [],
-                ),
-                body: ListView(
-                  physics: BouncingScrollPhysics(),
-                  children: [
-                    const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                    ProfileWidget(
-                      imagePath: u.image,
-                      onClicked: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => EditProfilePage()),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    buildName(u),
-                    const SizedBox(height: 24),
-                    FriendsWidget(u.friends, u.friendrequests, u.points),
-                    const SizedBox(height: 48),
-                    BouncingButton(
-                        bgColor: const Color(0xffE3663E),
-                        borderColor: const Color(0xffE3663E),
-                        buttonText: "View Events",
-                        textColor: const Color(0xffffffff),
-                        onClick: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  //change to test pages
-                                  builder: (context) => ViewEventPage()),
-                            )),
-                    const SizedBox(height: 24),
-                    buildAbout(u),
-                  ],
-                ),
+        //if (u.reports >= 5) {
+        //  showDialog(
+        //      context: context,
+        //      builder: (BuildContext context) => _buildWarningDialog(context));
+        //  repository.collection.doc(u.userid).update({"reports": 0});
+        //}
+
+        return Builder(
+          builder: (context) => Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              actions: <Widget>[
+                _isSigningOut
+                    ? CircularProgressIndicator()
+                    : TextButton.icon(
+                        style: TextButton.styleFrom(
+                          textStyle: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onPressed: logout,
+                        icon: Icon(
+                          Icons.logout,
+                        ),
+                        label: Text(
+                          'LOGOUT',
+                        ),
+                      ),
+              ],
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF60d5df),
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10.0),
+                    bottomRight: Radius.circular(0.0),
+                    topLeft: Radius.circular(10.0),
+                    bottomLeft: Radius.circular(0.0)),
               ),
-            ));
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0)),
+                  ProfileWidget(
+                    imagePath: u.image,
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(u),
+
+                  const SizedBox(height: 24),
+                  Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40.0),
+                            bottomRight: Radius.circular(0.0),
+                            topLeft: Radius.circular(40.0),
+                            bottomLeft: Radius.circular(0.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            spreadRadius: 2,
+                            color: Colors.grey,
+                            offset: const Offset(0, 1),
+                            blurRadius: 5,
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          buildAbout(u),
+                          const SizedBox(height: 10),
+                          FriendsWidget(u.friends, u.friendrequests, u.points),
+                          const SizedBox(height: 100),
+                        ],
+                      ))
+
+                  // BouncingButton(
+                  //     bgColor: Color.fromARGB(255, 65, 37, 28),
+                  //     borderColor: const Color(0xffE3663E),
+                  //     buttonText: "View Past Events",
+                  //     textColor: const Color(0xffffffff),
+                  //     //Currently leads to current event page
+                  //     onClick: () {
+                  //       // temporary tag
+                  //       if (u.reports >= 5) {
+                  //         showDialog(
+                  //             context: context,
+                  //             builder: (BuildContext context) =>
+                  //                 _buildWarningDialog(context));
+                  //         repository.collection
+                  //             .doc(u.userid)
+                  //             .update({"reports": 0});
+                  //       }
+                  //       Navigator.of(context).push(
+                  //         MaterialPageRoute(
+                  //             //change to test pages
+                  //             builder: (context) => ViewEventPage()),
+                  //       );
+                  //     }),
+                ],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
 
   Widget buildAbout(UserData user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
+      padding: EdgeInsets.symmetric(horizontal: 28),
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: 120,
+            child: Text(
               user.about,
-              style: TextStyle(fontSize: 16, height: 1.4),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),
             ),
-          ],
-        ),
-      );
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              shape: BoxShape.rectangle,
+            ),
+          ),
+          Positioned(
+              left: 30,
+              top: 12,
+              child: Container(
+                padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                color: Colors.white,
+                child: Text(
+                  'Your Bio',
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+        ],
+      ));
 
   Widget buildName(UserData user) => Column(
         children: [
@@ -160,18 +231,11 @@ class _ProfilePageState extends State<ProfilePage> {
           const SizedBox(height: 4),
           Text(
             user.userid.toString(),
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.black, fontSize: 16),
           )
         ],
       );
 }
-
-const BoxDecoration _background = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('assets/images/background.png'),
-    fit: BoxFit.fitHeight,
-  ),
-);
 
 Widget _buildWarningDialog(BuildContext context) {
   return AlertDialog(
