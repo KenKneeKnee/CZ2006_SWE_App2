@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:my_app/events/booking_repository.dart';
+import 'package:my_app/events/completeEvent.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
@@ -263,7 +264,6 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               curEvent: _curEvent,
               buttonFunction: () async {
                 String key = _curEvent.eventId;
-
                 booking.completeBooking(key);
               },
               buttontext: "Complete Event");

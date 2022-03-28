@@ -95,7 +95,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               displayNameController.text.isEmpty
           ? _displayNameValid = false
           : _displayNameValid = true;
-      bioController.text.trim().length > 100
+      bioController.text.trim().length > 140
           ? _bioValid = false
           : _bioValid = true;
     });
@@ -179,8 +179,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               displayNameController,
                               _displayNameValid,
                               "Username is too short"),
-                          buildField("About", "Talk about yourself...",
-                              bioController, _bioValid, "Bio is too long"),
+                          buildField(
+                              "About",
+                              "Talk about yourself...",
+                              bioController,
+                              _bioValid,
+                              "Bio is too long. Character Count: ${bioController.text.length} / 140"),
                           SizedBox(
                             height: 100,
                           ),

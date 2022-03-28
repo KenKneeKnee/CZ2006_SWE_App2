@@ -121,6 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 24),
                   buildName(u),
+
                   const SizedBox(height: 24),
                   Container(
                       decoration: BoxDecoration(
@@ -188,9 +189,16 @@ class _ProfilePageState extends State<ProfilePage> {
         children: <Widget>[
           Container(
             width: double.infinity,
-            height: 80,
+            height: 120,
+            child: Text(
+              user.about,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+              ),
+            ),
             margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            padding: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey, width: 2),
               borderRadius: BorderRadius.circular(8),
@@ -211,18 +219,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontWeight: FontWeight.bold),
                 ),
               )),
-          Center(
-              child: Container(
-            padding: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 12),
-            color: Colors.white,
-            child: Text(
-              'Nothing to see here!',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
-            ),
-          )),
         ],
       ));
 
