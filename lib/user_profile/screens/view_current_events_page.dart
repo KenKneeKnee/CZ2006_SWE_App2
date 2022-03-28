@@ -97,13 +97,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                       }
                     }
 
-                    for (DocumentSnapshot doc in BookingList) {
-                      if (doc['userId'] == uid) {
-                        if (doc['active'] == false) {
-                          activeEventIds.add(doc['eventId']);
-                        }
-                      }
-                    }
+                    
 
                     for (String eid in activeEventIds) {
                       for (DocumentSnapshot doc in EventList) {
