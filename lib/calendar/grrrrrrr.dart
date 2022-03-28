@@ -18,10 +18,11 @@ int getHashCode(DateTime key) {
 var _kEventSource = realEventSource..addAll({kToday: realTodaySource});
 
 class Grr extends StatefulWidget {
-  const Grr({Key? key, required this.placeId, required this.sportsFacility})
+  Grr({Key? key, required this.placeId, required this.sportsFacility})
       : super(key: key);
   final String placeId;
   final SportsFacility sportsFacility;
+  DateTime submittedDate = DateTime.now();
   @override
   _GrrState createState() => _GrrState();
 }
@@ -99,6 +100,7 @@ class _GrrState extends State<Grr> {
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
+        widget.submittedDate = focusedDay;
       });
 
       _selectedEvents.value = _getEventsForDay(selectedDay);
@@ -110,7 +112,7 @@ class _GrrState extends State<Grr> {
     return (!loading)
         ? Container(
             color: Colors.transparent,
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+            //margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
             child: Column(
               children: [
                 TableCalendar<RetrievedEvent>(
@@ -194,18 +196,24 @@ class _GrrState extends State<Grr> {
                                         builder: (BuildContext context) {
                                           print(
                                               'preparing dialog for place ${value[index]} || ${widget.sportsFacility.placeName}');
-                                          return Dialog(
-                                            backgroundColor: Color(0xffE5E8E8),
-                                            child: ViewEventPopUp(
-                                              placeIndex: index,
-                                              event: value[index],
-                                              SportsFacil:
-                                                  widget.sportsFacility,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20.0))),
+                                          return ViewEventPopUp(
+                                            placeIndex: index,
+                                            event: value[index],
+                                            SportsFacil: widget.sportsFacility,
                                           );
+
+                                          // Dialog(
+                                          //   backgroundColor: Color(0xffE5E8E8),
+                                          //   child: ViewEventPopUp(
+                                          //     placeIndex: index,
+                                          //     event: value[index],
+                                          //     SportsFacil:
+                                          //         widget.sportsFacility,
+                                          //   ),
+                                          //   shape: RoundedRectangleBorder(
+                                          //       borderRadius: BorderRadius.all(
+                                          //           Radius.circular(20.0))),
+                                          //);
                                         },
                                       );
                                     },
@@ -219,69 +227,6 @@ class _GrrState extends State<Grr> {
                     },
                   ),
                 ),
-                BouncingButton(
-                    bgColor: Color(0xffE96B46),
-                    borderColor: Color(0xffE96B46),
-                    buttonText: "Create Event",
-                    textColor: Color(0xffffffff),
-                    onClick: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            backgroundColor: Color(0xffE5E8E8),
-                            child: CreateEventForm(
-                                date: _focusedDay,
-                                placeId: widget.placeId,
-                                placeDetails:
-                                    widget.sportsFacility.addressDesc),
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0))),
-                          );
-                        },
-                      ).then((value) {
-                        int res = value;
-                        if (res==2) {
-                          showDialog(context: context,
-                              builder: (BuildContext context) {
-                            return OvernightDialog(bgDeco: DialogBoxDecoration
-                                .overnightEventBg,
-                                paragraph: "Your end time stretches into the next day! "
-                                    "Please book two separate events for this day and the next.",
-                                title: "Planning an all nighter?");
-                              }
-                          );
-                        }
-                        else if (res==1)
-                              {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return SuccessDialog(
-                                        bgDeco: DialogBoxDecoration
-                                            .createEventSuccessBg,
-                                        title: 'Event Created!',
-                                        paragraph:
-                                            'Now all that\'s left is getting fellow SportBuddies to join your event!',
-                                      );
-                                    });
-                              }
-                            else
-                              {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return FailDialog(
-                                        bgDeco: DialogBoxDecoration
-                                            .createEventFailBg,
-                                        title: 'Error',
-                                        paragraph: "Something went wrong. :(",
-                                      );
-                                    });
-                              }
-                          });
-                    })
               ],
             ),
           )

@@ -26,4 +26,5 @@ class EventRepository {
     await collection.doc(key).delete();
   }
 
+
 }

@@ -1,27 +1,41 @@
-// import 'package:flutter/material.dart';
-// import 'package:latlong2/latlong.dart';
-// import 'package:location/location.dart';
-// import 'package:my_app/events/sportevent.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:my_app/events/event_repository.dart';
-// import 'package:my_app/events/booking_repository.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:my_app/map/facil_map.dart';
-// import 'dart:math';
-// import 'package:my_app/map/map_data.dart';
-//
-// final uid = FirebaseAuth.instance.currentUser?.email as String;
-//
+import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:location/location.dart';
+import 'package:my_app/events/sportevent.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_app/events/event_repository.dart';
+import 'package:my_app/events/booking_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_app/map/facil_map.dart';
+import 'dart:math';
+import 'package:my_app/map/map_data.dart';
+
+final uid = FirebaseAuth.instance.currentUser?.email as String;
+
+class CompleteEventPage extends StatefulWidget {
+  const CompleteEventPage({Key? key}) : super(key: key);
+
+  @override
+  State<CompleteEventPage> createState() => _CompleteEventPageState();
+}
+
+class _CompleteEventPageState extends State<CompleteEventPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 // class eventPage extends StatefulWidget {
 //   eventPage({Key? key}) : super(key: key);
 //   _eventPageState createState() => _eventPageState();
 // }
-//
+
 // class _eventPageState extends State<eventPage> {
 //   final EventRepository repository = EventRepository();
 //   final BookingRepository booking = BookingRepository();
-//
+
 //   double calculateDistance(lat1, lon1, lat2, lon2) {
 //     var p = 0.017453292519943295;
 //     var c = cos;
@@ -30,13 +44,13 @@
 //         c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
 //     return 12742 * asin(sqrt(a)) * 1000;
 //   }
-//
+
 //   Future<void> complete(SportEvent e, String key) async {
 //     LocationData userLocation = await checkLocation();
 //     var sportsfacildatasource = SportsFacilDataSource();
 //     List<SportsFacility> objects = await sportsfacildatasource.someFunction();
 //     DateTime? curTime = DateTime.now();
-//     SportsFacility obj = objects[e.placeId];
+//     SportsFacility obj = objects[e.placeId as int];
 //     var lat2 = obj.coordinates.latitude;
 //     var lon2 = obj.coordinates.longitude;
 //     bool inRadius = calculateDistance(
@@ -45,22 +59,21 @@
 //     if (curTime.isAfter(e.start) & inRadius == true) {
 //       //functions to do once event completed
 //       booking.completeBooking(key);
-//     }
-//     else{
+//     } else {
 //       print("You cannot complete this event!");
 //     }
-//
+
 //     //auto delete for buds that joined but did not complete
-//
-//     if(curTime.isAfter(e.end)){
+
+//     if (curTime.isAfter(e.end)) {
 //       booking.deleteBooking(uid, key);
 //     }
 //   }
-//
+
 //   @override
 //   Widget build(BuildContext context) {
 //     // TODO: implement build
-//
+
 //     return StreamBuilder<QuerySnapshot>(
 //       stream: booking.getStream(),
 //       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot1) {
@@ -82,13 +95,13 @@
 //                 EventMap[doc.id] = e;
 //               }
 //             }
-//
+
 //             Future<int> hasActiveEvent(String uid, String key) async {
 //               SportEvent e = EventMap[key] as SportEvent;
 //               Timestamp eventStart = Timestamp.fromDate(e.start);
 //               Timestamp eventEnd =
 //                   Timestamp.fromDate(e.end); //current event timebox
-//
+
 //               QuerySnapshot ss = await booking
 //                   .retrieveActiveEvents(uid); // current bookings for this user
 //               for (DocumentSnapshot doc in ss.docs) {
@@ -104,7 +117,7 @@
 //               }
 //               return 0;
 //             }
-//
+
 //             return Scaffold(
 //                 appBar: AppBar(title: const Text("Event Page")),
 //                 body: ListView.builder(
