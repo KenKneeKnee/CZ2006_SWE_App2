@@ -338,13 +338,15 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - awesome_notifications (0.0.2):
+    - Flutter
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Implementation (0.0.7):
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
-  - cloud_firestore (3.1.9):
+  - cloud_firestore (3.1.10):
     - Firebase/Firestore (= 8.11.0)
     - firebase_core
     - Flutter
@@ -356,11 +358,11 @@ PODS:
   - Firebase/Firestore (8.11.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.11.0)
-  - firebase_auth (3.3.8):
+  - firebase_auth (3.3.11):
     - Firebase/Auth (= 8.11.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.12.0):
+  - firebase_core (1.13.1):
     - Firebase/CoreOnly (= 8.11.0)
     - Flutter
   - FirebaseAuth (8.11.0):
@@ -446,6 +448,7 @@ PODS:
   - PromisesObjC (2.0.0)
 
 DEPENDENCIES:
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -471,6 +474,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -484,11 +489,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
+  awesome_notifications: 74462bc8e68b11f8235d78422266886759e9da61
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: c4fe921497494112ca9de681464ddd44d51b17bb
+  cloud_firestore: c6c42fe62809b7417aa3c45a6ef0c2812f7fb0d6
   Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
-  firebase_auth: 386760cb543983c9f00ed148cd83e2c8443c94a2
-  firebase_core: 443bccfd6aa6b42f07be365b500773dc69db2d87
+  firebase_auth: bdfbd5b10da1db6d5eb6ae7dbda5d81365b9cc9d
+  firebase_core: 08f6a85f62060111de5e98d6a214810d11365de9
   FirebaseAuth: d96d73aba85d192d7a7aa0b86dd6d7f8ec170b4b
   FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
   FirebaseCoreDiagnostics: 64d9709d804a6c25bd77841371c1fcfd909d5601
