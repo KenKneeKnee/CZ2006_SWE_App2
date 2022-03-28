@@ -16,12 +16,10 @@ class CategoriesList extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Category> categories = [
       Category(Icon(FontAwesomeIcons.award), "All"),
-      Category(Icon(FontAwesomeIcons.utensils), "Food & Beverage"),
-      Category(Icon(FontAwesomeIcons.tag), "Limited Edition"),
-      Category(Icon(FontAwesomeIcons.tools), "Services"),
-      Category(Icon(FontAwesomeIcons.shoppingBag), "Shopping"),
+      Category(Icon(FontAwesomeIcons.utensils), "Sports Equipment"),
+      Category(Icon(FontAwesomeIcons.tag), "Health Supplements"),
+      Category(Icon(FontAwesomeIcons.tools), "Health Services"),
       Category(Icon(FontAwesomeIcons.luggageCart), "Travel"),
-      Category(Icon(FontAwesomeIcons.ticketAlt), "Entertainment"),
     ];
     return Container(
       height: 120,
