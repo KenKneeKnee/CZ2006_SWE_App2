@@ -12,10 +12,19 @@ class FriendsActionWidget extends StatelessWidget {
   Widget build(BuildContext context) =>
       Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         //can maybe change to remove friend
-        FloatingActionButton.extended(
+
+        ElevatedButton(
           onPressed: () {},
-          label: const Text('Added as friend!'),
-          backgroundColor: Colors.lightGreen,
+          child: Row(
+            children: [
+              Icon(Icons.check),
+              Text('Friends'),
+            ],
+          ),
+          style: ElevatedButton.styleFrom(
+              primary: Colors.green,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              textStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
         ),
         const Padding(padding: EdgeInsets.fromLTRB(20, 0, 0, 0)),
         FloatingActionButton.extended(

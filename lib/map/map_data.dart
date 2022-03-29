@@ -87,8 +87,8 @@ Future fetchFromJsonAssets() async {
     },
   );
   if (_markers.length > 0) {
-    // print(
-    //     'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
+    print(
+        'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
     return _markers;
   } else {
     print('smth went wrong in fetching the playgrounds/parks');
@@ -272,7 +272,7 @@ const res = [
 
 List<SportsFacility> fetchFromList() {
   List<SportsFacility> markers = <SportsFacility>[];
-
+  int count = 0;
   for (int i = 0; i < res.length; i++) {
     String coords = res[i][0];
     double _latitude = double.parse(coords.split(",")[0]);
@@ -282,6 +282,26 @@ List<SportsFacility> fetchFromList() {
     List<String> _facilities = res[i][1].split("/");
 
     for (int j = 0; j < _facilities.length; j++) {
+      String facilityType = "";
+      String f = _facilities[j];
+
+      if (f.contains("ennis")) {
+        facilityType = "Tennis Centre";
+      } else if (f.contains("Gym")) {
+        facilityType = "Gym";
+      } else if (f.contains("Hall")) {
+        facilityType = "Sports Hall";
+      } else if (f.contains("Stadium")) {
+        facilityType = "Stadium";
+      } else if (f.contains("wim")) {
+        facilityType = "Swimming Complex";
+      } else if (f.contains("Field")) {
+        facilityType = "Field";
+      } else {
+        count++;
+        continue;
+      }
+
       //shift coordinates slightly if there are more than 1 facil for a place
       var randomGenerator = Random();
       _latitude = _latitude +
@@ -291,24 +311,23 @@ List<SportsFacility> fetchFromList() {
           (randomGenerator.nextInt(5) * 0.0001 * j) -
           (randomGenerator.nextInt(5) * 0.0001 * j);
 
-      String _facilityType = _facilities[j];
-
       SportsFacility sportsFacil = SportsFacility(
-        facilityType: _facilityType,
+        facilityType: facilityType,
         placeName: "", //was not able to get name for these
         addressDesc: _address,
         coordinates: LatLng(_latitude, _longitude),
-        markerImgPath: _FindMarkerImage(_facilityType),
-        hoverImgPath: _FindHoverImage(_facilityType),
+        markerImgPath: _FindMarkerImage(facilityType),
+        hoverImgPath: _FindHoverImage(facilityType),
       );
       markers.add(sportsFacil);
       //print(sportsFacil);
     }
   }
   if (markers.length > 0) {
-    // print('fetched ${markers.length} facilites from _fetchSportsFacilites');
+    print(count);
+    print('fetched ${markers.length} facilites from res');
   } else {
-    print('smth went wrong in fetching the 35 sports facilities');
+    print('smth went wrong in fetching the facilities from res');
   }
 
   return markers;

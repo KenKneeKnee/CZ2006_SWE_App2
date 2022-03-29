@@ -41,7 +41,7 @@ class _EventStepFormState extends State<EventStepForm> {
   DateTime? startTime;
   DateTime? endTime;
   String dropdownValue = "Select Sport";
-  bool active = false;
+
 
   @override
   void initState() {
@@ -211,12 +211,7 @@ class _EventStepFormState extends State<EventStepForm> {
                                             if (isValid != null &&
                                                 isValid &&
                                                 !overnight) {
-                                              if (startTime!.isBefore(
-                                                      DateTime.now()) &&
-                                                  (!endTime!.isAfter(
-                                                      DateTime.now()))) {
-                                                active = true;
-                                              }
+
                                               newEvent = SportEvent(
                                                   name: eventTitle,
                                                   start: startTime!,
@@ -226,7 +221,7 @@ class _EventStepFormState extends State<EventStepForm> {
                                                   placeId: widget
                                                       .placeId, //temporary id
                                                   type: dropdownValue,
-                                                  active: active);
+                                                  active: true);
 
                                               DocumentReference addedDocRef =
                                                   await repository
