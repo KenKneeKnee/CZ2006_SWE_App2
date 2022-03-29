@@ -15,7 +15,8 @@ import 'package:my_app/map/map_data.dart';
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
 class CompleteEventPage extends StatefulWidget {
-	CompleteEventPage({Key? key}) : super(key: key);
+	CompleteEventPage({Key? key, required this.event_id}) : super(key: key);
+	String event_id;
 
 	@override
 	State<CompleteEventPage> createState() => _CompleteEventPageState();
@@ -75,7 +76,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
               .size;
 
           Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
-              "PGeXef3jAykqkR3KINj3");
+              widget.event_id);
           FutureBuilder<QuerySnapshot>(
               future: recommendations,
               builder: (BuildContext context,

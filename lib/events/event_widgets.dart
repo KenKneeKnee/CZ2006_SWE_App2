@@ -83,7 +83,7 @@ class CompleteEventButton extends StatelessWidget {
       buttonFunction(); //deals with database
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CompleteEventPage()),
+        MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)),
       );
       // showDialog(
       //     context: context,
