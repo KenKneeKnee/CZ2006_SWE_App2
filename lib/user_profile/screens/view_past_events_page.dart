@@ -70,8 +70,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
                     List EventList = snapshot.data!.docs;
                     List BookingList = snapshot1.data!.docs;
                     Map<String, SportEvent> PastEventMap = {};
-                    Map<String, SportEvent> ActiveEventMap = {};
-                    List activeEventIds = [];
+
                     List pastEventIds = [];
                     final Size size = MediaQuery.of(context).size;
 
@@ -85,25 +84,15 @@ class _ViewEventPageState extends State<ViewEventPage> {
                       }
                     }
 
-                    List tempEventIdlist = [];
-
                     for (String eid in pastEventIds) {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
                           SportEvent e = SportEvent.fromSnapshot(doc);
-                          DateTime start = e.start;
-                          DateTime end = e.end;
 
-                          DateTime? curTime = DateTime.now();
-                          if (curTime.isAfter(end) == true) {
-                            PastEventMap[eid] = e;
-                            tempEventIdlist.add(eid);
-                          }
+                          PastEventMap[eid] = e;
                         }
                       }
                     }
-
-                    pastEventIds = tempEventIdlist;
 
                     for (String eventid in pastEventIds) {
                       SportEvent currentevent =

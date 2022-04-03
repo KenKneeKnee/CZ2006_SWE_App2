@@ -97,8 +97,6 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                       }
                     }
 
-                    
-
                     for (String eid in activeEventIds) {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
@@ -107,7 +105,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                           DateTime end = e.end;
 
                           DateTime? curTime = DateTime.now();
-                          if (curTime.isBefore(start) == true) {
+                          if (curTime.isAfter(end) == true) {
                             ActiveEventMap[eid] = e;
                             tempEventIdlist.add(eid);
                           }
