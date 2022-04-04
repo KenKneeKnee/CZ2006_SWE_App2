@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/chat/chatpage.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/sportevent.dart';
@@ -79,9 +80,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                     }
                     List EventList = snapshot.data!.docs;
                     List BookingList = snapshot1.data!.docs;
-                    Map<String, SportEvent> PastEventMap = {};
+
                     Map<String, SportEvent> ActiveEventMap = {};
-                    List futureEventIds = [];
                     List activeEventIds = [];
                     final Size size = MediaQuery.of(context).size;
 
@@ -105,7 +105,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                           DateTime end = e.end;
 
                           DateTime? curTime = DateTime.now();
-                          if (curTime.isAfter(end) == true) {
+                          if (curTime.isAfter(end) != true) {
                             ActiveEventMap[eid] = e;
                             tempEventIdlist.add(eid);
                           }
@@ -223,6 +223,21 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                   const Text('Invite friends'),
                                               backgroundColor:
                                                   Colors.deepOrangeAccent,
+                                            ),
+                                            FloatingActionButton.extended(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatPage(
+                                                          eventId: eventid,
+                                                          eventName:
+                                                              currentevent.name,
+                                                          user: cu),
+                                                ));
+                                              },
+                                              label: const Text('Chat'),
+                                              backgroundColor: Colors.indigo,
                                             )
                                           ],
                                         )
