@@ -66,15 +66,10 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
 
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text(
-                      curEvent.name,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold),
-                    ),
                     elevation: 0,
                     backgroundColor: Colors.transparent,
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.yellow),
+                      icon: Icon(Icons.arrow_back, color: Colors.black),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
@@ -94,17 +89,37 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                               SportEventTextWidget.Title(widget.event.name),
                               SportEventTextWidget.Subtitle(
                                   widget.SportsFacil.addressDesc),
-                              SportEventTextWidget.Subtitle(widget.event.type),
-                              Row(
-                                children: [
-                                  Flexible(
-                                      child: TextWithIcon(
-                                          widget.event.toTime(), timeIcon)),
-                                  Flexible(
-                                      child: TextWithIcon(
-                                          '${widget.event.toCap()}\nplayers',
-                                          capIcon)),
-                                ],
+                              SizedBox(height: 8),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                        child: TextWithIcon(
+                                            widget.event.toDate(),
+                                            Icon(Icons.date_range))),
+                                    Flexible(
+                                        child: TextWithIcon(
+                                            widget.event.toTime(), timeIcon)),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: TextWithIcon(widget.event.type,
+                                          Icon(Icons.sports_rugby_rounded)),
+                                    ),
+                                    Flexible(
+                                        child: TextWithIcon(
+                                            '${widget.event.toCap()}\nplayers',
+                                            capIcon)),
+                                  ],
+                                ),
                               ),
                               renderButton(curEvent),
                             ],
@@ -273,9 +288,6 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
           child: Column(
             children: [
               Expanded(
-                child: statusChip,
-              ),
-              Expanded(
                 child: LeaveButton(
                     curEvent: _curEvent,
                     leaveFunction: () async {
@@ -290,6 +302,9 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                         repository.updateEvent(_curEvent.toSportEvent(), key);
                       }
                     }),
+              ),
+              Expanded(
+                child: statusChip,
               ),
             ],
           ),
