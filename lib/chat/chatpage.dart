@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/chat/chatDb.dart';
 import 'package:my_app/user_profile/data/user.dart';
+import 'package:my_app/widgets/background.dart';
 
 import 'messagetile.dart';
 
@@ -78,16 +79,34 @@ class _ChatPageState extends State<ChatPage> {
     print("EVENTID " + widget.eventId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.eventName, style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Center(
+          child: Row(
+            children: [
+              Text(widget.eventName, style: TextStyle(color: Colors.black)),
+            ],
+          ),
+        ),
         centerTitle: true,
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.white,
         elevation: 0.0,
       ),
       body: Container(
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage('assets/images/view-event-tennis.png'),
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.bottomCenter,
+          ),
+        ),
         child: Stack(
           children: <Widget>[
             _chatMessages(),
             // Container(),
+
             Container(
               alignment: Alignment.bottomCenter,
               width: MediaQuery.of(context).size.width,
@@ -103,7 +122,7 @@ class _ChatPageState extends State<ChatPage> {
                         decoration: InputDecoration(
                             hintText: "Send a message ...",
                             hintStyle: TextStyle(
-                              color: Colors.white38,
+                              color: Colors.white,
                               fontSize: 16,
                             ),
                             border: InputBorder.none),
