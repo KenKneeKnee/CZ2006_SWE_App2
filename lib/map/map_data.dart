@@ -87,8 +87,8 @@ Future fetchFromJsonAssets() async {
     },
   );
   if (_markers.length > 0) {
-    print(
-        'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
+    // print(
+    //     'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
     return _markers;
   } else {
     print('smth went wrong in fetching the playgrounds/parks');
@@ -324,8 +324,7 @@ List<SportsFacility> fetchFromList() {
     }
   }
   if (markers.length > 0) {
-    print(count);
-    print('fetched ${markers.length} facilites from res');
+    //print('fetched ${markers.length} facilites from res');
   } else {
     print('smth went wrong in fetching the facilities from res');
   }

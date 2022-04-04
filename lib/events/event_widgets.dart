@@ -233,7 +233,7 @@ Icon timeIcon = const Icon(Icons.timer);
 Container TextWithIcon(String text, Icon icon) {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
-    margin: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+    margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
     decoration: const BoxDecoration(
         color: Color(0xffEBEBEB),
         borderRadius: BorderRadius.all(Radius.circular(10))),
