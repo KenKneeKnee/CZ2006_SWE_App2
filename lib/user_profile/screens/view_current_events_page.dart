@@ -224,6 +224,10 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                               backgroundColor:
                                                   Colors.deepOrangeAccent,
                                             ),
+                                            const SizedBox(
+                                              height: 24,
+                                              child: VerticalDivider(),
+                                            ),
                                             FloatingActionButton.extended(
                                               onPressed: () {
                                                 Navigator.of(context)
