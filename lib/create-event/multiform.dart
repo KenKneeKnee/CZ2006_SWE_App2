@@ -18,6 +18,7 @@ class EventStepForm extends StatefulWidget {
   final String placeId;
   final SportsFacility sportsFacility;
   late Grr grrCalendar;
+
   TimePicker startPicker = TimePicker(
       labelText: "Start Time", selectedDate: DateTime.now(), initialise: true);
   TimePicker endPicker = TimePicker(
@@ -41,7 +42,6 @@ class _EventStepFormState extends State<EventStepForm> {
   DateTime? startTime;
   DateTime? endTime;
   String dropdownValue = "Select Sport";
-
 
   @override
   void initState() {
@@ -116,14 +116,14 @@ class _EventStepFormState extends State<EventStepForm> {
             body: Container(
               child: Column(
                 children: [
-                  Expanded(
-                    flex: 1,
-                    child: MapMarkerInfoHeader(
-                        SportsFacil.placeName,
-                        SportsFacil.facilityType,
-                        SportsFacil.addressDesc,
-                        SportsFacil.hoverImgPath),
-                  ),
+                  // Expanded(
+                  //   flex: 1,
+                  //   child: MapMarkerInfoHeader(
+                  //       SportsFacil.placeName,
+                  //       SportsFacil.facilityType,
+                  //       SportsFacil.addressDesc,
+                  //       SportsFacil.hoverImgPath),
+                  // ),
                   Expanded(
                     flex: 2,
                     child: Stepper(
@@ -155,15 +155,42 @@ class _EventStepFormState extends State<EventStepForm> {
                               if (_currentStep == 0) {
                                 setState(() {
                                   date = widget.grrCalendar.submittedDate;
+                                  widget.startPicker = TimePicker(
+                                      labelText: "Start Time",
+                                      selectedDate:
+                                          widget.grrCalendar.submittedDate,
+                                      initialise: true);
+
+                                  widget.endPicker = TimePicker(
+                                      labelText: "End Time",
+                                      selectedDate:
+                                          widget.grrCalendar.submittedDate,
+                                      initialise: true);
+
                                   print(date);
                                 });
                               } else if (_currentStep == 1) {
                                 setState(() {
+                                  startTime = widget.startPicker.selectedTime;
+                                  DateTime today = DateTime.now();
+                                  if (startTime == null) {
+                                    startTime = today.add(Duration(
+                                        hours: today.hour,
+                                        minutes: today.minute));
+                                  }
+                                  endTime = widget.endPicker.selectedTime;
+                                  if (endTime == null) {
+                                    endTime = today.add(Duration(
+                                        hours: today.hour,
+                                        minutes: today.minute));
+                                  }
+                                  print(startTime);
+                                  print(endTime);
+
                                   final isValid =
                                       formKey.currentState?.validate();
                                   if (isValid != null && isValid) {
                                     formKey.currentState?.save();
-                                    print('event title is' + eventTitle);
                                     isCompleted = true;
                                   }
                                 });
@@ -179,9 +206,9 @@ class _EventStepFormState extends State<EventStepForm> {
                             });
                           }
                         },
-                        onStepTapped: (step) => setState(() {
-                              _currentStep = step;
-                            }),
+                        // onStepTapped: (step) => setState(() {
+                        //       _currentStep = step;
+                        //     }),
                         controlsBuilder:
                             (BuildContext context, ControlsDetails controls) {
                           return Padding(
@@ -197,10 +224,6 @@ class _EventStepFormState extends State<EventStepForm> {
                                                 ?.validate();
                                             bool overnight = false;
                                             setState(() {
-                                              startTime = widget
-                                                  .startPicker.selectedTime;
-                                              endTime =
-                                                  widget.endPicker.selectedTime;
                                               if (endTime!
                                                   .isBefore(startTime!)) {
                                                 overnight = true;
@@ -211,7 +234,6 @@ class _EventStepFormState extends State<EventStepForm> {
                                             if (isValid != null &&
                                                 isValid &&
                                                 !overnight) {
-
                                               newEvent = SportEvent(
                                                   name: eventTitle,
                                                   start: startTime!,
