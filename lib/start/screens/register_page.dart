@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_app/user_profile/screens/profile_page.dart';
 import 'package:my_app/start/screens/register_success.dart';
 import 'package:my_app/start/screens/login_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
@@ -155,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       "assets/images/celerystick.jpg"
                                     ];
 
-                                    UserData newuser = new UserData(
+                                    UserData newuser = UserData(
                                         _emailTextController.text,
                                         _nameTextController.text,
                                         0,
@@ -163,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         List<dynamic>.empty(),
                                         List<dynamic>.empty(),
                                         "",
-                                        "assets/images/celerystick.jpg");
+                                        "https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg");
 
                                     await userdb
                                         .doc(_emailTextController.text)
