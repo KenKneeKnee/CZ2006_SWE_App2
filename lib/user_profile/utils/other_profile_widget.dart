@@ -24,7 +24,7 @@ class OtherProfileWidget extends StatelessWidget {
   }
 
   Widget buildImage() {
-    final image = Image.asset(imagePath);
+    final image = Image.network(imagePath);
 
     return ClipOval(
       child: Material(
