@@ -283,10 +283,7 @@ class _FriendPageState extends State<Friend_Page> {
                 fontSize: 14.0,
                 fontFamily: 'Brutal',
               ),
-              prefix: Padding(
-                padding: const EdgeInsets.fromLTRB(9.0, 6.0, 9.0, 6.0),
-                child: searchIcon,
-              ),
+              prefix: searchIcon,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
                 color: Colors.white,
