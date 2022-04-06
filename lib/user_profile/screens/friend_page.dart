@@ -137,9 +137,17 @@ class _FriendPageState extends State<Friend_Page> {
                               ),
                             ],
                           ),
-                          Image.asset(
-                            u.image,
-                            height: double.infinity,
+                          ClipOval(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Ink.image(
+                                image: Image.network(u.image).image,
+                                fit: BoxFit.cover,
+                                width: 96,
+                                height: 128,
+                                // child: InkWell(onTap: onClicked),
+                              ),
+                            ),
                           )
                         ]))));
           }
