@@ -43,7 +43,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     user = UserData.fromSnapshot(doc);
     displayNameController.text = user.username;
     bioController.text = user.about;
-    image = Image.asset(user.image);
+    image = Image.network(user.image);
 
     setState(() {
       isLoading = false;
@@ -80,6 +80,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 } else {}
                 //download image and update
                 newPic = await storage.downloadURL(user.userid!);
+                userdb.collection
+                    .doc(FirebaseAuth.instance.currentUser?.email)
+                    .update({"image": newPic});
+                setState(() {});
               },
               child: const Text('Pick New Image'),
               style: ElevatedButton.styleFrom(
@@ -147,8 +151,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_displayNameValid && _bioValid) {
       userdb.collection.doc(FirebaseAuth.instance.currentUser?.email).update({
         "username": displayNameController.text,
-        "about": bioController.text,
-        "image": newPic
+        "about": bioController.text
       });
       SnackBar snackbar = const SnackBar(
         content: Text("Profile updated!"),
@@ -190,7 +193,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: ListView(
                 children: <Widget>[
                   Column(children: <Widget>[
-                    Padding(
+                    /* Padding(
                         padding: const EdgeInsets.only(
                           top: 16.0,
                           bottom: 28.0,
@@ -205,7 +208,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               height: 128,
                             ),
                           ),
-                        )),
+                        )), */
                     Container(
                       decoration: const BoxDecoration(
                         color: Colors.white,
