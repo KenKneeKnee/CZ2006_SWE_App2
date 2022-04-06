@@ -44,8 +44,10 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   late LatLng userLocation;
   late List<SportsFacility> SportsFacilityList;
   late List<Marker> MarkerList;
+  final myController = TextEditingController();
 
   late final AnimationController _animationController;
+  late MapController mapController;
 
   @override
   void initState() {
@@ -57,6 +59,9 @@ class _FacilitiesMapState extends State<FacilitiesMap>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 600));
     _animationController.repeat(reverse: true);
+    setState(() {
+      mapController = MapController();
+    });
   }
 
   @override
@@ -96,6 +101,57 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   /// Returns a list of Marker objects from  a list of SportsFacility objects
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Card(
+          elevation: 2,
+          margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(15, 0, 0, 10),
+                  child: TextField(
+                    controller: myController,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Stack(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          List<SportsFacility> searchedList = [];
+                          for (SportsFacility place in SportsFacilityList) {
+                            String lower_place = place.placeName.toLowerCase();
+                            String lower_search =
+                                myController.text.toLowerCase();
+                            late SportsFacility sf;
+                            late int sf_index;
+
+                            if (lower_place.contains(lower_search)) {
+                              searchedList.add(place);
+                            }
+                          }
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Are you looking for...'),
+                                  content: setupAlertDialoadContainer(
+                                      searchedList, mapController),
+                                );
+                              });
+                        },
+                        icon: Icon(Icons.search, color: Colors.black)),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
       body: (!loading & location)
           ? FlutterMap(
               options: MapOptions(
@@ -103,7 +159,11 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                 maxZoom: 20,
                 zoom: 15,
                 center: _startingPoint,
+                // onMapCreated: (c) {
+                //   mapController = c;
+                // }),
               ),
+              mapController: mapController,
               children: [],
               nonRotatedLayers: [
                 TileLayerOptions(urlTemplate: MAPBOX_URL, additionalOptions: {
@@ -114,19 +174,45 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                   markers: MarkerList, //List<Marker>
                 ),
                 MarkerLayerOptions(
+                  //Layer for user's loaction
                   markers: [
                     Marker(
                         point: _startingPoint,
                         height: 60,
                         width: 60,
                         builder: (context) {
-                          return _myLocationMarker(_animationController);
+                          return myLocationMarker(_animationController);
                         }),
                   ], //List<Marker>
                 ),
               ],
             )
           : LottieMap(),
+    );
+  }
+
+  Widget setupAlertDialoadContainer(
+      List<SportsFacility> sflist, MapController mapController) {
+    return Container(
+      height: 300.0, // Change as per your requirement
+      width: 300.0, // Change as per your requirement
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: sflist.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(sflist[index].placeName),
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+                mapController.move(sflist[index].coordinates, 15.0);
+                print('moving to ${sflist[index].coordinates}');
+                Navigator.of(context, rootNavigator: true).pop();
+              });
+            },
+          );
+        },
+      ),
     );
   }
 
@@ -215,43 +301,4 @@ Future checkLocation() async {
 
   _locationData = await location.getLocation();
   return _locationData;
-}
-
-class _myLocationMarker extends AnimatedWidget {
-  const _myLocationMarker(
-    Animation<double> animation, {
-    Key? key,
-  }) : super(key: key, listenable: animation);
-
-  @override
-  Widget build(BuildContext context) {
-    final value = (listenable as Animation<double>).value;
-    final newValue = lerpDouble(0.5, 1.0, value)!;
-    //lerpDouble interpolates between two numbers by an extrapolation t
-    final size = 50.0;
-
-    return Center(
-        child: Stack(
-      children: [
-        Center(
-          child: Container(
-            height: size * newValue,
-            width: size * newValue,
-            decoration: BoxDecoration(
-              color: Colors.amber.withOpacity(0.5),
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-        Center(
-          child: Container(
-            height: 20,
-            width: 20,
-            decoration:
-                BoxDecoration(color: Colors.amber, shape: BoxShape.circle),
-          ),
-        ),
-      ],
-    ));
-  }
 }
