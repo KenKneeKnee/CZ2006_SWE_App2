@@ -295,7 +295,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
                             onClick: () async {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const CompleteEventPage()));
+                                MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:_curEvent.eventId)));
                             }
                       )
                       ]),
