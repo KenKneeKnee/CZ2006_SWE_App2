@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/events/cluster_repository.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/events/event_widgets.dart';
@@ -104,14 +105,119 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                       }
                       for (SportEvent i in selist) {
                         // add ui
-                        recevents.add(Container(child: Text('${i.name}')));
+                        recevents.add(RecWidget(event: i));
                       }
-                      return ListView(children: recevents);
+                      return Container(
+                        color: Colors.white,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 30,
+                              ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: recevents.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 18.0,
+                                      vertical: 10.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          spreadRadius: 1,
+                                          color: Colors.grey,
+                                          offset: const Offset(0, 1),
+                                          blurRadius: 3,
+                                        )
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flexible(
+                                          fit: FlexFit.tight,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              print("${index} was tapped");
+                                            },
+                                            child: recevents[index],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     });
               }
             }
           }
           return Container(color: Colors.red);
         });
+  }
+}
+
+class RecWidget extends StatelessWidget {
+  RecWidget({
+    Key? key,
+    required this.event,
+  }) : super(key: key);
+
+  final SportEvent event;
+
+  @override
+  Widget build(BuildContext context) {
+    DateFormat formatter = DateFormat.yMd().add_jm();
+            return Material(
+              child: Container(
+                  color: Colors.amberAccent,
+                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                  child: Expanded(
+                            flex: 4,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(event.name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.indigoAccent,
+                                      )),
+                                  SizedBox(height: 10),
+                                  Text("Located at ${event.placeId}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.indigo,
+                                      )),
+                                  SizedBox(height: 10),
+                                  Text("Starts on ${formatter.format(event.start)}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                      )),
+                                  SizedBox(height: 10),
+                                  Text("Ends on ${formatter.format(event.end)}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                      )),
+                                  SizedBox(height: 10),
+                                ]))
+              ),
+            );
   }
 }

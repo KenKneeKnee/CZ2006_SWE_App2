@@ -281,27 +281,6 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               buttonFunction: () async {
                 String key = _curEvent.eventId;
                 booking.completeBooking(uid,key);
-                showDialog(context: context, builder: (BuildContext context) {
-                  return Dialog(
-                    child: Container(
-                      decoration: DialogBoxDecoration.overnightEventBg,
-                      child: Column(
-                      children: [
-                        Text("Completed Event!"),
-                        BouncingButton(bgColor: Colors.yellow, 
-                            borderColor: Colors.lightBlue, 
-                            buttonText: "OK!", 
-                            textColor: Colors.black, 
-                            onClick: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:_curEvent.eventId)));
-                            }
-                      )
-                      ]),
-                    )
-                  );
-                });
               },
               buttontext: "Complete Event");
         }
