@@ -426,7 +426,3 @@ class ReviewWidget extends StatelessWidget {
   }
 }
 
-String removeEmail(String email) {
-  List split = email.split("@");
-  return split[0];
-}
