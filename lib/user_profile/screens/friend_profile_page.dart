@@ -1,4 +1,3 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,11 +7,8 @@ import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 import 'package:my_app/user_profile/utils/strangers_action_widget.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
-import 'package:my_app/user_profile/data/userDbManager.dart';
 import '../utils/appbar_widget.dart';
-import 'edit_profile_page.dart';
 import '../utils/friends_display_widget.dart';
-import 'package:my_app/user_profile/screens/friend_page.dart';
 
 //friendprofilepage
 class FriendProfilePage extends StatefulWidget {
@@ -60,70 +56,114 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                   FriendsDisplayWidget(u.friends, u.points),
                   const SizedBox(height: 24),
                   StrangersActionWidget(u),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 18),
                   buildAbout(u),
                 ],
               ),
             ),
           ));
     } else {
-      return Container(
-          decoration: _background,
-          child: Builder(
-            builder: (context) => Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: buildAppBar(context),
-              body: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                  OtherProfileWidget(
-                    imagePath: u.image,
-                  ),
-                  const SizedBox(height: 24),
-                  buildName(u),
-                  const SizedBox(height: 24),
-                  FriendsDisplayWidget(u.friends, u.points),
-                  const SizedBox(height: 24),
-                  FriendsActionWidget(u),
-                  const SizedBox(height: 48),
-                  buildAbout(u),
-                ],
-              ),
+      return Builder(
+        builder: (context) => Scaffold(
+          backgroundColor: Colors.white,
+          appBar: buildAppBar(context),
+          body: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/friends-bg.png"))),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                OtherProfileWidget(
+                  imagePath: u.image,
+                ),
+                const SizedBox(height: 14),
+                buildName(u),
+                const SizedBox(height: 14),
+                FriendsDisplayWidget(u.friends, u.points),
+                const SizedBox(height: 14),
+                FriendsActionWidget(u),
+                const SizedBox(height: 14),
+                buildAbout(u),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
     }
   }
 
   Widget buildAbout(UserData user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ignore: prefer_const_constructors
-            Center(
-              child: const Text('About',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center),
-            ),
-
-            const SizedBox(height: 16),
-            Center(
-                child: Text(
+      padding: EdgeInsets.symmetric(horizontal: 28),
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: 120,
+            child: Text(
               user.about,
               style: TextStyle(
-                  fontSize: 16,
-                  height: 1.4,
-                  background: Paint()
-                    ..strokeWidth = 30.0
-                    ..color = Colors.white
-                    ..style = PaintingStyle.stroke
-                    ..strokeJoin = StrokeJoin.round),
-              textAlign: TextAlign.center,
-            )),
-          ],
-        ),
-      );
+                color: Colors.black,
+                fontSize: 15,
+              ),
+            ),
+            margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+            padding: EdgeInsets.fromLTRB(10, 30, 10, 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 2),
+              borderRadius: BorderRadius.circular(8),
+              shape: BoxShape.rectangle,
+            ),
+          ),
+          Positioned(
+              left: 30,
+              top: 12,
+              child: Container(
+                padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                color: Colors.white,
+                child: Text(
+                  'Bio',
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              )),
+        ],
+      ));
+
+  // Widget buildAbout(UserData user) => Container(
+  //       padding: EdgeInsets.symmetric(horizontal: 48),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           // ignore: prefer_const_constructors
+  //           Center(
+  //             child: const Text('About',
+  //                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+  //                 textAlign: TextAlign.center),
+  //           ),
+
+  //           const SizedBox(height: 16),
+  //           Center(
+  //               child: Text(
+  //             user.about,
+  //             style: TextStyle(
+  //                 fontSize: 16,
+  //                 height: 1.4,
+  //                 background: Paint()
+  //                   ..strokeWidth = 30.0
+  //                   ..color = Colors.white
+  //                   ..style = PaintingStyle.stroke
+  //                   ..strokeJoin = StrokeJoin.round),
+  //             textAlign: TextAlign.center,
+  //           )),
+  //         ],
+  //       ),
+  //     );
 
   Widget buildName(UserData user) => Column(
         children: [

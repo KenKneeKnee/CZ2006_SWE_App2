@@ -87,8 +87,8 @@ Future fetchFromJsonAssets() async {
     },
   );
   if (_markers.length > 0) {
-    print(
-        'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
+    // print(
+    //     'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
     return _markers;
   } else {
     print('smth went wrong in fetching the playgrounds/parks');
@@ -267,6 +267,11 @@ const res = [
     '1.3340808063381,103.718512212638',
     'Stadium',
     '15 Fourth Chin Bee Rd, Singapore 619703'
+  ],
+  [
+    '1.3489,103.6895',
+    'Sports Hall/Stadium/Gym',
+    '110 Nanyang Cres, Singapore 636956'
   ]
 ];
 
@@ -324,8 +329,7 @@ List<SportsFacility> fetchFromList() {
     }
   }
   if (markers.length > 0) {
-    print(count);
-    print('fetched ${markers.length} facilites from res');
+    //print('fetched ${markers.length} facilites from res');
   } else {
     print('smth went wrong in fetching the facilities from res');
   }
