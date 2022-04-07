@@ -10,7 +10,8 @@ class ClusterRepository {
 
   Future<QuerySnapshot> retrieveSameLabel(String eventId) async{
     late int label;
-    collection.where("eventId", isEqualTo: eventId).get().then((value) {
+
+    await collection.where("eventId", isEqualTo: eventId).get().then((value) {
       value.docs.forEach((doc) {
         label = doc["label"];
       });
