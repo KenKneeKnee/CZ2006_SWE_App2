@@ -11,6 +11,8 @@ import 'package:my_app/map/map_data.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'dart:math';
+import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/events/completeEvent.dart';
 
 import '../map/facil_map.dart';
 
@@ -280,6 +282,29 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               buttonFunction: () async {
                 String key = _curEvent.eventId;
                 booking.completeBooking(key);
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                          child: Container(
+                        decoration: DialogBoxDecoration.overnightEventBg,
+                        child: Column(children: [
+                          Text("Completed Event!"),
+                          BouncingButton(
+                              bgColor: Colors.yellow,
+                              borderColor: Colors.lightBlue,
+                              buttonText: "OK!",
+                              textColor: Colors.black,
+                              onClick: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CompleteEventPage(event_id: key)));
+                              })
+                        ]),
+                      ));
+                    });
               },
               buttontext: "Complete Event");
         }
