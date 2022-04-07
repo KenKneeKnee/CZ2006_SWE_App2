@@ -1,4 +1,3 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,11 +7,8 @@ import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 import 'package:my_app/user_profile/utils/strangers_action_widget.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
-import 'package:my_app/user_profile/data/userDbManager.dart';
 import '../utils/appbar_widget.dart';
-import 'edit_profile_page.dart';
 import '../utils/friends_display_widget.dart';
-import 'package:my_app/user_profile/screens/friend_page.dart';
 
 //friendprofilepage
 class FriendProfilePage extends StatefulWidget {

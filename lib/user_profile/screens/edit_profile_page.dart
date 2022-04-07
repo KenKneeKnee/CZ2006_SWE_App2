@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
-import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/utils/progress_widget.dart';
-import 'package:my_app/widgets/bouncing_button.dart';
-
-import '../utils/appbar_widget.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:my_app/reviews/storage_repository.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -20,11 +17,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  final Storage storage = Storage();
   bool isLoading = false;
   late UserData user;
   bool _displayNameValid = true;
   bool _bioValid = true;
   late final image;
+  late String newPic;
 
   UserDbManager userdb = UserDbManager();
 
@@ -44,11 +43,60 @@ class _EditProfilePageState extends State<EditProfilePage> {
     user = UserData.fromSnapshot(doc);
     displayNameController.text = user.username;
     bioController.text = user.about;
-    image = Image.asset(user.image);
+    image = Image.network(user.image);
 
     setState(() {
       isLoading = false;
     });
+  }
+
+  //for picking new image
+  Column buildImageField(String title) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+            padding: EdgeInsets.only(top: 12.0),
+            child: Text(
+              title,
+              style: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+            )),
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+          child: Container(
+            margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
+            child: ElevatedButton(
+              onPressed: () async {
+                // pick new image
+                final newImage = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );
+                //upload image
+                if (newImage != null) {
+                  await storage.uploadFile(newImage.path, user.userid!);
+                } else {}
+                //download image and update
+                newPic = await storage.downloadURL(user.userid!);
+                userdb.collection
+                    .doc(FirebaseAuth.instance.currentUser?.email)
+                    .update({"image": newPic});
+                setState(() {});
+              },
+              child: const Text('Pick New Image'),
+              style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF31A462),
+                  // padding: EdgeInsets.symmetric(
+                  //     horizontal: 5, vertical: 2),
+                  textStyle:
+                      TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   Column buildField(String title, String hint, TextEditingController controller,
@@ -60,13 +108,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
             padding: EdgeInsets.only(top: 12.0),
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
                   fontSize: 15),
             )),
         Container(
-          margin: EdgeInsets.fromLTRB(0, 15, 0, 15),
+          margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
           decoration: BoxDecoration(
             color: Colors.white10,
             borderRadius: BorderRadius.circular(24.0),
@@ -103,9 +151,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (_displayNameValid && _bioValid) {
       userdb.collection.doc(FirebaseAuth.instance.currentUser?.email).update({
         "username": displayNameController.text,
-        "about": bioController.text,
+        "about": bioController.text
       });
-      SnackBar snackbar = SnackBar(
+      SnackBar snackbar = const SnackBar(
         content: Text("Profile updated!"),
         backgroundColor: Color(0xffE3663E),
         duration: Duration(seconds: 2),
@@ -130,7 +178,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         leading: BackButton(
             color: Colors.white, onPressed: () => Navigator.of(context).pop()),
         backgroundColor: Color(0xFF049cac),
-        title: Text(
+        title: const Text(
           "Edit Profile",
           style: TextStyle(
             color: Colors.white,
@@ -145,8 +193,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: ListView(
                 children: <Widget>[
                   Column(children: <Widget>[
-                    Padding(
-                        padding: EdgeInsets.only(
+                    /* Padding(
+                        padding: const EdgeInsets.only(
                           top: 16.0,
                           bottom: 28.0,
                         ),
@@ -160,9 +208,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               height: 128,
                             ),
                           ),
-                        )),
+                        )), */
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(40.0),
@@ -173,6 +221,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       padding: EdgeInsets.all(36.0),
                       child: Column(
                         children: <Widget>[
+                          buildImageField("Profile Picture"),
                           buildField(
                               "Username",
                               "Change username",
@@ -185,7 +234,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               bioController,
                               _bioValid,
                               "Bio is too long. Character Count: ${bioController.text.length} / 140"),
-                          SizedBox(
+                          const SizedBox(
                             height: 100,
                           ),
                           ElevatedButton.icon(
@@ -200,14 +249,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 backgroundColor: MaterialStateColor.resolveWith(
                                     _getTextColor),
                               ),
-                              label: Text(
+                              label: const Text(
                                 "SAVE",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold),
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                         ],
