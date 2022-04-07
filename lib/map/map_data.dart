@@ -267,6 +267,11 @@ const res = [
     '1.3340808063381,103.718512212638',
     'Stadium',
     '15 Fourth Chin Bee Rd, Singapore 619703'
+  ],
+  [
+    '1.3489,103.6895',
+    'Sports Hall/Stadium/Gym',
+    '110 Nanyang Cres, Singapore 636956'
   ]
 ];
 
