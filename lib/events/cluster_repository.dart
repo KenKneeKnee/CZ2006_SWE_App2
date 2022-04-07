@@ -9,17 +9,30 @@ class ClusterRepository {
   }
 
   Future<QuerySnapshot> retrieveSameLabel(String eventId) async{
-    late int label;
 
-    await collection.where("eventId", isEqualTo: eventId).get().then((value) {
-      value.docs.forEach((doc) {
-        label = doc["label"];
-      });
-    });
+    int label = -999;
 
-    return collection
-        .where("label", isEqualTo: label)
-        .where('eventId', isNotEqualTo: eventId)
-        .get();
+      QuerySnapshot maa = await collection.where("eventId", isEqualTo: eventId).get();
+      for (DocumentSnapshot docss in maa.docs) {
+        label=docss['label'];
+      }
+      // maa.data.docs.forEach((doc) {
+      //     label = doc["label"];
+      //   })
+      // })
+
+      //   if (label != -999) {
+          return collection
+              .where("label", isEqualTo: label)
+              .where('eventId', isNotEqualTo: eventId)
+              .get();
+      //   } else {
+      //     return ;
+      //
+      //
+      // });
+    }
+
+
   }
-}
+

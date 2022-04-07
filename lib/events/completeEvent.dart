@@ -75,12 +75,17 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
               .of(context)
               .size;
 
-          Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
-              widget.event_id);
+          // Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
+          //     widget.event_id);
           FutureBuilder<QuerySnapshot>(
-              future: recommendations,
+              future: clusterRepo.retrieveSameLabel(
+                  widget.event_id),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot_rec) {
+                if (!snapshot_rec.hasData) {
+                  return Text("nodata");
+                }
+                else {
                 if (snapshot_rec.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
                 } else if (snapshot_rec.connectionState == ConnectionState.done) {
@@ -89,7 +94,8 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                   } else if (snapshot_rec.hasData) {
                     Future<QuerySnapshot> activeEvents = booking.retrieveActiveEvents(uid);
                     FutureBuilder<QuerySnapshot>(
-                        future: recommendations,
+                        future: clusterRepo.retrieveSameLabel(
+                            widget.event_id),
                         builder: (context,
                             AsyncSnapshot<QuerySnapshot> snapshot,) {
                           if (snapshot.connectionState ==
@@ -129,7 +135,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                 else {
                   return Text('State: ${snapshot_rec.connectionState}');
                 }
-              });
+              }});
 
           for (String eventid in recommendedEventIds) {
             SportEvent currentevent = ActiveEventMap[eventid] as SportEvent;
