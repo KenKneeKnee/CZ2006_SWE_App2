@@ -323,7 +323,7 @@ class ReviewWidget extends StatelessWidget {
                       SizedBox(
                         height: 75,
                         width: 75,
-                        child: Image.asset(user.image, fit: BoxFit.cover),
+                        child: Image.network(user.image, fit: BoxFit.cover),
                       ),
                       RatingBarIndicator(
                         rating: review.rating * 1.0,
@@ -370,7 +370,7 @@ class ReviewWidget extends StatelessWidget {
                       SizedBox(
                         height: 75,
                         width: 75,
-                        child: Image.asset(user.image, fit: BoxFit.cover),
+                        child: Image.network(user.image, fit: BoxFit.cover),
                       ),
                       RatingBarIndicator(
                         rating: review.rating * 1.0,
