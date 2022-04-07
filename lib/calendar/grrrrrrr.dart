@@ -6,6 +6,7 @@ import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/reviews/review_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../events/event_widgets.dart';
