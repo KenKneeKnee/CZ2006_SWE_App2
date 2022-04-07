@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intro_slider/dot_animation_enum.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
+import 'package:my_app/homepage.dart';
 import 'package:my_app/user_profile/screens/profile_page.dart';
 
 const Color _PrimaryColV1 = Color(0x33ffcc5c);
@@ -65,7 +66,7 @@ class _OnboardingState extends State<Onboarding> {
     // Do what you want
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => ProfilePage(user: widget.user),
+        builder: (context) => Homepage(),
         // ProfilePage(user: user),
       ),
       ModalRoute.withName('/'),
@@ -132,7 +133,8 @@ class _OnboardingState extends State<Onboarding> {
             child: Stack(
               children: <Widget>[
                 Image.asset(
-                  currentSlide.backgroundImage ??= 'assets/images/background.png',
+                  currentSlide.backgroundImage ??=
+                      'assets/images/background.png',
                 ),
                 Column(
                   children: [

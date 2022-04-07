@@ -31,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final CollectionReference userdb = UserDbManager().collection;
 
   bool _isProcessing = false;
+  bool _isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +148,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       email: _emailTextController.text,
                                       password: _passwordTextController.text,
                                     );
+
+                                    _isRegistered = true;
 
                                     List<String> pictures = [
                                       "assets/images/1573252249390.jpeg",
