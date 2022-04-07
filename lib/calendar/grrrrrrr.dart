@@ -100,7 +100,7 @@ class _GrrState extends State<Grr> {
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
-        widget.submittedDate = focusedDay;
+        widget.submittedDate = selectedDay;
       });
 
       _selectedEvents.value = _getEventsForDay(selectedDay);

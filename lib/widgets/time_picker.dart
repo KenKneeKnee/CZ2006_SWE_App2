@@ -25,8 +25,9 @@ class _TimePickerState extends State<TimePicker> {
   @override
   void initState() {
     DateTime sDate = widget.selectedDate;
-    widget.selectedTime = DateTime(sDate.year, sDate.month,
-        sDate.day, DateTime.now().hour, DateTime.now().minute);
+    widget.selectedTime = DateTime(sDate.year, sDate.month, sDate.day,
+        DateTime.now().hour, DateTime.now().minute);
+
     if (widget.initialise) {
       String formattedTime = DateFormat('HH:mm').format(DateTime.now());
       timeinput.text = formattedTime; //set the initial value of text field
@@ -75,7 +76,12 @@ class _TimePickerState extends State<TimePicker> {
                     _date.day, pickedTime.hour, pickedTime.minute);
               });
             } else {
-              //print("Time is not selected");
+              print("Time is not selected");
+              setState(() {
+                DateTime _date = widget.selectedDate;
+                widget.selectedTime = DateTime(_date.year, _date.month,
+                    _date.day, DateTime.now().hour, DateTime.now().minute);
+              });
             }
           },
         )));

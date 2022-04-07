@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
         //      builder: (BuildContext context) => _buildWarningDialog(context));
         //  repository.collection.doc(u.userid).update({"reports": 0});
         //}
-
+        print(u.image);
         return Builder(
           builder: (context) => Scaffold(
             backgroundColor: Colors.white,
@@ -104,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
               elevation: 0,
             ),
             body: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xFF60d5df),
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10.0),
@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     bottomLeft: Radius.circular(0.0)),
               ),
               child: ListView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0)),
                   ProfileWidget(
@@ -124,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   const SizedBox(height: 24),
                   Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(40.0),
@@ -135,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           BoxShadow(
                             spreadRadius: 2,
                             color: Colors.grey,
-                            offset: const Offset(0, 1),
+                            offset: Offset(0, 1),
                             blurRadius: 5,
                           )
                         ],

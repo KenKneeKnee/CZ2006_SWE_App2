@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/chat/chatpage.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/sportevent.dart';
@@ -11,6 +12,7 @@ import 'package:my_app/map/map_data.dart';
 import 'package:my_app/user_profile/screens/friend_invite_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
+import 'package:my_app/widgets/background.dart';
 
 final uid = FirebaseAuth.instance.currentUser!.email as String;
 
@@ -79,6 +81,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                     }
                     List EventList = snapshot.data!.docs;
                     List BookingList = snapshot1.data!.docs;
+
                     Map<String, SportEvent> ActiveEventMap = {};
                     List activeEventIds = [];
                     final Size size = MediaQuery.of(context).size;
@@ -95,8 +98,6 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                       }
                     }
 
-                    
-
                     for (String eid in activeEventIds) {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
@@ -105,7 +106,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                           DateTime end = e.end;
 
                           DateTime? curTime = DateTime.now();
-                          if (curTime.isBefore(start) == true) {
+                          if (curTime.isAfter(end) != true) {
                             ActiveEventMap[eid] = e;
                             tempEventIdlist.add(eid);
                           }
@@ -137,80 +138,100 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                               ]),
                           child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 10),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  horizontal: 20.0, vertical: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    currentevent.name.toString(),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    currentevent.curCap.toString() +
+                                        "/" +
+                                        currentevent.maxCap.toString() +
+                                        " players",
+                                    style: const TextStyle(
+                                        fontSize: 17, color: Colors.grey),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
                                       children: <Widget>[
-                                        Text(
-                                          currentevent.name.toString(),
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SportEventTextWidget.Subtitle(
-                                            sportsfacil.facilityType),
-                                        Text(
-                                          "Current capacity: " +
-                                              currentevent.curCap.toString() +
-                                              "/" +
-                                              currentevent.maxCap.toString(),
-                                          style: const TextStyle(
-                                              fontSize: 17, color: Colors.grey),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          children: <Widget>[
-                                            FloatingActionButton.extended(
-                                                onPressed: () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Dialog(
-                                                        backgroundColor:
-                                                            Color(0xffE5E8E8),
-                                                        child: ViewEventPopUp(
-                                                          placeIndex: int.parse(
-                                                              currentevent
-                                                                  .placeId),
-                                                          event: RetrievedEvent(
-                                                            currentevent.name,
-                                                            currentevent.start,
-                                                            currentevent.end,
-                                                            currentevent.maxCap,
-                                                            currentevent.curCap,
-                                                            currentevent
-                                                                .placeId,
-                                                            currentevent.type,
-                                                            currentevent.active,
-                                                            eventid,
-                                                          ),
-                                                          SportsFacil:
-                                                              sportsfacil,
-                                                        ),
-                                                        shape: const RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius.all(
-                                                                    Radius.circular(
-                                                                        20.0))),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child:
+                                                FloatingActionButton.extended(
+                                                    onPressed: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return Dialog(
+                                                            backgroundColor:
+                                                                Color(
+                                                                    0xffE5E8E8),
+                                                            child:
+                                                                ViewEventPopUp(
+                                                              placeIndex: int.parse(
+                                                                  currentevent
+                                                                      .placeId),
+                                                              event:
+                                                                  RetrievedEvent(
+                                                                currentevent
+                                                                    .name,
+                                                                currentevent
+                                                                    .start,
+                                                                currentevent
+                                                                    .end,
+                                                                currentevent
+                                                                    .maxCap,
+                                                                currentevent
+                                                                    .curCap,
+                                                                currentevent
+                                                                    .placeId,
+                                                                currentevent
+                                                                    .type,
+                                                                currentevent
+                                                                    .active,
+                                                                eventid,
+                                                              ),
+                                                              SportsFacil:
+                                                                  sportsfacil,
+                                                            ),
+                                                            shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            20.0))),
+                                                          );
+                                                        },
                                                       );
                                                     },
-                                                  );
-                                                },
-                                                label: const Text('View'),
-                                                backgroundColor: Colors.orange),
-                                            const SizedBox(
-                                              height: 24,
-                                              child: VerticalDivider(),
-                                            ),
-                                            FloatingActionButton.extended(
+                                                    label: Row(
+                                                      children: [
+                                                        Icon(Icons
+                                                            .calendar_month),
+                                                        const Text(' View'),
+                                                      ],
+                                                    ),
+                                                    backgroundColor:
+                                                        Colors.orange),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child:
+                                                FloatingActionButton.extended(
                                               onPressed: () {
                                                 Navigator.of(context)
                                                     .push(MaterialPageRoute(
@@ -219,50 +240,112 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                           friends: cu.friends),
                                                 ));
                                               },
-                                              label:
-                                                  const Text('Invite friends'),
+                                              label: Row(
+                                                children: [
+                                                  Icon(Icons.people),
+                                                  Text(' Invite'),
+                                                ],
+                                              ),
                                               backgroundColor:
                                                   Colors.deepOrangeAccent,
-                                            )
-                                          ],
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          fit: FlexFit.loose,
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child:
+                                                FloatingActionButton.extended(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChatPage(
+                                                          eventId: eventid,
+                                                          eventName:
+                                                              currentevent.name,
+                                                          user: cu),
+                                                ));
+                                              },
+                                              label: Row(
+                                                children: [
+                                                  Icon(Icons.message),
+                                                  const Text(' Chat'),
+                                                ],
+                                              ),
+                                              backgroundColor: Colors.indigo,
+                                            ),
+                                          ),
                                         )
                                       ],
                                     ),
-                                  ]))));
+                                  )
+                                ],
+                              ))));
                     }
 
-                    return SafeArea(
-                        child: Scaffold(
-                            backgroundColor: Colors.deepPurple,
-                            body: Container(
-                                height: size.height,
-                                child: ListView.builder(
-                                    controller: controller,
-                                    itemCount: eventbuttons.length,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemBuilder: (context, index) {
-                                      double scale = 1.0;
-                                      if (topContainer > 0.1) {
-                                        scale = index + 0.1 - topContainer;
-                                        if (scale < 0) {
-                                          scale = 0;
-                                        } else if (scale > 1) {
-                                          scale = 1;
-                                        }
-                                      }
-                                      return Opacity(
-                                        opacity: scale,
-                                        child: Transform(
-                                          transform: Matrix4.identity()
-                                            ..scale(scale, scale),
-                                          alignment: Alignment.bottomCenter,
-                                          child: Align(
-                                              heightFactor: 0.8,
-                                              alignment: Alignment.topCenter,
-                                              child: eventbuttons[index]),
+                    return Scaffold(
+                        backgroundColor: Colors.white,
+                        body: Column(
+                          children: [
+                            SizedBox(height: 40),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            "assets/images/current-events.png"))),
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Expanded(
+                                flex: 2,
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.deepPurple,
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(50.0),
+                                          topLeft: Radius.circular(50.0),
                                         ),
-                                      );
-                                    }))));
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                        controller: controller,
+                                        itemCount: eventbuttons.length,
+                                        physics: const BouncingScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          double scale = 1.0;
+                                          if (topContainer > 0.1) {
+                                            scale = index + 0.1 - topContainer;
+                                            if (scale < 0) {
+                                              scale = 0;
+                                            } else if (scale > 1) {
+                                              scale = 1;
+                                            }
+                                          }
+                                          return Opacity(
+                                            opacity: scale,
+                                            child: Transform(
+                                              transform: Matrix4.identity()
+                                                ..scale(scale, scale),
+                                              alignment: Alignment.bottomCenter,
+                                              child: Align(
+                                                  heightFactor: 0.8,
+                                                  alignment:
+                                                      Alignment.topCenter,
+                                                  child: eventbuttons[index]),
+                                            ),
+                                          );
+                                        }),
+                                  ],
+                                )),
+                          ],
+                        ));
                   });
             })
         : CircularProgressIndicator();
