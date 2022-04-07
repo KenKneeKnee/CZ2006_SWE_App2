@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/reviews/create_review.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -165,6 +166,13 @@ class _ReviewPageState extends State<ReviewPage> {
           }
         },
       ),
+      floatingActionButton: FloatingActionButton.extended(onPressed: () {
+        setState(() {
+
+        });
+      },
+      label: Text("Refresh"),
+      icon: const Icon(Icons.refresh)),
     );
   }
 
