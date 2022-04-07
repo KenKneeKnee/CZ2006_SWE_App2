@@ -8,6 +8,7 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/map/map_data.dart';
+import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'dart:math';
@@ -271,7 +272,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
           return Chip(
               label: Text("EXPIRED EVENT")); //cannot leave this event anymore
         } else if (completeStatus == "future event") {
-          statusChip = Chip(label: Text("wait la"));
+          statusChip = Chip(label: Text("Please Wait"));
         } else if (completeStatus == "completed") {
           return statusChip = Chip(label: Text("Completed"));
         } else if (completeStatus == "can complete") {
@@ -280,6 +281,27 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               buttonFunction: () async {
                 String key = _curEvent.eventId;
                 booking.completeBooking(key);
+                showDialog(context: context, builder: (BuildContext context) {
+                  return Dialog(
+                    child: Container(
+                      decoration: DialogBoxDecoration.overnightEventBg,
+                      child: Column(
+                      children: [
+                        Text("Completed Event!"),
+                        BouncingButton(bgColor: Colors.yellow, 
+                            borderColor: Colors.lightBlue, 
+                            buttonText: "OK!", 
+                            textColor: Colors.black, 
+                            onClick: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const CompleteEventPage()));
+                            }
+                      )
+                      ]),
+                    )
+                  );
+                });
               },
               buttontext: "Complete Event");
         }

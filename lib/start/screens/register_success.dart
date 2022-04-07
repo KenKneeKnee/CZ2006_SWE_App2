@@ -114,7 +114,7 @@ class _hoveringBackground extends StatelessWidget {
     return Column(
       children: [
         AnimatedHoverImage(
-          imagePath: 'tick-circle.png',
+          imagePath: 'assets/images/tick-circle.png',
           durationMilliseconds: 500,
         )
       ],
