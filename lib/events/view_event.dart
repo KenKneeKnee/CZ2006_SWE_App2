@@ -280,7 +280,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               curEvent: _curEvent,
               buttonFunction: () async {
                 String key = _curEvent.eventId;
-                booking.completeBooking(key);
+                booking.completeBooking(uid,key);
                 showDialog(context: context, builder: (BuildContext context) {
                   return Dialog(
                     child: Container(
