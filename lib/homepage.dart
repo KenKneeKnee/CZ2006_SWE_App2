@@ -34,35 +34,37 @@ class _HomepageState extends State<Homepage> {
       //put another page here
     ];
 
-    return Scaffold(
-      body: IndexedStack(
-        index: pageIndex,
-        children: pages,
+    return SafeArea(
+      child: Scaffold(
+        body: IndexedStack(
+          index: pageIndex,
+          children: pages,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.shifting,
+            currentIndex: pageIndex,
+            onTap: (index) => setState(() {
+                  pageIndex = index;
+                }),
+            items: [
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.map_outlined),
+                  label: 'Map',
+                  backgroundColor: Colors.blue),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.people_alt_outlined),
+                  label: 'Profile',
+                  backgroundColor: Colors.cyan),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.star_border_outlined),
+                  label: 'Rewards',
+                  backgroundColor: Colors.orange),
+              const BottomNavigationBarItem(
+                  icon: Icon(Icons.sports_basketball),
+                  label: 'Current Events',
+                  backgroundColor: Colors.purple),
+            ]),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          currentIndex: pageIndex,
-          onTap: (index) => setState(() {
-                pageIndex = index;
-              }),
-          items: [
-            const BottomNavigationBarItem(
-                icon: Icon(Icons.map_outlined),
-                label: 'Map',
-                backgroundColor: Colors.blue),
-            const BottomNavigationBarItem(
-                icon: Icon(Icons.people_alt_outlined),
-                label: 'Profile',
-                backgroundColor: Colors.cyan),
-            const BottomNavigationBarItem(
-                icon: Icon(Icons.star_border_outlined),
-                label: 'Rewards',
-                backgroundColor: Colors.orange),
-            const BottomNavigationBarItem(
-                icon: Icon(Icons.sports_basketball),
-                label: 'Current Events',
-                backgroundColor: Colors.purple),
-          ]),
     );
   }
 }

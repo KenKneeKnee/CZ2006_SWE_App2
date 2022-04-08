@@ -9,6 +9,7 @@ import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
@@ -106,7 +107,7 @@ class _EventStepFormState extends State<EventStepForm> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return SmthWrong();
           }
           if (!snapshot.hasData) {
             return Container(color: Colors.black);
