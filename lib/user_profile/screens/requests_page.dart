@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
@@ -49,7 +50,7 @@ class _FriendRequestState extends State<Request_Page> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return SmthWrong();
           }
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();

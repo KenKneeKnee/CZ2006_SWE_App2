@@ -9,6 +9,7 @@ import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/user_profile/screens/friend_invite_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
@@ -74,7 +75,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
-                      return const Text('Something went wrong');
+                      return SmthWrong();
                     }
                     if (!snapshot.hasData) {
                       return const CircularProgressIndicator();

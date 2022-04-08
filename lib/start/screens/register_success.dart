@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/homepage.dart';
 import 'package:my_app/widgets/hovering_image.dart';
 import './login_page.dart';
 import './onboarding.dart';
@@ -88,12 +89,10 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                     textColor: Color(0xffE3663E),
                     onClick: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage(
-                                  user: widget.user,
-                                )),
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Homepage(),
+                          ));
                     },
                   ),
                 ],

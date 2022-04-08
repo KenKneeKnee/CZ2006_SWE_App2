@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/homepage.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/start/screens/onboarding.dart';
 import '../utils/fire_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -151,6 +152,13 @@ class _LoginPageState extends State<LoginPage> {
                                           MaterialPageRoute(
                                             //Can be changed for
                                             builder: (context) => Homepage(),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            //Can be changed for
+                                            builder: (context) => SmthWrong(),
                                           ),
                                         );
                                       }
