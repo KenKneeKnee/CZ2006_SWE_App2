@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
         email: value,
       ),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
         label: const Text(
           "EMAIL",
         ),
