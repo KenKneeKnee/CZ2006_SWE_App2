@@ -49,6 +49,7 @@ class _EventStepFormState extends State<EventStepForm> {
     super.initState();
     widget.grrCalendar =
         Grr(placeId: widget.placeId, sportsFacility: widget.sportsFacility);
+    print(uid);
   }
 
   List<Step> getSteps() => [

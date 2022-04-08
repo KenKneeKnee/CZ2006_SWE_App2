@@ -80,11 +80,36 @@ class CompleteEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void function() {
-      buttonFunction(); //deals with database
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CompleteEventPage()),
-      );
+      buttonFunction();//deals with database
+      showDialog(context: context, builder: (BuildContext context) {
+        return Dialog(
+            child: Container(
+              decoration: DialogBoxDecoration.overnightEventBg,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Completed event!",style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black)),
+                      BouncingButton(bgColor: Colors.yellow,
+                          borderColor: Colors.lightBlue,
+                          buttonText: "OK!",
+                          textColor: Colors.black,
+                          onClick: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)));
+                          }
+                      )
+                    ]),
+              ),
+            )
+        );
+      });
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)),
+      // );
       // showDialog(
       //     context: context,
       //     builder: (BuildContext context) {
