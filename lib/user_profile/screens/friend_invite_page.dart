@@ -119,7 +119,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                               ),
                             ],
                           ),
-                          Image.asset(
+                          Image.network(
                             u.image,
                             height: double.infinity,
                           )
