@@ -66,21 +66,21 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
     // Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
     //     widget.event_id);
 
-    return FutureBuilder<QuerySnapshot>(
+    return (loading==false)? FutureBuilder<QuerySnapshot>(
         future: clusterRepo.retrieveSameLabel(widget.event_id),
         builder:
             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot_rec) {
           if (!snapshot_rec.hasData) {
             print("whhhhhaht 1");
-            return Text("nodata");
+            //return Text("nodata");
           } else {
             if (snapshot_rec.connectionState == ConnectionState.waiting) {
               print("whhhhhah 2t");
-              return CircularProgressIndicator();
+              //return CircularProgressIndicator();
             } else if (snapshot_rec.connectionState == ConnectionState.done) {
               if (snapshot_rec.hasError) {
                 print("whhhhhah 3t");
-                return const Text('Error');
+                //return const Text('Error');
               } else if (snapshot_rec.hasData) {
                 snapshot_rec.data!.docs.forEach((element) {
                   recommendedEventIds.add(element['eventId']);
@@ -98,9 +98,12 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                           selist.add(SportEvent.fromSnapshot(docss));
                         }
                       }
+
                       for (SportEvent i in selist) {
                         // add ui
-                        recevents.add(RecWidget(event: i));
+                        String id = i.placeId;
+                        SportsFacility sf = SportsFacilityList[int.parse(id)];
+                        recevents.add(RecWidget(event: i,sf:sf));
                       }
                       return Scaffold(
                         appBar: AppBar(
@@ -113,7 +116,8 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                           elevation: 0,
                           backgroundColor: Colors.transparent,
                         ),
-                        body: Container(
+                        body:
+                        (loading==false) ? Container(
                           color: Colors.white,
                           child: SingleChildScrollView(
                             child: Column(
@@ -164,14 +168,14 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                               ],
                             ),
                           ),
-                        ),
+                        ):LinearProgressIndicator(),
                       );
                     });
               }
             }
           }
-          return Container(color: Colors.red);
-        });
+          return LinearProgressIndicator();
+        }) : LinearProgressIndicator();
   }
 }
 
@@ -179,10 +183,11 @@ class RecWidget extends StatelessWidget {
   RecWidget({
     Key? key,
     required this.event,
+    required this.sf,
   }) : super(key: key);
 
   final SportEvent event;
-
+  final SportsFacility sf;
   @override
   Widget build(BuildContext context) {
     DateFormat formatter = DateFormat.yMd().add_jm();
@@ -202,7 +207,21 @@ class RecWidget extends StatelessWidget {
                                         color: Colors.indigoAccent,
                                       )),
                                   SizedBox(height: 10),
-                                  Text("Located at ${event.placeId}",
+                                  Text("Located at ${sf.placeName}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.indigo,
+                                      )),
+                                  SizedBox(height: 10),
+                                  Text("${sf.addressDesc}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.indigo,
+                                      )),
+                                  SizedBox(height: 10),
+                                  Text("Facility type: ${sf.facilityType}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
