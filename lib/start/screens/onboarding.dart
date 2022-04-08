@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intro_slider/dot_animation_enum.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
+import 'package:my_app/homepage.dart';
 import 'package:my_app/user_profile/screens/profile_page.dart';
 
 const Color _PrimaryColV1 = Color(0x33ffcc5c);
@@ -50,6 +51,7 @@ class _OnboardingState extends State<Onboarding> {
       title: _title,
       description: _description,
       backgroundImage: _backgroundImage,
+      backgroundImageFit: BoxFit.fitWidth,
       backgroundOpacity: 0.0,
       styleTitle: myTitleStyle(),
       styleDescription: myDescStyle(),
@@ -58,15 +60,14 @@ class _OnboardingState extends State<Onboarding> {
 
   void onTabChangeCompleted(index) {
     // Index of current tab is focused
-    print(index);
+    //print(index);
   }
 
   void onDonePress() {
     // Do what you want
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => ProfilePage(user: widget.user),
-        // ProfilePage(user: user),
+        builder: (context) => Homepage(),
       ),
       ModalRoute.withName('/'),
     );
@@ -127,16 +128,23 @@ class _OnboardingState extends State<Onboarding> {
 
       tabs.add(
         Container(
-            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(currentSlide.backgroundImage ??=
+                    'assets/images/background.png'),
+                alignment: Alignment.topCenter,
+                fit: BoxFit.fitWidth,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
             height: MediaQuery.of(context).size.height,
             child: Stack(
+              alignment: Alignment.topCenter,
               children: <Widget>[
-                Image.asset(
-                  currentSlide.backgroundImage ??= 'assets/images/background.png',
-                ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.65),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.7),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
@@ -165,39 +173,41 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
-    return IntroSlider(
-      //slides: this.slides,
+    return SafeArea(
+      child: IntroSlider(
+        //slides: this.slides,
 
-      // Skip button
-      renderSkipBtn: this.renderSkipBtn(),
-      skipButtonStyle: myButtonStyle(),
+        // Skip button
+        renderSkipBtn: this.renderSkipBtn(),
+        skipButtonStyle: myButtonStyle(),
 
-      // Next button
-      renderNextBtn: this.renderNextBtn(),
-      nextButtonStyle: myButtonStyle(),
+        // Next button
+        renderNextBtn: this.renderNextBtn(),
+        nextButtonStyle: myButtonStyle(),
 
-      // Done button
-      renderDoneBtn: this.renderDoneBtn(),
-      onDonePress: this.onDonePress,
-      doneButtonStyle: myButtonStyle(),
+        // Done button
+        renderDoneBtn: this.renderDoneBtn(),
+        onDonePress: this.onDonePress,
+        doneButtonStyle: myButtonStyle(),
 
-      // Dot indicator
-      colorDot: Color(0xffffcc5c),
-      sizeDot: 13.0,
-      typeDotAnimation: dotSliderAnimation.SIZE_TRANSITION,
+        // Dot indicator
+        colorDot: Color(0xffffcc5c),
+        sizeDot: 13.0,
+        typeDotAnimation: dotSliderAnimation.SIZE_TRANSITION,
 
-      // Tabs
-      listCustomTabs: this.renderListCustomTabs(),
-      backgroundColorAllSlides: Colors.white,
+        // Tabs
+        listCustomTabs: this.renderListCustomTabs(),
+        backgroundColorAllSlides: Colors.white,
 
-      // Behavior
-      scrollPhysics: BouncingScrollPhysics(),
+        // Behavior
+        scrollPhysics: BouncingScrollPhysics(),
 
-      // Show or hide status bar
-      hideStatusBar: true,
+        // Show or hide status bar
+        hideStatusBar: true,
 
-      // On tab change completed
-      onTabChangeCompleted: this.onTabChangeCompleted,
+        // On tab change completed
+        onTabChangeCompleted: this.onTabChangeCompleted,
+      ),
     );
   }
 }

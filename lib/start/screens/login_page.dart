@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/homepage.dart';
+import 'package:my_app/start/screens/onboarding.dart';
 import '../utils/fire_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +33,8 @@ class _LoginPageState extends State<LoginPage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      //change back to pushReplacement after testing
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          //change to test pages
           builder: (context) => Homepage(),
         ),
       );
