@@ -11,7 +11,7 @@ class ClusterRepository {
   Future<QuerySnapshot> retrieveSameLabel(String eventId) async{
 
     int label = -999;
-
+    print(label);
     QuerySnapshot maa = await collection.where("eventId", isEqualTo: eventId).get();
     for (DocumentSnapshot docss in maa.docs) {
       label=docss['label'];
@@ -22,6 +22,7 @@ class ClusterRepository {
     // })
 
     //   if (label != -999) {
+    print(label);
     return collection
         .where("label", isEqualTo: label)
         .where('eventId', isNotEqualTo: eventId)

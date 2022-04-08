@@ -58,6 +58,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    // future builder first then stream builder
     return(!loading)
     ? StreamBuilder<QuerySnapshot>(
         stream: repository.getStream(),
@@ -78,31 +79,35 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
               .of(context)
               .size;
           print("calista 3");
-          Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
-              widget.event_id);
           FutureBuilder<QuerySnapshot>(
-              future: recommendations,
+              future: clusterRepo.retrieveSameLabel(widget.event_id),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot_rec) {
                 if (snapshot_rec.connectionState == ConnectionState.waiting) {
+                  print("calista 4");
                   return CircularProgressIndicator();
                 } else if (snapshot_rec.connectionState == ConnectionState.done) {
+                  print("calista 5");
                   if (snapshot_rec.hasError) {
+                    print("calista 6");
                     return const Text('Error');
                   } else if (snapshot_rec.hasData) {
-                    Future<QuerySnapshot> activeEvents = booking.retrieveActiveEvents(uid);
+                    print("calista 7");
                     FutureBuilder<QuerySnapshot>(
-                        future: activeEvents,
+                        future: booking.retrieveActiveEvents(uid),
                         builder: (context,
                             AsyncSnapshot<QuerySnapshot> snapshot,) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
+                            print("calista 8");
                             return CircularProgressIndicator();
                           } else if (snapshot.connectionState ==
                               ConnectionState.done) {
                             if (snapshot.hasError) {
+                              print("calista 8");
                               return const Text('Error');
                             } else if (snapshot.hasData) {
+                              print("calista 9");
                               snapshot_rec.data!.docs.forEach((element) {
                                 bool check = true;
                                 snapshot.data!.docs.forEach((element1) {
@@ -135,6 +140,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
               });
 
           for (String eventid in recommendedEventIds) {
+            print(eventid);
             SportEvent currentevent = ActiveEventMap[eventid] as SportEvent;
             SportsFacility sportsfacil = SportsFacilityList[int.parse(
                 currentevent.placeId)];
