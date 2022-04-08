@@ -107,6 +107,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Container(
           color: Colors.blue,
           child: Row(

@@ -88,6 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
             builder: (context) => Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 actions: <Widget>[
                   _isSigningOut
                       ? CircularProgressIndicator()
