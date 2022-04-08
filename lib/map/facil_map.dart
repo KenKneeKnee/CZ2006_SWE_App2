@@ -44,6 +44,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   late LatLng userLocation;
   late List<SportsFacility> SportsFacilityList;
   late List<Marker> MarkerList;
+
   final myController = TextEditingController();
 
   late final AnimationController _animationController;
@@ -74,12 +75,16 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   ///
   Future getUserLocation() async {
     final _userLocationData = await checkLocation();
-    if (_userLocationData == null) {
-      print('location services not enabled!');
-    }
     setState(() {
       location = true;
     });
+    if (_userLocationData == null) {
+      print('location services not enabled!');
+      _startingPoint = LatLng(1.3489, 103.6895);
+
+      return;
+    }
+
     var _longitude = _userLocationData.longitude;
     var _latitude = _userLocationData.latitude;
     _startingPoint = LatLng(_latitude, _longitude);
@@ -102,19 +107,22 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Card(
-          elevation: 2,
-          margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
+        title: Container(
+          color: Colors.blue,
           child: Row(
             children: [
               Expanded(
                 flex: 5,
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(15, 0, 0, 10),
-                  child: TextField(
-                    controller: myController,
-                  ),
-                ),
+                    padding: EdgeInsets.fromLTRB(15, 10, 0, 10),
+                    child: TextField(
+                      decoration: new InputDecoration.collapsed(
+                        hintStyle:
+                            TextStyle(fontSize: 20.0, color: Colors.white),
+                        hintText: 'Search for Facilities',
+                      ),
+                      controller: myController,
+                    )),
               ),
               Expanded(
                 flex: 1,
@@ -123,14 +131,17 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                     IconButton(
                         onPressed: () {
                           List<SportsFacility> searchedList = [];
+
                           for (SportsFacility place in SportsFacilityList) {
                             String lower_place = place.placeName.toLowerCase();
-                            String lower_search =
-                                myController.text.toLowerCase();
+                            String lower_search = myController.text;
+                            // String lower_search =
+                            //     myController.text.toLowerCase();
                             late SportsFacility sf;
                             late int sf_index;
 
-                            if (lower_place.contains(lower_search)) {
+                            if (lower_search != null &&
+                                lower_place.contains(lower_search)) {
                               searchedList.add(place);
                             }
                           }
@@ -144,7 +155,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                                 );
                               });
                         },
-                        icon: Icon(Icons.search, color: Colors.black)),
+                        icon: Icon(Icons.search, color: Colors.white)),
                   ],
                 ),
               )

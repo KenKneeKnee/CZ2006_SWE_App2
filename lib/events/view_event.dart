@@ -9,6 +9,7 @@ import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'dart:math';
@@ -59,7 +60,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return const Text('Something went wrong');
+                  return SmthWrong();
                 }
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();
