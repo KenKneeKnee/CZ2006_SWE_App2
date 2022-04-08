@@ -63,9 +63,11 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
         builder: (context,
             AsyncSnapshot<QuerySnapshot> snapshot1) {
           if (snapshot1.hasError) {
+            print("calista 1");
             return const Text('Something went wrong');
           }
           if (!snapshot1.hasData) {
+            print("calista 2");
             return const CircularProgressIndicator();
           }
           List recommendedEventIds = [];
@@ -74,7 +76,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
           final Size size = MediaQuery
               .of(context)
               .size;
-
+          print("calista 3");
           Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
               widget.event_id);
           FutureBuilder<QuerySnapshot>(
