@@ -107,7 +107,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                           DateTime end = e.end;
 
                           DateTime? curTime = DateTime.now();
-                          if (curTime.isAfter(end) != true) {
+                          if (curTime.isBefore(end) == true) {
                             ActiveEventMap[eid] = e;
                             tempEventIdlist.add(eid);
                           }

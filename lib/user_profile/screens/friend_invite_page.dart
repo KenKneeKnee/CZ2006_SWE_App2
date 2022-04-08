@@ -97,11 +97,6 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                                 style: const TextStyle(
                                     fontSize: 28, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                u.userid.toString(),
-                                style: const TextStyle(
-                                    fontSize: 17, color: Colors.grey),
-                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -119,9 +114,16 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                               ),
                             ],
                           ),
-                          Image.asset(
-                            u.image,
-                            height: double.infinity,
+                          ClipOval(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Ink.image(
+                                image: Image.network(u.image).image,
+                                fit: BoxFit.cover,
+                                width: 128,
+                                height: 128,
+                              ),
+                            ),
                           )
                         ]))));
           }
@@ -129,7 +131,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
           //Appbar kinda of the page
           return SafeArea(
               child: Scaffold(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.deepPurple,
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Color.fromRGBO(227, 102, 62, 1),
