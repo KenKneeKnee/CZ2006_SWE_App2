@@ -30,7 +30,6 @@ class _ChatPageState extends State<ChatPage> {
     DatabaseService().getChats(widget.eventId).then((val) {
       setState(() {
         _chats = val;
-        user = widget.user;
       });
     });
   }
@@ -49,7 +48,7 @@ class _ChatPageState extends State<ChatPage> {
                 return MessageTile(
                   message: map["message"],
                   sender: map["sender"],
-                  sentByMe: user.username == map["sender"],
+                  sentByMe: widget.user.username == map["sender"],
                 );
               });
         } else {
@@ -63,7 +62,7 @@ class _ChatPageState extends State<ChatPage> {
     if (messageEditingController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
         "message": messageEditingController.text,
-        "sender": user.username,
+        "sender": widget.user.username,
         'time': DateTime.now().millisecondsSinceEpoch,
       };
 
