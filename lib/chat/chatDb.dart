@@ -7,7 +7,6 @@ class DatabaseService {
 
   // send message
   sendMessage(String eventId, chatMessageData) {
-    print("SENT MESSAGE");
     FirebaseFirestore.instance
         .collection('events')
         .doc(eventId)
