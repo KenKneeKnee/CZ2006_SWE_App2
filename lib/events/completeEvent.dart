@@ -89,7 +89,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                   } else if (snapshot_rec.hasData) {
                     Future<QuerySnapshot> activeEvents = booking.retrieveActiveEvents(uid);
                     FutureBuilder<QuerySnapshot>(
-                        future: recommendations,
+                        future: activeEvents,
                         builder: (context,
                             AsyncSnapshot<QuerySnapshot> snapshot,) {
                           if (snapshot.connectionState ==
