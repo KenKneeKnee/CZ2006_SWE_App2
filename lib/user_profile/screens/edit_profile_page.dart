@@ -153,6 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         "username": displayNameController.text,
         "about": bioController.text
       });
+      Navigator.pop(context);
       SnackBar snackbar = const SnackBar(
         content: Text("Profile updated!"),
         backgroundColor: Color(0xffE3663E),

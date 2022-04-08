@@ -2,7 +2,9 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/start/screens/login_page.dart';
+import 'package:my_app/start/screens/welcome_page.dart';
 import 'package:my_app/user_profile/screens/view_past_events_page.dart';
 import 'package:my_app/user_profile/utils/profile_widget.dart';
 import 'package:my_app/user_profile/data/user.dart';
@@ -23,14 +25,18 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   bool _isSigningOut = false;
-
+  bool userCheck = false;
   late User _currentUser;
 
   final UserDbManager repository = UserDbManager();
 
   @override
   void initState() {
-    _currentUser = widget.user;
+    if (widget.user != null) {
+      _currentUser = widget.user;
+      userCheck = true;
+    }
+
     super.initState();
   }
 
@@ -44,142 +50,149 @@ class _ProfilePageState extends State<ProfilePage> {
     });
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => LoginPage(),
+        builder: (context) => WelcomePage(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: repository.getStream(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return const Text('Something went wrong');
-        }
-        if (!snapshot.hasData) {
-          return const CircularProgressIndicator();
-        }
-        UserData u = UserData.fromSnapshot(snapshot.data!.docs[0]);
-
-        List DocList = snapshot.data!.docs;
-
-        for (DocumentSnapshot doc in DocList) {
-          if (doc['userid'] == FirebaseAuth.instance.currentUser?.email) {
-            u = UserData.fromSnapshot(doc);
+    if (userCheck)
+      return StreamBuilder<QuerySnapshot>(
+        stream: repository.getStream(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return SmthWrong();
           }
-        }
+          if (!snapshot.hasData) {
+            return const CircularProgressIndicator();
+          }
+          UserData u = UserData.fromSnapshot(snapshot.data!.docs[0]);
 
-        //if (u.reports >= 5) {
-        //  showDialog(
-        //      context: context,
-        //      builder: (BuildContext context) => _buildWarningDialog(context));
-        //  repository.collection.doc(u.userid).update({"reports": 0});
-        //}
-        print(u.image);
-        return Builder(
-          builder: (context) => Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              actions: <Widget>[
-                _isSigningOut
-                    ? CircularProgressIndicator()
-                    : TextButton.icon(
-                        style: TextButton.styleFrom(
-                          textStyle: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
-                          backgroundColor: Colors.transparent,
-                        ),
-                        onPressed: logout,
-                        icon: Icon(
-                          Icons.logout,
-                        ),
-                        label: Text(
-                          'LOGOUT',
-                        ),
-                      ),
-              ],
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-            ),
-            body: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF60d5df),
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    bottomRight: Radius.circular(0.0),
-                    topLeft: Radius.circular(10.0),
-                    bottomLeft: Radius.circular(0.0)),
-              ),
-              child: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0)),
-                  ProfileWidget(
-                    imagePath: u.image,
-                  ),
-                  const SizedBox(height: 24),
-                  buildName(u),
+          List DocList = snapshot.data!.docs;
 
-                  const SizedBox(height: 24),
-                  Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(40.0),
-                            bottomRight: Radius.circular(0.0),
-                            topLeft: Radius.circular(40.0),
-                            bottomLeft: Radius.circular(0.0)),
-                        boxShadow: [
-                          BoxShadow(
-                            spreadRadius: 2,
-                            color: Colors.grey,
-                            offset: Offset(0, 1),
-                            blurRadius: 5,
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 24),
-                          buildAbout(u),
-                          const SizedBox(height: 10),
-                          FriendsWidget(u.friends, u.friendrequests, u.points),
-                          const SizedBox(height: 100),
-                        ],
-                      ))
+          for (DocumentSnapshot doc in DocList) {
+            if (doc['userid'] == FirebaseAuth.instance.currentUser?.email) {
+              u = UserData.fromSnapshot(doc);
+            }
+          }
 
-                  // BouncingButton(
-                  //     bgColor: Color.fromARGB(255, 65, 37, 28),
-                  //     borderColor: const Color(0xffE3663E),
-                  //     buttonText: "View Past Events",
-                  //     textColor: const Color(0xffffffff),
-                  //     //Currently leads to current event page
-                  //     onClick: () {
-                  //       // temporary tag
-                  //       if (u.reports >= 5) {
-                  //         showDialog(
-                  //             context: context,
-                  //             builder: (BuildContext context) =>
-                  //                 _buildWarningDialog(context));
-                  //         repository.collection
-                  //             .doc(u.userid)
-                  //             .update({"reports": 0});
-                  //       }
-                  //       Navigator.of(context).push(
-                  //         MaterialPageRoute(
-                  //             //change to test pages
-                  //             builder: (context) => ViewEventPage()),
-                  //       );
-                  //     }),
+          //if (u.reports >= 5) {
+          //  showDialog(
+          //      context: context,
+          //      builder: (BuildContext context) => _buildWarningDialog(context));
+          //  repository.collection.doc(u.userid).update({"reports": 0});
+          //}
+          print(u.image);
+          return Builder(
+            builder: (context) => Scaffold(
+              backgroundColor: Colors.white,
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                actions: <Widget>[
+                  _isSigningOut
+                      ? CircularProgressIndicator()
+                      : TextButton.icon(
+                          style: TextButton.styleFrom(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          onPressed: logout,
+                          icon: Icon(
+                            Icons.logout,
+                          ),
+                          label: Text(
+                            'LOGOUT',
+                          ),
+                        ),
                 ],
+                foregroundColor: Colors.black,
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
+              body: Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFF60d5df),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10.0),
+                      bottomRight: Radius.circular(0.0),
+                      topLeft: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(0.0)),
+                ),
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0)),
+                    ProfileWidget(
+                      imagePath: u.image,
+                    ),
+                    const SizedBox(height: 24),
+                    buildName(u),
+
+                    const SizedBox(height: 24),
+                    Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(40.0),
+                              bottomRight: Radius.circular(0.0),
+                              topLeft: Radius.circular(40.0),
+                              bottomLeft: Radius.circular(0.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              spreadRadius: 2,
+                              color: Colors.grey,
+                              offset: Offset(0, 1),
+                              blurRadius: 5,
+                            )
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 24),
+                            buildAbout(u),
+                            const SizedBox(height: 10),
+                            FriendsWidget(
+                                u.friends, u.friendrequests, u.points),
+                            const SizedBox(height: 100),
+                          ],
+                        ))
+
+                    // BouncingButton(
+                    //     bgColor: Color.fromARGB(255, 65, 37, 28),
+                    //     borderColor: const Color(0xffE3663E),
+                    //     buttonText: "View Past Events",
+                    //     textColor: const Color(0xffffffff),
+                    //     //Currently leads to current event page
+                    //     onClick: () {
+                    //       // temporary tag
+                    //       if (u.reports >= 5) {
+                    //         showDialog(
+                    //             context: context,
+                    //             builder: (BuildContext context) =>
+                    //                 _buildWarningDialog(context));
+                    //         repository.collection
+                    //             .doc(u.userid)
+                    //             .update({"reports": 0});
+                    //       }
+                    //       Navigator.of(context).push(
+                    //         MaterialPageRoute(
+                    //             //change to test pages
+                    //             builder: (context) => ViewEventPage()),
+                    //       );
+                    //     }),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    else {
+      return SmthWrong();
+    }
   }
 
   Widget buildAbout(UserData user) => Container(

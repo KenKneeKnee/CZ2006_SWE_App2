@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_app/events/cluster_repository.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/events/event_widgets.dart';
@@ -15,8 +16,8 @@ import 'package:my_app/map/map_data.dart';
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
 class CompleteEventPage extends StatefulWidget {
-	CompleteEventPage({Key? key, required this.event_id}) : super(key: key);
-	String event_id;
+  CompleteEventPage({Key? key, required this.event_id}) : super(key: key);
+  String event_id;
 
 	@override
 	State<CompleteEventPage> createState() => _CompleteEventPageState();

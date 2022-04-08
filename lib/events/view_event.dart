@@ -8,6 +8,8 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/map/map_data.dart';
+import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'dart:math';
@@ -58,7 +60,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return const Text('Something went wrong');
+                  return SmthWrong();
                 }
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();
@@ -271,7 +273,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
           return Chip(
               label: Text("EXPIRED EVENT")); //cannot leave this event anymore
         } else if (completeStatus == "future event") {
-          statusChip = Chip(label: Text("wait la"));
+          statusChip = Chip(label: Text("Please Wait"));
         } else if (completeStatus == "completed") {
           return statusChip = Chip(label: Text("Completed"));
         } else if (completeStatus == "can complete") {
@@ -279,7 +281,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               curEvent: _curEvent,
               buttonFunction: () async {
                 String key = _curEvent.eventId;
-                booking.completeBooking(key);
+                booking.completeBooking(uid,key);
               },
               buttontext: "Complete Event");
         }
