@@ -120,7 +120,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                               child: Ink.image(
                                 image: Image.network(u.image).image,
                                 fit: BoxFit.cover,
-                                width: 96,
+                                width: 128,
                                 height: 128,
                               ),
                             ),
@@ -131,7 +131,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
           //Appbar kinda of the page
           return SafeArea(
               child: Scaffold(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.deepPurple,
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Color.fromRGBO(227, 102, 62, 1),
