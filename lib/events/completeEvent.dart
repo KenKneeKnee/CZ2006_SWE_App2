@@ -103,7 +103,16 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                         recevents.add(RecWidget(event: i));
                       }
                       return Scaffold(
-                        appBar: AppBar(),
+                        appBar: AppBar(
+                          title: Text("You may also like these:",
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                          leading: IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.black),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                        ),
                         body: Container(
                           color: Colors.white,
                           child: SingleChildScrollView(
