@@ -59,9 +59,6 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
   @override
   Widget build(BuildContext context) {
     List recommendedEventIds = [];
-    List<Widget> eventbuttons = [];
-    Map<String, SportEvent> ActiveEventMap = {};
-    List eventlist = [];
     List<SportEvent> selist = [];
     List<Widget> recevents = [];
     final Size size = MediaQuery.of(context).size;
@@ -89,16 +86,14 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                   recommendedEventIds.add(element['eventId']);
                 });
 
-                for (String eventid in recommendedEventIds) {
-                  print(recommendedEventIds.length);
-                }
-
                 return StreamBuilder(
                     stream: repository.getStream(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshote) {
+                      if (!snapshote.hasData) {
+                        return const CircularProgressIndicator();
+                      }
                       for (DocumentSnapshot docss in snapshote.data!.docs) {
-                        print(docss.id);
                         if (recommendedEventIds.contains(docss.id)) {
                           selist.add(SportEvent.fromSnapshot(docss));
                         }
@@ -107,55 +102,58 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                         // add ui
                         recevents.add(RecWidget(event: i));
                       }
-                      return Container(
-                        color: Colors.white,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                height: 30,
-                              ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: recevents.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 18.0,
-                                      vertical: 10.0,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          spreadRadius: 1,
-                                          color: Colors.grey,
-                                          offset: const Offset(0, 1),
-                                          blurRadius: 3,
-                                        )
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Flexible(
-                                          fit: FlexFit.tight,
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              print("${index} was tapped");
-                                            },
-                                            child: recevents[index],
+                      return Scaffold(
+                        appBar: AppBar(),
+                        body: Container(
+                          color: Colors.white,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: recevents.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(
+                                        horizontal: 18.0,
+                                        vertical: 10.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12.0),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            spreadRadius: 1,
+                                            color: Colors.grey,
+                                            offset: const Offset(0, 1),
+                                            blurRadius: 3,
+                                          )
+                                        ],
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.tight,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                print("${index} was tapped");
+                                              },
+                                              child: recevents[index],
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

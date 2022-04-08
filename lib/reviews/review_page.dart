@@ -50,7 +50,7 @@ class _ReviewPageState extends State<ReviewPage> {
       body: FutureBuilder(
         future: Future.wait([
           facils.getReviewsFor(widget.placeId),
-          userDb.collection.doc(uid).get()
+          userDb.collection.get(),
         ]),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (!snapshot.hasData) {
@@ -59,7 +59,7 @@ class _ReviewPageState extends State<ReviewPage> {
             );
           } else {
             final revs = snapshot.data![0];
-            final UserData user = UserData.fromSnapshot(snapshot.data![1]);
+            final users = snapshot.data![1];
             List<Widget> reviewlist = [];
             if (revs!.docs.isEmpty) {
               return Container(
@@ -90,15 +90,19 @@ class _ReviewPageState extends State<ReviewPage> {
               4: 0,
               5: 0,
             }; // rating:count
+            Map userdata = {};
+            for (DocumentSnapshot docss in users.docs) {
+              userdata[docss.id]=UserData.fromSnapshot(docss);
+            }
             for (DocumentSnapshot doc in revs.docs) {
               String imageid = doc.id;
-              Review retrieved =
-                  ReviewFromJson(doc.data() as Map<String, dynamic>);
+              Review retrieved = ReviewFromJson(doc.data() as Map<String, dynamic>);
               if (ratings[retrieved.rating] != null) {
                 ratings[retrieved.rating] += 1;
               } else {
                 ratings[retrieved.rating] = 1;
               }
+              UserData user = userdata[retrieved.user];
               reviewlist.add(ReviewWidget(
                   review: retrieved, imageid: imageid, user: user));
             }

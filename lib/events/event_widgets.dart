@@ -85,24 +85,24 @@ class CompleteEventButton extends StatelessWidget {
         return Dialog(
             child: Container(
               decoration: DialogBoxDecoration.overnightEventBg,
-              child: Column(
-                  children: [
-                    Center(child: Text("Completed event!",style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ))),
-                    SizedBox(height: 300),
-                    BouncingButton(bgColor: Colors.yellow,
-                        borderColor: Colors.lightBlue,
-                        buttonText: "OK!",
-                        textColor: Colors.black,
-                        onClick: () async {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)));
-                        }
-                    )
-                  ]),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Completed event!",style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black)),
+                      BouncingButton(bgColor: Colors.yellow,
+                          borderColor: Colors.lightBlue,
+                          buttonText: "OK!",
+                          textColor: Colors.black,
+                          onClick: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)));
+                          }
+                      )
+                    ]),
+              ),
             )
         );
       });
