@@ -49,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
                 return MessageTile(
                   message: map["message"],
                   sender: map["sender"],
-                  sentByMe: widget.user.username == map["sender"],
+                  sentByMe: user.username == map["sender"],
                 );
               });
         } else {
