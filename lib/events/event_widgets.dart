@@ -5,6 +5,7 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/homepage.dart';
 import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -76,7 +77,6 @@ class CompleteEventButton extends StatelessWidget {
   RetrievedEvent curEvent;
   String buttontext;
   void Function() buttonFunction;
-
   @override
   Widget build(BuildContext context) {
     void function() {

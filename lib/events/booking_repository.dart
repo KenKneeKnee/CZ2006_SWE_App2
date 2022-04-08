@@ -48,7 +48,7 @@ class BookingRepository {
   }
 
   void completeBooking(String uid,String key) async {
-    collection.where("userID", isEqualTo: uid).where("eventId", isEqualTo: key).get().then((value) {
+    collection.where("userId", isEqualTo: uid).where("eventId", isEqualTo: key).get().then((value) {
       value.docs.forEach((result) {
         collection.doc(result.id).update({"active": false});
       });
