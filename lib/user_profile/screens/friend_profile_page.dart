@@ -43,22 +43,27 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
             builder: (context) => Scaffold(
               backgroundColor: Colors.transparent,
               appBar: buildAppBar(context),
-              body: ListView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                  OtherProfileWidget(
-                    imagePath: u.image,
-                  ),
-                  const SizedBox(height: 24),
-                  buildName(u),
-                  const SizedBox(height: 24),
-                  FriendsDisplayWidget(u.friends, u.points),
-                  const SizedBox(height: 24),
-                  StrangersActionWidget(u),
-                  const SizedBox(height: 18),
-                  buildAbout(u),
-                ],
+              body: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/friends-bg.png"))),
+                child: ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                    OtherProfileWidget(
+                      imagePath: u.image,
+                    ),
+                    const SizedBox(height: 24),
+                    buildName(u),
+                    const SizedBox(height: 24),
+                    FriendsDisplayWidget(u.friends, u.points),
+                    const SizedBox(height: 24),
+                    StrangersActionWidget(u),
+                    const SizedBox(height: 18),
+                    buildAbout(u),
+                  ],
+                ),
               ),
             ),
           ));
