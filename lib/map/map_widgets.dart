@@ -335,6 +335,14 @@ class OvernightDialog extends StatelessWidget {
 }
 
 class DialogBoxDecoration {
+  static const BoxDecoration redeemedBg = BoxDecoration(
+    color: Colors.white,
+    image: DecorationImage(
+      image: AssetImage('assets/images/redeemed.png'),
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.topCenter,
+    ),
+  );
   static const BoxDecoration createEventSuccessBg = BoxDecoration(
     image: DecorationImage(
       image: AssetImage('assets/images/create-event-success.png'),
