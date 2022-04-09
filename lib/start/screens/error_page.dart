@@ -7,43 +7,45 @@ class SmthWrong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.red,
-              image: DecorationImage(
-                image: AssetImage('assets/images/smthwrong.png'),
-                alignment: Alignment.topCenter,
-                fit: BoxFit.fitWidth,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/smthwrong.png'),
+                  alignment: Alignment.topCenter,
+                  fit: BoxFit.fitWidth,
+                ),
               ),
             ),
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: TextButton.icon(
-              style: TextButton.styleFrom(
-                textStyle:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                backgroundColor: Colors.transparent,
-              ),
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => WelcomePage()));
-              },
-              icon: Icon(
-                Icons.exit_to_app,
-              ),
-              label: Text(
-                'RETURN TO MAIN',
+            Container(
+              alignment: Alignment.bottomCenter,
+              padding: EdgeInsets.only(bottom: 100),
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                  backgroundColor: Colors.transparent,
+                ),
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => WelcomePage()));
+                },
+                icon: Icon(
+                  Icons.exit_to_app,
+                ),
+                label: Text(
+                  'RETURN TO MAIN',
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -281,7 +281,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               curEvent: _curEvent,
               buttonFunction: () async {
                 String key = _curEvent.eventId;
-                booking.completeBooking(uid,key);
+                booking.completeBooking(uid, key);
               },
               buttontext: "Complete Event");
         }

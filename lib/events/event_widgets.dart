@@ -29,19 +29,6 @@ class GreenButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void function() {
-      buttonFunction(); //MUST put bracket for the function to be actually executed
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return JoinedEventDialog(
-              bgDeco: DialogBoxDecoration.joinEventBg,
-              title: 'Joined Successfully!',
-              paragraph: 'Your fellow SportBuds can\'t wait to see you!',
-            );
-          });
-    }
-
     return BouncingButton(
       bgColor: Colors.green,
       textColor: Colors.white,
@@ -49,19 +36,15 @@ class GreenButton extends StatelessWidget {
       buttonText: buttontext,
       onClick: () {
         showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Join Event'),
-            content: const Text('Confirm?'),
-            actions: <Widget>[
-              CancelTextButton(context),
-              TextButton(
-                onPressed: function,
-                child: const Text('Ok'),
-              ),
-            ],
-          ),
-        );
+            context: context,
+            builder: (BuildContext context) {
+              buttonFunction();
+              return JoinedEventDialog(
+                bgDeco: DialogBoxDecoration.joinEventBg,
+                title: 'Joined Successfully!',
+                paragraph: 'Your fellow SportBuds can\'t wait to see you!',
+              );
+            });
       },
     );
   }
@@ -93,7 +76,7 @@ class CompleteEventButton extends StatelessWidget {
               ),
               child: Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Completed event!",style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black)),
@@ -105,14 +88,14 @@ class CompleteEventButton extends StatelessWidget {
                           onClick: () async {
                             Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)));
-                          }
-                      )
+                                MaterialPageRoute(
+                                    builder: (context) => CompleteEventPage(
+                                        event_id: curEvent.eventId)));
+                          })
                     ]),
               ),
-            )
-        );
-      });
+            ));
+          });
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)),
@@ -360,9 +343,14 @@ class ReturnToMapButton extends StatelessWidget {
       borderColor: const Color(0xffD56F2F),
       buttonText: "Return to Map",
       onClick: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => Homepage()));
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context); // closes infosheet
+
+        // Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigator.pushReplacement(context,
+        //     MaterialPageRoute(builder: (BuildContext context) => Homepage()));
       },
     );
   }
