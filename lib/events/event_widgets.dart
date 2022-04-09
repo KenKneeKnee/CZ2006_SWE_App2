@@ -63,24 +63,25 @@ class CompleteEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void function() {
-      buttonFunction(); //deals with database
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return Dialog(
-                child: Container(
-              decoration: DialogBoxDecoration.overnightEventBg,
+      buttonFunction();//deals with database
+      showDialog(context: context, builder: (BuildContext context) {
+        return Dialog(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/view-event-basketball.png'),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter,
+                ),
+              ),
               child: Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Completed event!",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 45,
-                              color: Colors.black)),
-                      BouncingButton(
-                          bgColor: Colors.yellow,
+                      Text("Completed event!",style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black)),
+                      SizedBox(height: 200,),
+                      BouncingButton(bgColor: Colors.yellow,
                           borderColor: Colors.lightBlue,
                           buttonText: "OK!",
                           textColor: Colors.black,
