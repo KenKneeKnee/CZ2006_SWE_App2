@@ -173,7 +173,7 @@ class _RewardsPageState extends State<RewardsPage> {
                   ),
                   Row(
                     children: <Widget>[
-                      Text(_numberFormat.format(value),
+                      Text(value.toStringAsFixed(0),
                           style: Theme.of(context).textTheme.headline4),
                       Container(
                         margin: EdgeInsets.only(left: 8),
