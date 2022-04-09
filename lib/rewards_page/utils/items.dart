@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/map/map_widgets.dart';
+
+import '../../widgets/bouncing_button.dart';
 
 class Item {
   final String image;
@@ -154,7 +157,30 @@ class ItemList extends StatelessWidget {
               child: FloatingActionButton.extended(
                 heroTag: "$label-${item.label}-$index",
                 elevation: 1,
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: Container(
+                              decoration: DialogBoxDecoration.redeemedBg,
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(0, 500, 0, 100),
+                                child: BouncingButton(
+                                    bgColor: Color(0xffE96B46),
+                                    borderColor: Color(0xffE96B46),
+                                    buttonText: "OKAY",
+                                    textColor: Color(0xffffffff),
+                                    onClick: () {
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                    }),
+                              )),
+                        );
+                      });
+                },
                 label: Text(
                   "Redeem",
                   style: Theme.of(context)

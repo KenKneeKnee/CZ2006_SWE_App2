@@ -121,7 +121,16 @@ class UserProfileDialog extends StatelessWidget {
         width: 400,
         decoration: bgDeco,
       ),
-      actions: [],
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.of(context, rootNavigator: true).pop();
+            Navigator.of(context, rootNavigator: true).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
     );
   }
 }
