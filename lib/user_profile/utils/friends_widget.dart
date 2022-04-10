@@ -46,7 +46,7 @@ class FriendsWidget extends StatelessWidget {
                 Expanded(
                     child: buildEButton(
                         context,
-                        round((points / 10)).toStringAsFixed(0),
+                        round((points / 20)).toStringAsFixed(0),
                         'Events',
                         Colors.green)),
               ],
