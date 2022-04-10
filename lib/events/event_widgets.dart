@@ -63,14 +63,16 @@ class CompleteEventButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void function() {
-      buttonFunction();//deals with database
-      showDialog(context: context, builder: (BuildContext context) {
-        return Dialog(
-            child: Container(
+      buttonFunction(); //deals with database
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+                child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/images/view-event-basketball.png'),
-                  fit: BoxFit.fitWidth,
+                  //    fit: BoxFit.fitWidth,
                   alignment: Alignment.topCenter,
                 ),
               ),
@@ -78,11 +80,12 @@ class CompleteEventButton extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Completed event!",style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black)),
-                      SizedBox(height: 200,),
-                      BouncingButton(bgColor: Colors.yellow,
-                          borderColor: Colors.lightBlue,
+                      SizedBox(
+                        height: 300,
+                      ),
+                      BouncingButton(
+                          bgColor: Color(0xFFEDB129),
+                          borderColor: Colors.black,
                           buttonText: "OK!",
                           textColor: Colors.black,
                           onClick: () async {
@@ -96,19 +99,6 @@ class CompleteEventButton extends StatelessWidget {
               ),
             ));
           });
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)),
-      // );
-      // showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return JoinedEventDialog(
-      //         bgDeco: DialogBoxDecoration.joinEventBg,
-      //         title: 'Completed Event!',
-      //         paragraph: 'Hope you had fun!',
-      //       );
-      //     });
     }
 
     return BouncingButton(
