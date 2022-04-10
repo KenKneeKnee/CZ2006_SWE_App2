@@ -47,8 +47,8 @@ class BookingRepository {
     // await collection.doc(key).delete();
   }
 
-  void completeBooking(String key) async {
-    collection.where("eventId", isEqualTo: key).get().then((value) {
+  void completeBooking(String uid,String key) async {
+    collection.where("userId", isEqualTo: uid).where("eventId", isEqualTo: key).get().then((value) {
       value.docs.forEach((result) {
         collection.doc(result.id).update({"active": false});
       });

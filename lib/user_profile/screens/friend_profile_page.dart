@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/user_profile/screens/friend_invite_page.dart';
 import 'package:my_app/user_profile/utils/friend_action_widget.dart';
 import 'package:my_app/user_profile/utils/other_profile_widget.dart';
 import 'package:my_app/user_profile/utils/strangers_action_widget.dart';
@@ -37,13 +38,17 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
   @override
   Widget build(BuildContext context) {
     if (isFriends == false) {
-      return Container(
-          decoration: _background,
-          child: Builder(
-            builder: (context) => Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: buildAppBar(context),
-              body: ListView(
+      return SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/not-friends-bg.png"))),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: buildAppBar(context),
+            body: Container(
+              width: MediaQuery.of(context).size.width,
+              child: ListView(
                 physics: BouncingScrollPhysics(),
                 children: [
                   const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
@@ -61,32 +66,36 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                 ],
               ),
             ),
-          ));
+          ),
+        ),
+      );
     } else {
-      return Builder(
-        builder: (context) => Scaffold(
-          backgroundColor: Colors.white,
-          appBar: buildAppBar(context),
-          body: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/friends-bg.png"))),
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
-                OtherProfileWidget(
-                  imagePath: u.image,
-                ),
-                const SizedBox(height: 14),
-                buildName(u),
-                const SizedBox(height: 14),
-                FriendsDisplayWidget(u.friends, u.points),
-                const SizedBox(height: 14),
-                FriendsActionWidget(u),
-                const SizedBox(height: 14),
-                buildAbout(u),
-              ],
+      return SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/friends-bg.png"))),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: buildAppBar(context),
+            body: Container(
+              child: ListView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  const Padding(padding: EdgeInsets.fromLTRB(0, 20, 0, 0)),
+                  OtherProfileWidget(
+                    imagePath: u.image,
+                  ),
+                  const SizedBox(height: 14),
+                  buildName(u),
+                  const SizedBox(height: 14),
+                  FriendsDisplayWidget(u.friends, u.points),
+                  const SizedBox(height: 14),
+                  FriendsActionWidget(u),
+                  const SizedBox(height: 14),
+                  buildAbout(u),
+                ],
+              ),
             ),
           ),
         ),
@@ -179,10 +188,3 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
         ],
       );
 }
-
-const BoxDecoration _background = BoxDecoration(
-  image: DecorationImage(
-    image: AssetImage('assets/images/background.png'),
-    fit: BoxFit.fitHeight,
-  ),
-);

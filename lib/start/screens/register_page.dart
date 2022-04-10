@@ -97,125 +97,127 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
 
-    return GestureDetector(
-      onTap: () {
-        _focusName.unfocus();
-        _focusEmail.unfocus();
-        _focusPassword.unfocus();
-      },
-      child: Container(
-        decoration: _background,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Padding(
-            padding: EdgeInsets.fromLTRB(
-                40, MediaQuery.of(context).size.height * 0.35, 40, 20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Hello there!', style: _titleStyle),
-                  SizedBox(height: 20),
-                  const Text(
-                      'You\'re one step away from a world of games, friends, and no fuss!',
-                      style: _subheadingStyle),
-                  SizedBox(height: 50),
-                  Form(
-                    key: _registerFormKey,
-                    child: Wrap(
-                      runSpacing: 30,
-                      children: <Widget>[
-                        _FormFieldContainer(_nameField),
-                        _FormFieldContainer(_emailField),
-                        _FormFieldContainer(_pwField),
-                        _isProcessing
-                            ? LinearProgressIndicator()
-                            : BouncingButton(
-                                bgColor: Color(0xffE3663E),
-                                borderColor: Color(0xffE3663E),
-                                buttonText: 'REGISTER',
-                                textColor: Color(0xffffffff),
-                                onClick: () async {
-                                  setState(() {
-                                    _isProcessing = true;
-                                  });
-
-                                  if (_registerFormKey.currentState!
-                                      .validate()) {
-                                    User? user = await FireAuth
-                                        .registerUsingEmailPassword(
-                                      name: _nameTextController.text,
-                                      email: _emailTextController.text,
-                                      password: _passwordTextController.text,
-                                    );
-
-                                    _isRegistered = true;
-
-                                    List<String> pictures = [
-                                      "assets/images/1573252249390.jpeg",
-                                      "assets/images/celerystick.jpg"
-                                    ];
-
-                                    UserData newuser = UserData(
-                                        _emailTextController.text,
-                                        _nameTextController.text,
-                                        0,
-                                        0,
-                                        List<dynamic>.empty(),
-                                        List<dynamic>.empty(),
-                                        "",
-                                        "https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg");
-
-                                    await userdb
-                                        .doc(_emailTextController.text)
-                                        .set(newuser
-                                            .toJson()); //adds new user and sets custom ID
-
+    return SafeArea(
+      child: GestureDetector(
+        onTap: () {
+          _focusName.unfocus();
+          _focusEmail.unfocus();
+          _focusPassword.unfocus();
+        },
+        child: Container(
+          decoration: _background,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: EdgeInsets.fromLTRB(
+                  40, MediaQuery.of(context).size.height * 0.35, 40, 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Hello there!', style: _titleStyle),
+                    SizedBox(height: 20),
+                    const Text(
+                        'You\'re one step away from a world of games, friends, and no fuss!',
+                        style: _subheadingStyle),
+                    SizedBox(height: 50),
+                    Form(
+                      key: _registerFormKey,
+                      child: Wrap(
+                        runSpacing: 30,
+                        children: <Widget>[
+                          _FormFieldContainer(_nameField),
+                          _FormFieldContainer(_emailField),
+                          _FormFieldContainer(_pwField),
+                          _isProcessing
+                              ? LinearProgressIndicator()
+                              : BouncingButton(
+                                  bgColor: Color(0xffE3663E),
+                                  borderColor: Color(0xffE3663E),
+                                  buttonText: 'REGISTER',
+                                  textColor: Color(0xffffffff),
+                                  onClick: () async {
                                     setState(() {
-                                      _isProcessing = false;
+                                      _isProcessing = true;
                                     });
 
-                                    if (user != null) {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                          builder: (context) => RegisterSuccess(
-                                            user: user,
-                                          ),
-                                          //ProfilePage(widget.user),
-                                        ),
-                                        ModalRoute.withName('/'),
+                                    if (_registerFormKey.currentState!
+                                        .validate()) {
+                                      User? user = await FireAuth
+                                          .registerUsingEmailPassword(
+                                        name: _nameTextController.text,
+                                        email: _emailTextController.text,
+                                        password: _passwordTextController.text,
                                       );
+
+                                      List<String> pictures = [
+                                        "assets/images/1573252249390.jpeg",
+                                        "assets/images/celerystick.jpg"
+                                      ];
+
+                                      UserData newuser = UserData(
+                                          _emailTextController.text,
+                                          _nameTextController.text,
+                                          0,
+                                          0,
+                                          List<dynamic>.empty(),
+                                          List<dynamic>.empty(),
+                                          "",
+                                          "https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg");
+
+                                      await userdb
+                                          .doc(_emailTextController.text)
+                                          .set(newuser
+                                              .toJson()); //adds new user and sets custom ID
+
+                                      setState(() {
+                                        _isProcessing = false;
+                                      });
+
+                                      if (user != null) {
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RegisterSuccess(
+                                              user: user,
+                                            ),
+                                            //ProfilePage(widget.user),
+                                          ),
+                                          ModalRoute.withName('/'),
+                                        );
+                                      }
+                                    } else {
+                                      setState(() {
+                                        _isProcessing = false;
+                                        print('please retry');
+                                      });
                                     }
-                                  } else {
-                                    setState(() {
-                                      _isProcessing = false;
-                                      print('please retry');
-                                    });
-                                  }
-                                },
-                              )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: RichText(
-                      //textAlign: TextAlign.justify,
-                      text: TextSpan(
-                        children: <TextSpan>[
-                          const TextSpan(
-                            text: 'Already have an account? ',
-                            style: _paraStyle,
-                          ),
-                          TextSpan(
-                              text: ' Log In',
-                              style: _paraStyleBold,
-                              recognizer: _textGestureRecognizer),
+                                  },
+                                )
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                    Center(
+                      child: RichText(
+                        //textAlign: TextAlign.justify,
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            const TextSpan(
+                              text: 'Already have an account? ',
+                              style: _paraStyle,
+                            ),
+                            TextSpan(
+                                text: ' Log In',
+                                style: _paraStyleBold,
+                                recognizer: _textGestureRecognizer),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

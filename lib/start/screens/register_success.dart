@@ -88,8 +88,11 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                     buttonText: 'I already know how',
                     textColor: Color(0xffE3663E),
                     onClick: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Homepage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Homepage(),
+                          ));
                     },
                   ),
                 ],

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
@@ -49,7 +50,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return SmthWrong();
           }
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
@@ -96,11 +97,6 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                                 style: const TextStyle(
                                     fontSize: 28, fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                u.userid.toString(),
-                                style: const TextStyle(
-                                    fontSize: 17, color: Colors.grey),
-                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -118,9 +114,16 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                               ),
                             ],
                           ),
-                          Image.asset(
-                            u.image,
-                            height: double.infinity,
+                          ClipOval(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Ink.image(
+                                image: Image.network(u.image).image,
+                                fit: BoxFit.cover,
+                                width: 128,
+                                height: 128,
+                              ),
+                            ),
                           )
                         ]))));
           }
@@ -128,7 +131,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
           //Appbar kinda of the page
           return SafeArea(
               child: Scaffold(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.deepPurple,
                   appBar: AppBar(
                     elevation: 0,
                     backgroundColor: Color.fromRGBO(227, 102, 62, 1),

@@ -9,6 +9,7 @@ import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/widgets/background.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'dart:math';
@@ -59,7 +60,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return const Text('Something went wrong');
+                  return SmthWrong();
                 }
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();
@@ -280,28 +281,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               curEvent: _curEvent,
               buttonFunction: () async {
                 String key = _curEvent.eventId;
-                booking.completeBooking(key);
-                showDialog(context: context, builder: (BuildContext context) {
-                  return Dialog(
-                    child: Container(
-                      decoration: DialogBoxDecoration.overnightEventBg,
-                      child: Column(
-                      children: [
-                        Text("Completed Event!"),
-                        BouncingButton(bgColor: Colors.yellow, 
-                            borderColor: Colors.lightBlue, 
-                            buttonText: "OK!", 
-                            textColor: Colors.black, 
-                            onClick: () async {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const CompleteEventPage()));
-                            }
-                      )
-                      ]),
-                    )
-                  );
-                });
+                booking.completeBooking(uid, key);
               },
               buttontext: "Complete Event");
         }

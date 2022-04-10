@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/homepage.dart';
+import 'package:my_app/start/screens/error_page.dart';
+import 'package:my_app/start/screens/onboarding.dart';
 import '../utils/fire_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -32,10 +34,8 @@ class _LoginPageState extends State<LoginPage> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      //change back to pushReplacement after testing
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          //change to test pages
           builder: (context) => Homepage(),
         ),
       );
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
         email: value,
       ),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        contentPadding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
         label: const Text(
           "EMAIL",
         ),
@@ -88,106 +88,117 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    return Container(
-      decoration: _background,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: FutureBuilder(
-          future: _initializeFirebase(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(
-                    40, MediaQuery.of(context).size.height * 0.37, 40, 100),
-                child: Wrap(
-                  runAlignment: WrapAlignment.center,
-                  runSpacing: 30,
-                  //crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Text('Welcome\nback!',
-                        style: _titleStyle, textAlign: TextAlign.left),
-                    const Text(
-                        'Ready for more fun and games? Login to your account now',
-                        style: _subheadingStyle,
-                        textAlign: TextAlign.left),
-                    Form(
-                      key: _formKey,
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        runAlignment: WrapAlignment.center,
-                        runSpacing: 40,
-                        children: <Widget>[
-                          _FormFieldContainer(_emailField),
-                          //const SizedBox(height: 28.0),
-                          _FormFieldContainer(_pwField),
-                          //const SizedBox(height: 24.0),
-                          _isProcessing
-                              ? const CircularProgressIndicator()
-                              : BouncingButton(
-                                  bgColor: const Color(0xffE3663E),
-                                  borderColor: const Color(0xffE3663E),
-                                  buttonText: 'LOG IN',
-                                  textColor: Color(0xffffffff),
-                                  onClick: () async {
-                                    _focusEmail.unfocus();
-                                    _focusPassword.unfocus();
+    return SafeArea(
+      child: Container(
+        decoration: _background,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: FutureBuilder(
+            future: _initializeFirebase(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(
+                      40, MediaQuery.of(context).size.height * 0.37, 40, 100),
+                  child: Wrap(
+                    runAlignment: WrapAlignment.center,
+                    runSpacing: 30,
+                    //crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      const Text('Welcome\nback!',
+                          style: _titleStyle, textAlign: TextAlign.left),
+                      const Text(
+                          'Ready for more fun and games? Login to your account now',
+                          style: _subheadingStyle,
+                          textAlign: TextAlign.left),
+                      Form(
+                        key: _formKey,
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          runAlignment: WrapAlignment.center,
+                          runSpacing: 40,
+                          children: <Widget>[
+                            _FormFieldContainer(_emailField),
+                            //const SizedBox(height: 28.0),
+                            _FormFieldContainer(_pwField),
+                            //const SizedBox(height: 24.0),
+                            _isProcessing
+                                ? const CircularProgressIndicator()
+                                : BouncingButton(
+                                    bgColor: const Color(0xffE3663E),
+                                    borderColor: const Color(0xffE3663E),
+                                    buttonText: 'LOG IN',
+                                    textColor: Color(0xffffffff),
+                                    onClick: () async {
+                                      _focusEmail.unfocus();
+                                      _focusPassword.unfocus();
 
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        _isProcessing = true;
-                                      });
+                                      if (_formKey.currentState!.validate()) {
+                                        setState(() {
+                                          _isProcessing = true;
+                                        });
 
-                                      User? user = await FireAuth
-                                          .signInUsingEmailPassword(
-                                              email: _emailTextController.text,
-                                              password:
-                                                  _passwordTextController.text);
+                                        User? user = await FireAuth
+                                            .signInUsingEmailPassword(
+                                                email:
+                                                    _emailTextController.text,
+                                                password:
+                                                    _passwordTextController
+                                                        .text);
 
-                                      setState(() {
-                                        _isProcessing = false;
-                                      });
+                                        setState(() {
+                                          _isProcessing = false;
+                                        });
 
-                                      if (user != null) {
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                            //Can be changed for
-                                            builder: (context) => Homepage(),
-                                          ),
-                                        );
+                                        if (user != null) {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              //Can be changed for
+                                              builder: (context) => Homepage(),
+                                            ),
+                                          );
+                                        } else {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              //Can be changed for
+                                              builder: (context) => SmthWrong(),
+                                            ),
+                                          );
+                                        }
                                       }
-                                    }
-                                  },
-                                ),
-                        ],
-                      ),
-                    ),
-                    Center(
-                      child: RichText(
-                        //textAlign: TextAlign.justify,
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            const TextSpan(
-                              text: 'Don\'t have an account? ',
-                              style: _paraStyle,
-                            ),
-                            TextSpan(
-                                text: ' Sign Up',
-                                style: _paraStyleBold,
-                                recognizer: _textGestureRecognizer),
+                                    },
+                                  ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            }
+                      Center(
+                        child: RichText(
+                          //textAlign: TextAlign.justify,
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              const TextSpan(
+                                text: 'Don\'t have an account? ',
+                                style: _paraStyle,
+                              ),
+                              TextSpan(
+                                  text: ' Sign Up',
+                                  style: _paraStyleBold,
+                                  recognizer: _textGestureRecognizer),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-            return Center(
-              child:
-                  CircularProgressIndicator(), //if not logged in successfully
-            );
-          },
+              return Center(
+                child:
+                    CircularProgressIndicator(), //if not logged in successfully
+              );
+            },
+          ),
         ),
       ),
     );

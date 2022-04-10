@@ -9,6 +9,7 @@ import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
+import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
@@ -99,6 +100,7 @@ class _EventStepFormState extends State<EventStepForm> {
   @override
   Widget build(BuildContext context) {
     final isLastStep = _currentStep == getSteps().length - 1;
+    final isFirstStep = _currentStep == 0;
     SportsFacility SportsFacil = widget.sportsFacility;
     SportEvent newEvent;
 
@@ -106,7 +108,7 @@ class _EventStepFormState extends State<EventStepForm> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return SmthWrong();
           }
           if (!snapshot.hasData) {
             return Container(color: Colors.black);
@@ -117,14 +119,6 @@ class _EventStepFormState extends State<EventStepForm> {
             body: Container(
               child: Column(
                 children: [
-                  // Expanded(
-                  //   flex: 1,
-                  //   child: MapMarkerInfoHeader(
-                  //       SportsFacil.placeName,
-                  //       SportsFacil.facilityType,
-                  //       SportsFacil.addressDesc,
-                  //       SportsFacil.hoverImgPath),
-                  // ),
                   Expanded(
                     flex: 2,
                     child: Stepper(
@@ -258,8 +252,14 @@ class _EventStepFormState extends State<EventStepForm> {
                                               Navigator.pop(context, 0);
                                             }
                                           },
-                                    child:
-                                        Text(isLastStep ? 'CONFIRM' : 'NEXT'),
+                                    child: Text((() {
+                                      if (isLastStep) {
+                                        return "SUBMIT";
+                                      } else if (isFirstStep) {
+                                        return "CREATE EVENT";
+                                      }
+                                      return "NEXT";
+                                    })()),
                                   ),
                                 ),
                                 const SizedBox(

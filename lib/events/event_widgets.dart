@@ -5,6 +5,7 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/homepage.dart';
 import 'package:my_app/map/facil_map.dart';
+import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 
@@ -28,19 +29,6 @@ class GreenButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void function() {
-      buttonFunction(); //MUST put bracket for the function to be actually executed
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return JoinedEventDialog(
-              bgDeco: DialogBoxDecoration.joinEventBg,
-              title: 'Joined Successfully!',
-              paragraph: 'Your fellow SportBuds can\'t wait to see you!',
-            );
-          });
-    }
-
     return BouncingButton(
       bgColor: Colors.green,
       textColor: Colors.white,
@@ -48,19 +36,15 @@ class GreenButton extends StatelessWidget {
       buttonText: buttontext,
       onClick: () {
         showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Join Event'),
-            content: const Text('Confirm?'),
-            actions: <Widget>[
-              CancelTextButton(context),
-              TextButton(
-                onPressed: function,
-                child: const Text('Ok'),
-              ),
-            ],
-          ),
-        );
+            context: context,
+            builder: (BuildContext context) {
+              buttonFunction();
+              return JoinedEventDialog(
+                bgDeco: DialogBoxDecoration.joinEventBg,
+                title: 'Joined Successfully!',
+                paragraph: 'Your fellow SportBuds can\'t wait to see you!',
+              );
+            });
       },
     );
   }
@@ -76,15 +60,46 @@ class CompleteEventButton extends StatelessWidget {
   RetrievedEvent curEvent;
   String buttontext;
   void Function() buttonFunction;
-
   @override
   Widget build(BuildContext context) {
     void function() {
-      buttonFunction(); //deals with database
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CompleteEventPage()),
-      );
+      buttonFunction();//deals with database
+      showDialog(context: context, builder: (BuildContext context) {
+        return Dialog(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/view-event-basketball.png'),
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter,
+                ),
+              ),
+              child: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Completed event!",style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 45, color: Colors.black)),
+                      SizedBox(height: 200,),
+                      BouncingButton(bgColor: Colors.yellow,
+                          borderColor: Colors.lightBlue,
+                          buttonText: "OK!",
+                          textColor: Colors.black,
+                          onClick: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CompleteEventPage(
+                                        event_id: curEvent.eventId)));
+                          })
+                    ]),
+              ),
+            ));
+          });
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => CompleteEventPage(event_id:curEvent.eventId)),
+      // );
       // showDialog(
       //     context: context,
       //     builder: (BuildContext context) {
@@ -328,9 +343,14 @@ class ReturnToMapButton extends StatelessWidget {
       borderColor: const Color(0xffD56F2F),
       buttonText: "Return to Map",
       onClick: () {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => Homepage()));
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context); // closes infosheet
+
+        // Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigator.pushReplacement(context,
+        //     MaterialPageRoute(builder: (BuildContext context) => Homepage()));
       },
     );
   }

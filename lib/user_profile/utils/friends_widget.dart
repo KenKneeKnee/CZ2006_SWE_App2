@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 import 'package:my_app/user_profile/screens/requests_page.dart';
@@ -44,7 +45,10 @@ class FriendsWidget extends StatelessWidget {
                 //buildDivider(),
                 Expanded(
                     child: buildEButton(
-                        context, points.toString(), 'Events', Colors.green)),
+                        context,
+                        round((points / 10)).toStringAsFixed(0),
+                        'Events',
+                        Colors.green)),
               ],
             )
           ],

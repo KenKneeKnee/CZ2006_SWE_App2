@@ -345,40 +345,14 @@ class SportsFacilDataSource {
     List<SportsFacility> finalList = someList + anotherList;
     return finalList;
   }
+
+  Future getNames() async {
+    List<String> someList = await fetchNamesFromJsonAssets();
+    List<String> anotherList = fetchNamesFromList();
+    List<String> finalList = someList + anotherList;
+    return finalList;
+  }
 }
-
-// need to uncomment dependencies and do import if want to use this fn
-// import 'package:csv/csv.dart';
-// abstract class someClass {
-//   static void writeToCsv() async {
-//     final playgroundParkList = await fetchPlaygroundParks();
-//     final otherFacilList = fetchSportsFacils();
-
-//     List<List> _facilList = [
-//       ["Name", "Coordinates", "FacilityType", "Address", "imagePath"]
-//     ];
-//     playgroundParkList.forEach((facility) {
-//       List _facilInfo = [];
-//       _facilInfo.add(facility.placeName);
-//       _facilInfo.add(facility.coordinates);
-//       _facilInfo.add(facility.facilityType);
-//       _facilInfo.add(facility.addressDesc);
-//       _facilInfo.add(facility.imagePath);
-
-//       _facilList.add(_facilInfo);
-//     });
-
-//     String csv = const ListToCsvConverter().convert(_facilList);
-//     print(_facilList.length);
-//     print(csv);
-
-//     /// Write to a file
-//     // final String directory = (await getApplicationSupportDirectory()).path;
-//     // final path = "$directory/csv-${DateTime.now()}.csv";
-//     // File file = await File(path);
-//     // file.writeAsString(csv);
-//   }
-// }
 
 /// Find Marker image path according to the facility Type
 String _FindHoverImage(String facilityType) {
@@ -437,4 +411,79 @@ String _FindMarkerImage(String facilityType) {
     return ('assets/images/soccer-marker.png');
   }
   return ('assets/images/sports-marker.png');
+}
+
+List<String> fetchNamesFromList() {
+  List<String> markers = <String>[];
+  int count = 0;
+  for (int i = 0; i < res.length; i++) {
+    String coords = res[i][0];
+    double _latitude = double.parse(coords.split(",")[0]);
+    double _longitude = double.parse(coords.split(",")[1]);
+
+    String _address = res[i][2];
+    List<String> _facilities = res[i][1].split("/");
+
+    for (int j = 0; j < _facilities.length; j++) {
+      String facilityType = "";
+      String f = _facilities[j];
+
+      if (f.contains("ennis")) {
+        facilityType = "Tennis Centre";
+      } else if (f.contains("Gym")) {
+        facilityType = "Gym";
+      } else if (f.contains("Hall")) {
+        facilityType = "Sports Hall";
+      } else if (f.contains("Stadium")) {
+        facilityType = "Stadium";
+      } else if (f.contains("wim")) {
+        facilityType = "Swimming Complex";
+      } else if (f.contains("Field")) {
+        facilityType = "Field";
+      } else {
+        count++;
+        continue;
+      }
+      markers.add(facilityType + "located at" + _address);
+    }
+  }
+
+  return markers;
+}
+
+Future fetchNamesFromJsonAssets() async {
+  String _path = 'assets/images/parks-geojson.json';
+  List<String> _markers = [];
+  await parseJsonFromAssets(_path).then(
+    (dmap) {
+      // here you get json `dmap` as Map<String, dynamic>
+      List<dynamic> data = dmap['features'];
+
+      data.forEach(
+        (place) {
+          String _description = place['properties']['Description'];
+          List<String> _nameDescSplit =
+              _description.split('<th>NAME</th> <td>');
+          String _name = _nameDescSplit[1].split('</td>')[0];
+
+          String _facilityType;
+          if (_name.contains("Playground")) {
+            _facilityType = "Playground";
+          } else if (_name.contains("Park")) {
+            _facilityType = "Park";
+          } else {
+            _facilityType = "Shared Space";
+          }
+
+          List<String> _addrDescSplit =
+              _description.split('<th>DESCRIPTION</th> <td>');
+          String _addrDesc = _addrDescSplit[1].split('</td>')[0];
+
+          _markers.add(_facilityType + "located at" + _name);
+        },
+      );
+    },
+  );
+
+  return _markers;
 }

@@ -10,6 +10,8 @@ import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
+import '../start/screens/error_page.dart';
+
 class CreateEventForm extends StatefulWidget {
   CreateEventForm({
     Key? key,
@@ -64,7 +66,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const Text('Something went wrong');
+            return SmthWrong();
           }
           if (!snapshot.hasData) {
             return const LottieEvent();

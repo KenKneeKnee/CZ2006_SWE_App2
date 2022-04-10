@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
+import 'package:my_app/user_profile/screens/friend_invite_page.dart';
 
 class FriendsActionWidget extends StatelessWidget {
   UserDbManager userdb = UserDbManager();
@@ -36,7 +37,27 @@ class FriendsActionWidget extends StatelessWidget {
           },
           label: const Text('Report'),
           backgroundColor: Colors.red,
-        )
+        ),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 4),
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => Friend_Invite_Page(friends: u.friends),
+                ));
+              },
+              label: Row(
+                children: [
+                  Icon(Icons.people),
+                  Text(' Invite'),
+                ],
+              ),
+              backgroundColor: Colors.deepOrangeAccent,
+            ),
+          ),
+        ),
       ]);
   Widget buildDivider() => Container(
         height: 24,

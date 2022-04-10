@@ -11,8 +11,6 @@ AppBar buildAppBar(BuildContext context) {
 
   return AppBar(
     title: const Text('Friend\'s Profile'),
-    leading: BackButton(
-        color: Colors.black, onPressed: () => Navigator.of(context).pop()),
     foregroundColor: Colors.black,
     backgroundColor: Colors.transparent,
     elevation: 0,
