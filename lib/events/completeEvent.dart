@@ -10,6 +10,7 @@ import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/events/view_event.dart';
+import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/map/map_data.dart';
 
@@ -66,122 +67,140 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
     // Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
     //     widget.event_id);
 
-    return (loading==false)? FutureBuilder<QuerySnapshot>(
-        future: clusterRepo.retrieveSameLabel(widget.event_id),
-        builder:
-            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot_rec) {
-          if (!snapshot_rec.hasData) {
-            print("whhhhhaht 1");
-            //return Text("nodata");
-          } else {
-            if (snapshot_rec.connectionState == ConnectionState.waiting) {
-              print("whhhhhah 2t");
-              //return CircularProgressIndicator();
-            } else if (snapshot_rec.connectionState == ConnectionState.done) {
-              if (snapshot_rec.hasError) {
-                print("whhhhhah 3t");
-                //return const Text('Error');
-              } else if (snapshot_rec.hasData) {
-                snapshot_rec.data!.docs.forEach((element) {
-                  recommendedEventIds.add(element['eventId']);
-                });
+    return (loading == false)
+        ? FutureBuilder<QuerySnapshot>(
+            future: clusterRepo.retrieveSameLabel(widget.event_id),
+            builder: (BuildContext context,
+                AsyncSnapshot<QuerySnapshot> snapshot_rec) {
+              if (!snapshot_rec.hasData) {
+                print("whhhhhaht 1");
+                //return Text("nodata");
+              } else {
+                if (snapshot_rec.connectionState == ConnectionState.waiting) {
+                  print("whhhhhah 2t");
+                  //return CircularProgressIndicator();
+                } else if (snapshot_rec.connectionState ==
+                    ConnectionState.done) {
+                  if (snapshot_rec.hasError) {
+                    print("whhhhhah 3t");
+                    //return const Text('Error');
+                  } else if (snapshot_rec.hasData) {
+                    snapshot_rec.data!.docs.forEach((element) {
+                      recommendedEventIds.add(element['eventId']);
+                    });
 
-                return StreamBuilder(
-                    stream: repository.getStream(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snapshote) {
-                      if (!snapshote.hasData) {
-                        return const CircularProgressIndicator();
-                      }
-                      for (DocumentSnapshot docss in snapshote.data!.docs) {
-                        if (recommendedEventIds.contains(docss.id)) {
-                          selist.add(SportEvent.fromSnapshot(docss));
-                        }
-                      }
+                    return StreamBuilder(
+                        stream: repository.getStream(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshote) {
+                          if (!snapshote.hasData) {
+                            return const CircularProgressIndicator();
+                          }
+                          for (DocumentSnapshot docss in snapshote.data!.docs) {
+                            if (recommendedEventIds.contains(docss.id)) {
+                              selist.add(SportEvent.fromSnapshot(docss));
+                            }
+                          }
 
-                      for (SportEvent i in selist) {
-                        // add ui
-                        String id = i.placeId;
-                        SportsFacility sf = SportsFacilityList[int.parse(id)];
-                        recevents.add(RecWidget(event: i,sf:sf));
-                      }
-                      return Scaffold(
-                        appBar: AppBar(
-                          title: Text("You may also like these:",
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                          leading: IconButton(
-                            icon: Icon(Icons.arrow_back, color: Colors.black),
-                            onPressed: () {
-                              Navigator.of(context, rootNavigator: true).pop();
-                              Navigator.of(context, rootNavigator: true).pop();
-                              Navigator.of(context, rootNavigator: true).pop();
-                              Navigator.of(context, rootNavigator: true).pop();
-                              Navigator.of(context, rootNavigator: true).pop();
-                              },
-                          ),
-                          elevation: 0,
-                          backgroundColor: Colors.transparent,
-                        ),
-                        body:
-                        (loading==false) ? Container(
-                          color: Colors.white,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: recevents.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        horizontal: 18.0,
-                                        vertical: 10.0,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(12.0),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            spreadRadius: 1,
-                                            color: Colors.grey,
-                                            offset: const Offset(0, 1),
-                                            blurRadius: 3,
-                                          )
-                                        ],
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Flexible(
-                                            fit: FlexFit.tight,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                print("${index} was tapped");
-                                              },
-                                              child: recevents[index],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
+                          for (SportEvent i in selist) {
+                            // add ui
+                            String id = i.placeId;
+                            SportsFacility sf =
+                                SportsFacilityList[int.parse(id)];
+                            recevents.add(RecWidget(event: i, sf: sf));
+                          }
+                          return Scaffold(
+                              appBar: AppBar(
+                                title: Text("You may also like these:",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                                leading: IconButton(
+                                  icon: Icon(Icons.arrow_back,
+                                      color: Colors.black),
+                                  onPressed: () {
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
+                                    Navigator.of(context, rootNavigator: true)
+                                        .pop();
                                   },
                                 ),
-                              ],
-                            ),
-                          ),
-                        ):LinearProgressIndicator(),
-                      );
-                    });
+                                elevation: 0,
+                                backgroundColor: Colors.transparent,
+                              ),
+                              body: (loading == false)
+                                  ? Container(
+                                      color: Colors.white,
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox(
+                                              height: 30,
+                                            ),
+                                            ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: recevents.length,
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 18.0,
+                                                    vertical: 10.0,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12.0),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        spreadRadius: 1,
+                                                        color: Colors.grey,
+                                                        offset:
+                                                            const Offset(0, 1),
+                                                        blurRadius: 3,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Flexible(
+                                                        fit: FlexFit.tight,
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            print(
+                                                                "${index} was tapped");
+                                                          },
+                                                          child:
+                                                              recevents[index],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      color: Colors.white,
+                                      child: LottieRecommend()));
+                        });
+                  }
+                }
               }
-            }
-          }
-          return LinearProgressIndicator();
-        }) : LinearProgressIndicator();
+              return Container(color: Colors.white, child: LottieRecommend());
+            })
+        : Container(color: Colors.white, child: LottieRecommend());
   }
 }
 
@@ -197,59 +216,58 @@ class RecWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateFormat formatter = DateFormat.yMd().add_jm();
-            return Material(
-              child: Container(
-                  color: Colors.amberAccent,
-                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                  child: Expanded(
-                            flex: 4,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(event.name,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.indigoAccent,
-                                      )),
-                                  SizedBox(height: 10),
-                                  Text("Located at ${sf.placeName}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.indigo,
-                                      )),
-                                  SizedBox(height: 10),
-                                  Text("${sf.addressDesc}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.indigo,
-                                      )),
-                                  SizedBox(height: 10),
-                                  Text("Facility type: ${sf.facilityType}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.indigo,
-                                      )),
-                                  SizedBox(height: 10),
-                                  Text("Starts on ${formatter.format(event.start)}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                      )),
-                                  SizedBox(height: 10),
-                                  Text("Ends on ${formatter.format(event.end)}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                      )),
-                                  SizedBox(height: 10),
-                                ]))
-              ),
-            );
+    return Material(
+      child: Container(
+          color: Colors.amberAccent,
+          padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+          child: Expanded(
+              flex: 4,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(event.name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.indigoAccent,
+                        )),
+                    SizedBox(height: 10),
+                    Text("Located at ${sf.placeName}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.indigo,
+                        )),
+                    SizedBox(height: 10),
+                    Text("${sf.addressDesc}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.indigo,
+                        )),
+                    SizedBox(height: 10),
+                    Text("Facility type: ${sf.facilityType}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.indigo,
+                        )),
+                    SizedBox(height: 10),
+                    Text("Starts on ${formatter.format(event.start)}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black,
+                        )),
+                    SizedBox(height: 10),
+                    Text("Ends on ${formatter.format(event.end)}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black,
+                        )),
+                    SizedBox(height: 10),
+                  ]))),
+    );
   }
 }

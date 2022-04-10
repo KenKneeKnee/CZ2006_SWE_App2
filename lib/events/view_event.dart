@@ -268,14 +268,34 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
         );
 
         if (completeStatus == "not at location") {
-          statusChip = Chip(label: Text("YOU'RE NOT HERE DONT FAKE"));
+          statusChip = Chip(label: Text("You are not here!"));
         } else if (completeStatus == "event expired") {
           return Chip(
-              label: Text("EXPIRED EVENT")); //cannot leave this event anymore
+              backgroundColor: Colors.red[300],
+              avatar: Icon(
+                Icons.timer,
+                color: Colors.white,
+              ),
+              label: Text(
+                "EXPIRED EVENT",
+                style: TextStyle(color: Colors.white),
+              )); //cannot leave this event anymore
         } else if (completeStatus == "future event") {
-          statusChip = Chip(label: Text("Please Wait"));
+          statusChip = Chip(
+              backgroundColor: Colors.amber,
+              avatar: Icon(Icons.calendar_month),
+              label: Text("Please Wait"));
         } else if (completeStatus == "completed") {
-          return statusChip = Chip(label: Text("Completed"));
+          return statusChip = Chip(
+              backgroundColor: Colors.indigo,
+              avatar: Icon(
+                Icons.star,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Completed Event",
+                style: TextStyle(color: Colors.white),
+              ));
         } else if (completeStatus == "can complete") {
           statusChip = CompleteEventButton(
               curEvent: _curEvent,

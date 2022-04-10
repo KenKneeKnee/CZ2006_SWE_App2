@@ -84,7 +84,7 @@ class CompleteEventButton extends StatelessWidget {
                 child: Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/images/view-event-basketball.png'),
+                  image: AssetImage('assets/images/completed-event.png'),
                   //    fit: BoxFit.fitWidth,
                   alignment: Alignment.topCenter,
                 ),
@@ -100,7 +100,7 @@ class CompleteEventButton extends StatelessWidget {
                           bgColor: Color(0xFFEDB129),
                           borderColor: Colors.black,
                           buttonText: "OK!",
-                          textColor: Colors.black,
+                          textColor: Color.fromARGB(255, 247, 244, 244),
                           onClick: () async {
                             Navigator.push(
                                 context,
