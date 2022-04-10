@@ -111,7 +111,13 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                           leading: IconButton(
                             icon: Icon(Icons.arrow_back, color: Colors.black),
-                            onPressed: () => Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Navigator.of(context, rootNavigator: true).pop();
+                              },
                           ),
                           elevation: 0,
                           backgroundColor: Colors.transparent,
