@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
+final Color darkBlue = Color.fromARGB(254, 18, 32, 47);
 
 class AnimatedSendDoneButton extends StatefulWidget {
   const AnimatedSendDoneButton({Key? key}) : super(key: key);

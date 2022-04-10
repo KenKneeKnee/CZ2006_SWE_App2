@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/completeEvent.dart';
@@ -8,6 +10,8 @@ import 'package:my_app/map/facil_map.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
+import 'package:my_app/user_profile/data/user.dart';
+import 'package:my_app/user_profile/data/userDbManager.dart';
 
 TextButton CancelTextButton(BuildContext context) {
   return TextButton(
@@ -60,6 +64,15 @@ class CompleteEventButton extends StatelessWidget {
   RetrievedEvent curEvent;
   String buttontext;
   void Function() buttonFunction;
+  UserDbManager userdb = UserDbManager();
+  late UserData cu;
+  getUser() async {
+    DocumentSnapshot doc = await userdb.collection
+        .doc(FirebaseAuth.instance.currentUser?.email)
+        .get();
+    cu = UserData.fromSnapshot(doc);
+  }
+
   @override
   Widget build(BuildContext context) {
     void function() {
@@ -94,6 +107,10 @@ class CompleteEventButton extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) => CompleteEventPage(
                                         event_id: curEvent.eventId)));
+                            cu.points = cu.points + 20;
+                            userdb.collection
+                                .doc(cu.userid)
+                                .update({"points": cu.points});
                           })
                     ]),
               ),

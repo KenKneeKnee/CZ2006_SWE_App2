@@ -31,6 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final CollectionReference userdb = UserDbManager().collection;
 
   bool _isProcessing = false;
+  bool _isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
