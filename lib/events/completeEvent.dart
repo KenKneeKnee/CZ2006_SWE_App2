@@ -110,6 +110,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
                             recevents.add(RecWidget(event: i, sf: sf));
                           }
                           return Scaffold(
+                              backgroundColor: Colors.white,
                               appBar: AppBar(
                                 title: Text("You may also like these:",
                                     style: TextStyle(
@@ -215,59 +216,70 @@ class RecWidget extends StatelessWidget {
   final SportsFacility sf;
   @override
   Widget build(BuildContext context) {
-    DateFormat formatter = DateFormat.yMd().add_jm();
+    DateFormat formatter = DateFormat.yMd();
     return Material(
       child: Container(
-          color: Colors.amberAccent,
-          padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-          child: Expanded(
-              flex: 4,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(event.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.indigoAccent,
-                        )),
-                    SizedBox(height: 10),
-                    Text("Located at ${sf.placeName}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.indigo,
-                        )),
-                    SizedBox(height: 10),
-                    Text("${sf.addressDesc}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.indigo,
-                        )),
-                    SizedBox(height: 10),
-                    Text("Facility type: ${sf.facilityType}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.indigo,
-                        )),
-                    SizedBox(height: 10),
-                    Text("Starts on ${formatter.format(event.start)}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black,
-                        )),
-                    SizedBox(height: 10),
-                    Text("Ends on ${formatter.format(event.end)}",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black,
-                        )),
-                    SizedBox(height: 10),
-                  ]))),
+          color: Colors.blue[100],
+          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(event.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Color.fromARGB(255, 11, 20, 70),
+                )),
+            SizedBox(height: 10),
+            Chip(
+              backgroundColor: Colors.white,
+              avatar: Icon(Icons.place, color: Colors.green),
+              label: Text("${sf.placeName} ${sf.addressDesc}",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  )),
+            ),
+            SizedBox(height: 5),
+            Chip(
+              backgroundColor: Colors.white,
+              avatar: Icon(
+                Icons.sports_baseball,
+                color: Colors.orange,
+              ),
+              label: Text("${sf.facilityType}",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  )),
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Chip(
+                  backgroundColor: Colors.white,
+                  avatar: Icon(Icons.calendar_month),
+                  label: Text("${formatter.format(event.end)}",
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      )),
+                ),
+                Chip(
+                  backgroundColor: Colors.white,
+                  avatar: Icon(Icons.timer),
+                  label: Text("${event.toTime()}",
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      )),
+                )
+              ],
+            ),
+            SizedBox(height: 10)
+          ])),
     );
   }
 }
