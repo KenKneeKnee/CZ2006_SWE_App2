@@ -7,6 +7,8 @@ import 'package:my_app/user_profile/utils/progress_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/reviews/storage_repository.dart';
 
+/// A page for users to edit their profile information
+
 class EditProfilePage extends StatefulWidget {
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -15,14 +17,28 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// TextController where [user.username] is edited
   TextEditingController displayNameController = TextEditingController();
+
+  /// TextController where [user.about] is edited
   TextEditingController bioController = TextEditingController();
+
   final Storage storage = Storage();
   bool isLoading = false;
+
+  /// Data of the current user
   late UserData user;
+
+  /// Check for validity of new [user.username]
   bool _displayNameValid = true;
+
+  /// Check for validity of new [user.about]
   bool _bioValid = true;
+
+  /// Current [user.image]
   late final image;
+
+  /// New [user.image] that [user] may upload
   late String newPic;
 
   UserDbManager userdb = UserDbManager();
@@ -33,6 +49,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     getUser();
   }
 
+  /// Sets the current user
   getUser() async {
     setState(() {
       isLoading = true;
@@ -50,7 +67,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
   }
 
-  //for picking new image
+  /// Field where [user] may choose new [user.image]
   Column buildImageField(String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,15 +87,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
             child: ElevatedButton(
               onPressed: () async {
-                // pick new image
+                // Pick new image
                 final newImage = await ImagePicker().pickImage(
                   source: ImageSource.gallery,
                 );
-                //upload image
+                // Upload image to Firebase if a new image is picked
                 if (newImage != null) {
                   await storage.uploadFile(newImage.path, user.userid!);
                 } else {}
-                //download image and update
+                // Download new image from Firebase and set as user's proifle picture
                 newPic = await storage.downloadURL(user.userid!);
                 userdb.collection
                     .doc(FirebaseAuth.instance.currentUser?.email)
@@ -88,8 +105,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: const Text('Pick New Image'),
               style: ElevatedButton.styleFrom(
                   primary: Color(0xFF31A462),
-                  // padding: EdgeInsets.symmetric(
-                  //     horizontal: 5, vertical: 2),
                   textStyle:
                       TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
             ),
@@ -99,6 +114,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  /// Field where [user.about] and [user.username] are edited
   Column buildField(String title, String hint, TextEditingController controller,
       bool check, String warning) {
     return Column(
@@ -137,6 +153,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  /// Update [user]'s details if all details entered are valid
   updateProfileData() {
     setState(() {
       displayNameController.text.trim().length < 3 ||
@@ -194,22 +211,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: ListView(
                 children: <Widget>[
                   Column(children: <Widget>[
-                    /* Padding(
-                        padding: const EdgeInsets.only(
-                          top: 16.0,
-                          bottom: 28.0,
-                        ),
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.transparent,
-                            child: Ink.image(
-                              image: image.image,
-                              fit: BoxFit.cover,
-                              width: 128,
-                              height: 128,
-                            ),
-                          ),
-                        )), */
                     Container(
                       decoration: const BoxDecoration(
                         color: Colors.white,
