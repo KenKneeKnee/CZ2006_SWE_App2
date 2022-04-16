@@ -14,8 +14,8 @@ class Friend_Invite_Page extends StatefulWidget {
 }
 
 class _FriendInvitePageState extends State<Friend_Invite_Page> {
-  final myController = TextEditingController();
   final UserDbManager repository = UserDbManager();
+  UserDbManager userdb = UserDbManager();
 
   /// List of [cu.friends]'s [userid]
   late List<dynamic> friendData = widget.friends;
@@ -23,7 +23,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
   /// List of [cu.friends]'s [UserData]
   final List<UserData> listfriends = [];
 
-  /// Controlloer for scrolling through friend list
+  /// Controller for scrolling through friend list
   ScrollController controller = ScrollController();
 
   /// List of cards for each friend in [cu.friends]
@@ -31,7 +31,6 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
 
   /// Start coordiante of first card
   double topContainer = 0;
-  UserDbManager userdb = UserDbManager();
 
   /// [UserData] of current user
   late UserData cu;

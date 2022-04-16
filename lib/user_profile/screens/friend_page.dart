@@ -7,6 +7,8 @@ import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
 
+/// A page where users' friends are shown and where user may search
+/// for other users
 class Friend_Page extends StatefulWidget {
   final List<dynamic> friends;
   const Friend_Page({Key? key, required this.friends}) : super(key: key);
@@ -15,22 +17,32 @@ class Friend_Page extends StatefulWidget {
 }
 
 class _FriendPageState extends State<Friend_Page> {
-  // Icon _searchIcon = Icon(
-  //   Icons.search,
-  // );
-
   bool isSearchClicked = false;
-  final TextEditingController _filter = new TextEditingController();
-
-  // final myController = TextEditingController();
   final UserDbManager repository = UserDbManager();
-  late List<dynamic> friendData = widget.friends;
-  final List<UserData> listfriends = [];
-  ScrollController controller = ScrollController();
-  final List<Widget> friendbuttons = [];
-  double topContainer = 0;
   UserDbManager userdb = UserDbManager();
+
+  /// TextController to search for other users
+  final TextEditingController _filter = TextEditingController();
+
+  /// List of [cu.friends]'s [userid]
+  late List<dynamic> friendData = widget.friends;
+
+  /// List of [cu.friends]'s [UserData]
+  final List<UserData> listfriends = [];
+
+  /// Controller for scrolling through friend list
+  ScrollController controller = ScrollController();
+
+  /// List of cards for each friend in [cu.friends]
+  final List<Widget> friendbuttons = [];
+
+  /// Start coordiante of first card
+  double topContainer = 0;
+
+  /// [UserData] of current user
   late UserData cu;
+
+  /// Sets the current user
   getUser() async {
     DocumentSnapshot doc = await userdb.collection
         .doc(FirebaseAuth.instance.currentUser?.email)
@@ -71,6 +83,7 @@ class _FriendPageState extends State<Friend_Page> {
 
             List DocList = snapshot.data!.docs;
 
+            // Appends listfriends with UserData of current user's friends
             listfriends.clear();
             for (String userid in friendData) {
               for (DocumentSnapshot doc in DocList) {
@@ -81,8 +94,8 @@ class _FriendPageState extends State<Friend_Page> {
               }
             }
 
+            // Adds a card for each of current user's friends
             friendbuttons.clear();
-
             for (UserData u in listfriends) {
               friendbuttons.add(Container(
                   height: size.height * 0.15,
@@ -123,7 +136,6 @@ class _FriendPageState extends State<Friend_Page> {
                                   onPressed: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                          //change to test pages
                                           builder: (context) =>
                                               FriendProfilePage(u: u)),
                                     );
@@ -131,9 +143,7 @@ class _FriendPageState extends State<Friend_Page> {
                                   child: const Text('Visit'),
                                   style: ElevatedButton.styleFrom(
                                       primary: Color(0xFF31A462),
-                                      // padding: EdgeInsets.symmetric(
-                                      //     horizontal: 5, vertical: 2),
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold)),
                                 ),
@@ -150,34 +160,39 @@ class _FriendPageState extends State<Friend_Page> {
                                   fit: BoxFit.cover,
                                   width: 96,
                                   height: 128,
-                                  // child: InkWell(onTap: onClicked),
                                 ),
                               ),
                             )
                           ]))));
             }
 
+            ///Search Icon and the logic behind search function
             IconButton userSearchIcon = IconButton(
                 onPressed: () {
-                  //late UserData su;
+                  //Flag to determine if searched userid exist
                   bool found = false;
+
+                  //Flag to determine if searched userid is already in friendlist
                   bool alrFriend = false;
+
                   for (DocumentSnapshot doc in DocList) {
-                    print(doc["userid"]);
                     if (doc["userid"] == _filter.text) {
+                      //UserData of searched user
                       UserData userFound = UserData.fromSnapshot(doc);
+
                       if (!cu.friends.contains(userFound.userid) &&
                           cu.userid != userFound.userid) {
+                        //searched userid is neither the user's nor
+                        //their friends' userid
                         found = true;
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              //change to test pages
                               builder: (context) =>
                                   FriendProfilePage(u: userFound)),
                         );
                         return;
-                      } else if (cu.friends.contains(userFound.userid) &&
-                          cu.userid != userFound.userid) {
+                      } else if (cu.friends.contains(userFound.userid)) {
+                        //searched userid is that of user's friend
                         alrFriend = true;
                       }
                     }
@@ -196,28 +211,10 @@ class _FriendPageState extends State<Friend_Page> {
                   } else {
                     print("friend found!!");
                   }
-
-                  // try {
-                  //   if (!cu.friends.contains(su.userid) &&
-                  //       cu.userid != su.userid) {
-                  //     Navigator.of(context).push(
-                  //       MaterialPageRoute(
-                  //           //change to test pages
-                  //           builder: (context) => FriendProfilePage(u: su)),
-                  //     );
-                  //   }
-                  // } finally {
-                  //   showDialog(
-                  //       context: context,
-                  //       builder: (BuildContext context) {
-                  //         return AlertDialog(
-                  //           title: Text('No such friends found :('),
-                  //         );
-                  //       });
-                  // }
                 },
                 icon: Icon(Icons.search, color: Colors.blue));
 
+            /// Area where most of the page elements are built
             return Scaffold(
               body: NestedScrollView(
                   headerSliverBuilder:
@@ -263,20 +260,6 @@ class _FriendPageState extends State<Friend_Page> {
   SliverAppBar createSilverAppBar(Widget searchIcon) {
     return SliverAppBar(
       backgroundColor: Color(0xFF31A462),
-      actions: <Widget>[
-        //   RawMaterialButton(
-        //     elevation: 0.0,
-        //     child: _searchIcon,
-        //     onPressed: () {
-        //       _searchPressed();
-        //     },
-        //     constraints: BoxConstraints.tightFor(
-        //       width: 56,
-        //       height: 56,
-        //     ),
-        //     shape: CircleBorder(),
-        //   ),
-      ],
       expandedHeight: 420,
       collapsedHeight: 80,
       floating: false,
@@ -294,7 +277,7 @@ class _FriendPageState extends State<Friend_Page> {
               controller: _filter,
               keyboardType: TextInputType.text,
               placeholder: "Search to new friends",
-              placeholderStyle: TextStyle(
+              placeholderStyle: const TextStyle(
                 color: Color(0xffC4C6CC),
                 fontSize: 14.0,
                 fontFamily: 'Brutal',
@@ -314,173 +297,3 @@ class _FriendPageState extends State<Friend_Page> {
     );
   }
 }
-//   void _searchPressed() {
-//     setState(() {
-//       if (this._searchIcon.icon == Icons.search) {
-//         this._searchIcon = Icon(
-//           Icons.close,
-//         );
-//         isSearchClicked = true;
-//       } else {
-//         this._searchIcon = Icon(
-//           Icons.search,
-//         );
-//         isSearchClicked = false;
-//         _filter.clear();
-//       }
-//     });
-//   }
-// }
-
-//           return SafeArea(
-//               child: Scaffold(
-//                   backgroundColor: Colors.white,
-//                   appBar: AppBar(
-//                     elevation: 0,
-//                     backgroundColor: Color(0xFF60d5df),
-//                     leading: BackButton(
-//                         color: Colors.white,
-//                         onPressed: () => Navigator.of(context).pop()),
-//                   ),
-//                   body: Column(
-//                     children: [
-//                       SizedBox(
-//                         height: MediaQuery.of(context).size.height * 0.3,
-//                         child: Image.asset('assets/images/invite-friends.png',
-//                             scale: 1),
-//                       ),
-//                       Expanded(
-//                         flex: 2,
-//                         child: Container(
-//                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-//                           margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-//                           alignment: Alignment.bottomLeft,
-//                           child: Text(
-//                             "Invite more friends",
-//                             style: TextStyle(
-//                                 fontWeight: FontWeight.bold, fontSize: 20),
-//                           ),
-//                         ),
-//                       ),
-//                       Expanded(
-//                         flex: 2,
-//                         child: Card(
-//                           elevation: 2,
-//                           margin: EdgeInsets.fromLTRB(20, 0, 20, 10),
-//                           // decoration: BoxDecoration(
-//                           //   color: Colors.white10,
-//                           //   borderRadius: BorderRadius.circular(24.0),
-//                           //   border: Border.all(
-//                           //     color: Colors.grey,
-//                           //   ),
-//                           // ),
-//                           // padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-//                           child: Row(
-//                             children: [
-//                               Expanded(
-//                                 flex: 5,
-//                                 child: Container(
-//                                   padding: EdgeInsets.fromLTRB(15, 0, 0, 10),
-//                                   child: TextField(
-//                                     controller: myController,
-//                                   ),
-//                                 ),
-//                               ),
-//                               Expanded(
-//                                 flex: 1,
-//                                 child: IconButton(
-//                                     onPressed: () {
-//                                       late UserData su;
-//                                       for (DocumentSnapshot doc in DocList) {
-//                                         if (doc["userid"] ==
-//                                             myController.text) {
-//                                           su = UserData.fromSnapshot(doc);
-//                                         }
-//                                       }
-
-//                                       print(su.userid);
-//                                       try {
-//                                         if (!cu.friends.contains(su.userid) &&
-//                                             cu.userid != su.userid) {
-//                                           Navigator.of(context).push(
-//                                             MaterialPageRoute(
-//                                                 //change to test pages
-//                                                 builder: (context) =>
-//                                                     FriendProfilePage(u: su)),
-//                                           );
-//                                         }
-//                                       } finally {
-//                                         //
-//                                       }
-//                                     },
-//                                     icon: Icon(Icons.search,
-//                                         color: Colors.black)),
-//                               )
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                       Expanded(
-//                         flex: 2,
-//                         child: Container(
-//                           padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-//                           alignment: Alignment.bottomLeft,
-//                           child: Text(
-//                             "Friends List",
-//                             style: TextStyle(
-//                                 fontWeight: FontWeight.bold, fontSize: 20),
-//                           ),
-//                         ),
-//                       ),
-//                       Expanded(
-//                         flex: 8,
-//                         child: Card(
-//                           shape: RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.only(
-//                                   topLeft: Radius.circular(20),
-//                                   topRight: Radius.circular(20))),
-//                           child: Container(
-//                             decoration: BoxDecoration(
-//                               border: Border.all(color: Colors.black45),
-//                             ),
-//                             margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-//                             padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
-//                             child: SizedBox(
-//                               height: 300,
-//                               child: ListView.builder(
-//                                   shrinkWrap: true,
-//                                   controller: controller,
-//                                   itemCount: friendbuttons.length,
-//                                   physics: const BouncingScrollPhysics(),
-//                                   itemBuilder: (context, index) {
-//                                     double scale = 1.0;
-//                                     if (topContainer > 0.1) {
-//                                       scale = index + 0.1 - topContainer;
-//                                       if (scale < 0) {
-//                                         scale = 0;
-//                                       } else if (scale > 1) {
-//                                         scale = 1;
-//                                       }
-//                                     }
-//                                     return Opacity(
-//                                       opacity: scale,
-//                                       child: Transform(
-//                                         transform: Matrix4.identity()
-//                                           ..scale(scale, scale),
-//                                         alignment: Alignment.bottomCenter,
-//                                         child: Align(
-//                                             heightFactor: 0.8,
-//                                             alignment: Alignment.topCenter,
-//                                             child: friendbuttons[index]),
-//                                       ),
-//                                     );
-//                                   }),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   )));
-//         });
-//   }
-// }
