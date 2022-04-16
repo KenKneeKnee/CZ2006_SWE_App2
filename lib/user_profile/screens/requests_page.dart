@@ -6,6 +6,7 @@ import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_profile_page.dart';
 
+///A page where user's friend requests appear
 class Request_Page extends StatefulWidget {
   final List<dynamic> friendrequests;
   const Request_Page({Key? key, required this.friendrequests})
@@ -15,12 +16,22 @@ class Request_Page extends StatefulWidget {
 }
 
 class _FriendRequestState extends State<Request_Page> {
-  late UserData cu;
   final UserDbManager repository = UserDbManager();
   UserDbManager userdb = UserDbManager();
+
+  /// UserData of current user
+  late UserData cu;
+
+  /// List of userids of users who have sent a request to current user
   late List<dynamic> friendData = widget.friendrequests;
+
+  /// List of UserData of users who have sent a request to current user
   List<UserData> listfriends = [];
+
+  /// Controller for scrolling through request list
   ScrollController controller = ScrollController();
+
+  /// List of cards for each requests in [cu.friendrequests]
   final List<Widget> friendbuttons = [];
   double topContainer = 0;
 
@@ -36,6 +47,7 @@ class _FriendRequestState extends State<Request_Page> {
     });
   }
 
+  ///Sets the current user
   getUser() async {
     DocumentSnapshot doc = await userdb.collection
         .doc(FirebaseAuth.instance.currentUser?.email)
@@ -59,6 +71,8 @@ class _FriendRequestState extends State<Request_Page> {
 
           List DocList = snapshot.data!.docs;
 
+          // Appends listfriends with UserData of users who have sent
+          // a request to current user
           listfriends.clear();
           for (String userid in friendData) {
             for (DocumentSnapshot doc in DocList) {
@@ -69,6 +83,7 @@ class _FriendRequestState extends State<Request_Page> {
             }
           }
 
+          // Adds a card for each user who have sent a request to current user
           friendbuttons.clear();
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
@@ -106,10 +121,10 @@ class _FriendRequestState extends State<Request_Page> {
                               ),
                               Row(children: <Widget>[
                                 FloatingActionButton.extended(
+                                    // Visits the other user's profile page
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            //change to test pages
                                             builder: (context) =>
                                                 FriendProfilePage(u: u)),
                                       );
@@ -118,11 +133,11 @@ class _FriendRequestState extends State<Request_Page> {
                                     backgroundColor: Colors.orange),
                                 buildDivider(),
                                 FloatingActionButton.extended(
+                                    // Accepts friend request
                                     onPressed: () {
                                       cu.friends.add(u.userid);
                                       u.friends.add(cu.userid);
-                                      u.friendrequests
-                                          .remove(cu.userid); //may not need
+                                      u.friendrequests.remove(cu.userid);
                                       cu.friendrequests.remove(u.userid);
 
                                       userdb.collection.doc(u.userid).update(
@@ -143,7 +158,6 @@ class _FriendRequestState extends State<Request_Page> {
                                             friendrequests: cu.friendrequests),
                                       ));
                                       showDialog(
-                                          // needs some UI
                                           context: context,
                                           builder: (BuildContext context) =>
                                               _buildRequestAcceptedDialog(
@@ -164,13 +178,10 @@ class _FriendRequestState extends State<Request_Page> {
                               )
                             ],
                           ),
-                          // Image.asset(
-                          //   "assets/images/${post["image"]}",
-                          //   height: double.infinity,
-                          //)
                         ]))));
           }
 
+          /// Area where most elements of the page is built
           return SafeArea(
               child: Scaffold(
                   backgroundColor: Colors.white,
@@ -214,10 +225,13 @@ class _FriendRequestState extends State<Request_Page> {
         });
   }
 
+  /// Utility Widget for adding space between elements of the page
   Widget buildDivider() => Container(
         height: 12,
         child: VerticalDivider(),
       );
+
+  /// Dialogs that appears when a request is accepted
   Widget _buildRequestAcceptedDialog(BuildContext context) {
     return AlertDialog(
       content: Column(
