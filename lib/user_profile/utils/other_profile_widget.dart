@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
+/// Widget for building other users' profile image
 class OtherProfileWidget extends StatelessWidget {
   final String imagePath;
 
@@ -12,8 +11,6 @@ class OtherProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
-
     return Center(
       child: Stack(
         children: [

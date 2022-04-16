@@ -72,11 +72,6 @@ class FriendsActionWidget extends StatelessWidget {
   Widget _buildReportDialog(BuildContext context) {
     return UserProfileDialog(bgDeco: DialogBoxDecoration.userReportedBg);
   }
-
-  /// Dialog that appears when current user sends a friend request
-  Widget _buildRequestDialog(BuildContext context) {
-    return UserProfileDialog(bgDeco: DialogBoxDecoration.friendAddedBg);
-  }
 }
 
 class UserProfileDialog extends StatelessWidget {
