@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:my_app/reviews/storage_repository.dart';
 
 /// A page for users to edit their profile information
-
 class EditProfilePage extends StatefulWidget {
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
