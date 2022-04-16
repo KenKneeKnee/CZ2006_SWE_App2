@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/chat/chatpage.dart';
-import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/sportevent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,10 +12,10 @@ import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/user_profile/screens/friend_invite_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
-import 'package:my_app/widgets/background.dart';
 
 final uid = FirebaseAuth.instance.currentUser!.email as String;
 
+/// A page where users can view the events they have joined or created
 class ViewCurrentEventPage extends StatefulWidget {
   ViewCurrentEventPage({Key? key}) : super(key: key);
   _ViewCurrentEventPageState createState() => _ViewCurrentEventPageState();
@@ -29,15 +28,20 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
   late bool loading;
   UserDbManager userdb = UserDbManager();
   late UserData cu;
+  ScrollController controller = ScrollController();
+  double topContainer = 0;
+
+  /// List of event ids of evnets that the user has joined or
+  /// created and are still yet to happen
+  List activeEventIds = [];
+
+  /// Sets current user
   getUser() async {
     DocumentSnapshot doc = await userdb.collection
         .doc(FirebaseAuth.instance.currentUser?.email)
         .get();
     cu = UserData.fromSnapshot(doc);
   }
-
-  ScrollController controller = ScrollController();
-  double topContainer = 0;
 
   @override
   void initState() {
@@ -65,7 +69,6 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (!loading)
         ? StreamBuilder<QuerySnapshot>(
             stream: booking.getStream(),
@@ -82,9 +85,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                     }
                     List EventList = snapshot.data!.docs;
                     List BookingList = snapshot1.data!.docs;
-
                     Map<String, SportEvent> ActiveEventMap = {};
-                    List activeEventIds = [];
+
                     final Size size = MediaQuery.of(context).size;
 
                     List<Widget> eventbuttons = [];
@@ -165,7 +167,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                         Flexible(
                                           fit: FlexFit.loose,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(
+                                            margin: const EdgeInsets.symmetric(
                                                 horizontal: 4),
                                             child:
                                                 FloatingActionButton.extended(
@@ -176,7 +178,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                             context) {
                                                           return Dialog(
                                                             backgroundColor:
-                                                                Color(
+                                                                const Color(
                                                                     0xffE5E8E8),
                                                             child:
                                                                 ViewEventPopUp(
@@ -216,10 +218,10 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                       );
                                                     },
                                                     label: Row(
-                                                      children: [
+                                                      children: const [
                                                         Icon(Icons
                                                             .calendar_month),
-                                                        const Text(' View'),
+                                                        Text(' View'),
                                                       ],
                                                     ),
                                                     backgroundColor:
@@ -229,7 +231,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                         Flexible(
                                           fit: FlexFit.loose,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(
+                                            margin: const EdgeInsets.symmetric(
                                                 horizontal: 4),
                                             child:
                                                 FloatingActionButton.extended(
@@ -242,7 +244,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                 ));
                                               },
                                               label: Row(
-                                                children: [
+                                                children: const [
                                                   Icon(Icons.people),
                                                   Text(' Invite'),
                                                 ],
@@ -255,7 +257,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                         Flexible(
                                           fit: FlexFit.loose,
                                           child: Container(
-                                            margin: EdgeInsets.symmetric(
+                                            margin: const EdgeInsets.symmetric(
                                                 horizontal: 4),
                                             child:
                                                 FloatingActionButton.extended(
@@ -271,9 +273,9 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                                 ));
                                               },
                                               label: Row(
-                                                children: [
+                                                children: const [
                                                   Icon(Icons.message),
-                                                  const Text(' Chat'),
+                                                  Text(' Chat'),
                                                 ],
                                               ),
                                               backgroundColor: Colors.indigo,
@@ -295,7 +297,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                             Expanded(
                               flex: 1,
                               child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     image: DecorationImage(
                                         image: AssetImage(
                                             "assets/images/current-events.png"))),
@@ -307,7 +309,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                                 child: Stack(
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Colors.deepPurple,
                                         borderRadius: BorderRadius.only(
                                           topRight: Radius.circular(50.0),

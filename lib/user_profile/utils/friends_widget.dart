@@ -65,9 +65,7 @@ class FriendsWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 8),
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-                //change to test pages
-                builder: (context) => ViewEventPage()),
+            MaterialPageRoute(builder: (context) => ViewEventPage()),
           );
         },
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
