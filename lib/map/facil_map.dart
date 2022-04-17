@@ -26,7 +26,7 @@ LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
 ///The Map Page shown where users can browse SportsFacilities
-///Provides following funcitonalities:
+///Provides following functionalities:
 ///1. Displays user's current location and sets Map's starting point as so using helper function getUserLocation()
 ///2. Displays markers for each SportsFacility using helper funciton _buildMapMapMarkers()
 ///3. Allows users to search for a SportsFacility based on its name

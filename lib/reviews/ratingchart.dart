@@ -1,3 +1,4 @@
+/// Horizontal bar chart for visualizing ratings for a facility based on its reviews
 import 'dart:math';
 
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:my_app/map/map_data.dart';
 
+/// class used in constructing the chart based on review ratings
 class StarSeries {
   final String star;
   final int score;
@@ -19,6 +21,7 @@ class StarSeries {
   });
 }
 
+/// bar chart to be constructed showing ratings and count of each rating
 class RatingChart extends StatelessWidget {
   RatingChart(
       {Key? key,
@@ -56,6 +59,8 @@ class RatingChart extends StatelessWidget {
     ];
 
     double avgRating = calcAvgRating(data, total);
+
+    /// container with the bar chart, average rating, total number of ratings and facility name
     return Container(
       height: MediaQuery.of(context).size.height,
       color: Colors.transparent,
@@ -149,6 +154,7 @@ class RatingChart extends StatelessWidget {
   }
 }
 
+/// helper function to calculate the average rating
 double calcAvgRating(List<StarSeries> data, int total) {
   int sumRating = 0;
 
@@ -160,6 +166,7 @@ double calcAvgRating(List<StarSeries> data, int total) {
   return dp(average, 1);
 }
 
+/// helper function to format the average rating to specified number of decimal places
 double dp(double val, int places) {
   num mod = pow(10.0, places);
   return ((val * mod).round().toDouble() / mod);
