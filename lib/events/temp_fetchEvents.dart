@@ -12,6 +12,10 @@ import 'dart:math';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/start/screens/error_page.dart';
 
+
+/// This is a temporary page used for testing backend functions used for events.
+/// The items in this page are not being deployed on the live app
+
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
 class eventPage extends StatefulWidget {
