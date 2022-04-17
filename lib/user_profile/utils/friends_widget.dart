@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/user_profile/screens/friend_page.dart';
 import 'package:my_app/user_profile/screens/requests_page.dart';
 import 'package:my_app/user_profile/screens/view_past_events_page.dart';
 
+/// Widget built on profile_page displaying stats of current user
 class FriendsWidget extends StatelessWidget {
   List<dynamic> friends;
   List<dynamic> friendrequests;
@@ -25,24 +25,21 @@ class FriendsWidget extends StatelessWidget {
                 Expanded(
                     child: buildFButton(context, friends.length.toString(),
                         'Friends', Colors.orange)),
-                //buildDivider(),
                 Expanded(
                   child: buildRButton(context, friendrequests.length.toString(),
                       'Requests', Colors.pink),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Row(
               mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                     child: buildPButton(
                         context, points.toString(), 'Points', Colors.purple)),
-                //buildDivider(),
                 Expanded(
                     child: buildEButton(
                         context,
@@ -54,20 +51,23 @@ class FriendsWidget extends StatelessWidget {
           ],
         ),
       );
+
+  /// Utility widget to add space between elements
   Widget buildDivider() => Container(
         height: 24,
         child: VerticalDivider(),
       );
 
+  /// Button widget displaying number of past events the user have joined
+  ///
+  /// Leads to view_past_events_page when pressed
   Widget buildEButton(
           BuildContext context, String value, String text, Color color) =>
       MaterialButton(
         padding: EdgeInsets.symmetric(vertical: 8),
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-                //change to test pages
-                builder: (context) => ViewEventPage()),
+            MaterialPageRoute(builder: (context) => ViewEventPage()),
           );
         },
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -75,7 +75,7 @@ class FriendsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.calendar_month, color: color),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Column(
@@ -98,6 +98,9 @@ class FriendsWidget extends StatelessWidget {
         ),
       );
 
+  /// Button widget displaying number of friends the user have
+  ///
+  /// Leads to friend_page when pressed
   Widget buildFButton(
           BuildContext context, String value, String text, Color color) =>
       MaterialButton(
@@ -113,7 +116,7 @@ class FriendsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.people, color: color),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Column(
@@ -136,6 +139,9 @@ class FriendsWidget extends StatelessWidget {
         ),
       );
 
+  /// Button widget displaying number of friend requests that the user have
+  ///
+  /// Leads to requests_page when pressed
   Widget buildRButton(
           BuildContext context, String value, String text, Color color) =>
       MaterialButton(
@@ -150,7 +156,7 @@ class FriendsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.message, color: color),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Column(
@@ -172,6 +178,9 @@ class FriendsWidget extends StatelessWidget {
         ),
       );
 
+  /// (Unused)Button widget displaying number of points the user have
+  ///
+  /// Leads to rewards_page when pressed
   Widget buildPButton(
           BuildContext context, String value, String text, Color color) =>
       MaterialButton(
@@ -186,7 +195,7 @@ class FriendsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.star, color: color),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Column(

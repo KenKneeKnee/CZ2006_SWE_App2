@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/user_profile/screens/edit_profile_page.dart';
 
-///Editable Profile Pic
+///Widget for building current user's profile picture
+///
+///Leads to edit_profile_page when pressed
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
   final bool isEdit;
-  //final VoidCallback onClicked;
 
-  ProfileWidget({
+  const ProfileWidget({
     Key? key,
     required this.imagePath,
     this.isEdit = false,
-    //required this.onClicked,
   }) : super(key: key);
 
   @override
@@ -50,7 +50,6 @@ class ProfileWidget extends StatelessWidget {
           fit: BoxFit.cover,
           width: 128,
           height: 128,
-          // child: InkWell(onTap: onClicked),
         ),
       ),
     );

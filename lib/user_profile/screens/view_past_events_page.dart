@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/events/event_widgets.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/sportevent.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/booking_repository.dart';
@@ -10,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/start/screens/error_page.dart';
-import 'package:my_app/user_profile/utils/appbar_widget.dart';
 
 final uid = FirebaseAuth.instance.currentUser!.email as String;
 
@@ -167,7 +165,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
                                                           eventid),
                                                       SportsFacil: sportsfacil,
                                                     ),
-                                                    shape: RoundedRectangleBorder(
+                                                    shape: const RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.all(
                                                                 Radius.circular(

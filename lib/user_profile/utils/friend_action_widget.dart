@@ -4,20 +4,22 @@ import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 import 'package:my_app/user_profile/screens/friend_invite_page.dart';
 
+/// Widget built on friend_profile_page
+/// if current user is friends with selected user
+///
+/// Contains actions that current user can take on selected user
 class FriendsActionWidget extends StatelessWidget {
   UserDbManager userdb = UserDbManager();
   UserData u;
-  FriendsActionWidget(this.u);
+  FriendsActionWidget(this.u, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) =>
       Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-        //can maybe change to remove friend
-
         ElevatedButton(
           onPressed: () {},
           child: Row(
-            children: [
+            children: const [
               Icon(Icons.check),
               Text('Friends'),
             ],
@@ -49,7 +51,7 @@ class FriendsActionWidget extends StatelessWidget {
                 ));
               },
               label: Row(
-                children: [
+                children: const [
                   Icon(Icons.people),
                   Text(' Invite'),
                 ],
@@ -59,16 +61,16 @@ class FriendsActionWidget extends StatelessWidget {
           ),
         ),
       ]);
+
+  /// Utility Widget for adding space between elements
   Widget buildDivider() => Container(
         height: 24,
         child: VerticalDivider(),
       );
+
+  /// Dialog that appears when selected user is reported
   Widget _buildReportDialog(BuildContext context) {
     return UserProfileDialog(bgDeco: DialogBoxDecoration.userReportedBg);
-  }
-
-  Widget _buildRequestDialog(BuildContext context) {
-    return UserProfileDialog(bgDeco: DialogBoxDecoration.friendAddedBg);
   }
 }
 
@@ -77,8 +79,6 @@ class UserProfileDialog extends StatelessWidget {
     Key? key,
     required this.bgDeco,
   }) : super(key: key);
-  // String paragraph;
-  // String title;
   BoxDecoration bgDeco;
 
   @override

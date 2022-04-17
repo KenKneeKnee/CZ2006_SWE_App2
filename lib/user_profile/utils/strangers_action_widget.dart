@@ -5,6 +5,10 @@ import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 
+/// Widget built on friend_profile_page
+/// if current user is not friend with selected user
+///
+/// Contains actions that current user can take on selected user
 class StrangersActionWidget extends StatefulWidget {
   UserData u;
   StrangersActionWidget(this.u);
@@ -13,8 +17,12 @@ class StrangersActionWidget extends StatefulWidget {
 }
 
 class _StrangersActionWidgetState extends State<StrangersActionWidget> {
+  /// [UserData] of selected user
   late UserData u;
+
+  /// [UserData] of current user
   late UserData cu;
+
   UserDbManager userdb = UserDbManager();
   @override
   void initState() {
@@ -24,6 +32,7 @@ class _StrangersActionWidgetState extends State<StrangersActionWidget> {
     super.initState();
   }
 
+  /// Sets current user
   getUser() async {
     DocumentSnapshot doc = await userdb.collection
         .doc(FirebaseAuth.instance.currentUser?.email)
@@ -35,23 +44,14 @@ class _StrangersActionWidgetState extends State<StrangersActionWidget> {
       Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
         FloatingActionButton.extended(
           onPressed: () {
-            if (!u.friendrequests.contains(cu.userid) &&
-                !cu.friendrequests.contains(u.userid)) {
-              u.friendrequests.add(cu.userid);
-              userdb.collection
-                  .doc(u.userid)
-                  .update({"friendrequests": u.friendrequests});
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      _buildRequestDialog(context));
-            } else {
-              showDialog(
-                  // needs some UI
-                  context: context,
-                  builder: (BuildContext context) =>
-                      _buildRequestSentDialog(context));
-            }
+            u.friendrequests.add(cu.userid);
+            userdb.collection
+                .doc(u.userid)
+                .update({"friendrequests": u.friendrequests});
+            showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    _buildRequestDialog(context));
           },
           label: const Text('Add as Friend'),
           backgroundColor: Colors.green,
@@ -75,14 +75,19 @@ Widget buildDivider() => Container(
       height: 24,
       child: VerticalDivider(),
     );
+
+/// Dialog that appears when selected user is reported
 Widget _buildReportDialog(BuildContext context) {
   return UserProfileDialog(bgDeco: DialogBoxDecoration.userReportedBg);
 }
 
+/// Dialog that appears when current user sends a friend request
 Widget _buildRequestDialog(BuildContext context) {
   return UserProfileDialog(bgDeco: DialogBoxDecoration.friendAddedBg);
 }
 
+/// Dialog that appears when current user sends a friend request
+/// after a request has already been sent
 Widget _buildRequestSentDialog(BuildContext context) {
   return AlertDialog(
     content: Column(
@@ -108,8 +113,6 @@ class UserProfileDialog extends StatelessWidget {
     Key? key,
     required this.bgDeco,
   }) : super(key: key);
-  // String paragraph;
-  // String title;
   BoxDecoration bgDeco;
 
   @override

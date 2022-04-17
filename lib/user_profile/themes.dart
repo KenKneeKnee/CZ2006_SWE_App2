@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Unused utilites for switching themes of the application
 class MyThemes {
   static final primary = Colors.blue;
   static final primaryColor = Colors.blue.shade300;

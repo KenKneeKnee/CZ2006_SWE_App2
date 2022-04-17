@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'user.dart';
 
+/// Control class responsible for updating [UserData] attributes
 class UserDbManager {
   // 1
   final CollectionReference collection =

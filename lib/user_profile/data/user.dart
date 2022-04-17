@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Class that hold persistent data attribute of a user
 class UserData {
   late final String? userid;
   late final String username;
@@ -29,7 +30,7 @@ class UserData {
   Map<String, dynamic> toJson() => _UserToJson(this);
 }
 
-// 1
+/// Reads data from Firebase
 UserData _UserFromJson(Map<String, dynamic> json) {
   return UserData(
       json['userid'] as String,
@@ -42,8 +43,7 @@ UserData _UserFromJson(Map<String, dynamic> json) {
       json['image'] as String);
 }
 
-// 2
-
+/// Uploads data to Firebase
 Map<String, dynamic> _UserToJson(UserData instance) => <String, dynamic>{
       'userid': instance.userid,
       //'id': instance.id,

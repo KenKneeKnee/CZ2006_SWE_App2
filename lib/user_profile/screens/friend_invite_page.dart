@@ -5,6 +5,7 @@ import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 
+/// A page from where user may invite their friends to events
 class Friend_Invite_Page extends StatefulWidget {
   final List<dynamic> friends;
   const Friend_Invite_Page({Key? key, required this.friends}) : super(key: key);
@@ -13,15 +14,28 @@ class Friend_Invite_Page extends StatefulWidget {
 }
 
 class _FriendInvitePageState extends State<Friend_Invite_Page> {
-  final myController = TextEditingController();
   final UserDbManager repository = UserDbManager();
-  late List<dynamic> friendData = widget.friends;
-  final List<UserData> listfriends = [];
-  ScrollController controller = ScrollController();
-  final List<Widget> friendbuttons = [];
-  double topContainer = 0;
   UserDbManager userdb = UserDbManager();
+
+  /// List of [cu.friends]'s [userid]
+  late List<dynamic> friendData = widget.friends;
+
+  /// List of [cu.friends]'s [UserData]
+  final List<UserData> listfriends = [];
+
+  /// Controller for scrolling through friend list
+  ScrollController controller = ScrollController();
+
+  /// List of cards for each friend in [cu.friends]
+  final List<Widget> friendbuttons = [];
+
+  /// Start coordiante of first card
+  double topContainer = 0;
+
+  /// [UserData] of current user
   late UserData cu;
+
+  /// Sets the current user
   getUser() async {
     DocumentSnapshot doc = await userdb.collection
         .doc(FirebaseAuth.instance.currentUser?.email)
@@ -58,6 +72,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
 
           List DocList = snapshot.data!.docs;
 
+          // Appends listfriends with UserData of current user's friends
           listfriends.clear();
           for (String userid in friendData) {
             for (DocumentSnapshot doc in DocList) {
@@ -68,15 +83,15 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
             }
           }
 
+          // Adds a card for each of current user's friends
           friendbuttons.clear();
-
           for (UserData u in listfriends) {
             friendbuttons.add(Container(
                 height: size.height * 0.2,
                 margin:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -127,7 +142,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
                         ]))));
           }
 
-          //Appbar kinda of the page
+          /// Area where page is built
           return SafeArea(
               child: Scaffold(
                   backgroundColor: Colors.deepPurple,
@@ -171,6 +186,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
         });
   }
 
+  /// Dialog shwon when an invitation is sent
   Widget _buildDialog(BuildContext context) {
     return AlertDialog(
       content: Column(

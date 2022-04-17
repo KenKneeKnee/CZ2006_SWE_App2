@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// Widget built on friend_profile_page displaying stats of selected user
 class FriendsDisplayWidget extends StatelessWidget {
   List<dynamic> friends;
   int points;
-
-  FriendsDisplayWidget(this.friends, this.points);
+  FriendsDisplayWidget(this.friends, this.points, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Row(
@@ -29,7 +29,7 @@ class FriendsDisplayWidget extends StatelessWidget {
               value,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             Text(
               text,
               style: TextStyle(fontWeight: FontWeight.bold),
