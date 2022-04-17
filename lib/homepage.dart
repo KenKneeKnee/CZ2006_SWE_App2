@@ -5,6 +5,7 @@ import 'package:my_app/rewards_page/screens/rewards_page.dart';
 import 'package:my_app/user_profile/screens/profile_page.dart';
 import 'package:my_app/user_profile/screens/view_current_events_page.dart';
 
+///Homepage which allows the user to navigate between the Map Page, Profile page, Rewards page and Current Events page
 class Homepage extends StatefulWidget {
   Homepage({Key? key}) : super(key: key);
   User? user = FirebaseAuth.instance.currentUser;
@@ -30,8 +31,6 @@ class _HomepageState extends State<Homepage> {
       ProfilePage(user: _currentUser),
       RewardsPage(),
       ViewCurrentEventPage()
-      //put page here
-      //put another page here
     ];
 
     return SafeArea(

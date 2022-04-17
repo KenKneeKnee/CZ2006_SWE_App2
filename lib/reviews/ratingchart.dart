@@ -23,11 +23,16 @@ class StarSeries {
 
 /// bar chart to be constructed showing ratings and count of each rating
 class RatingChart extends StatelessWidget {
-  RatingChart({Key? key, required this.sportsFacility, required this.stardata, required this.total}) : super(key: key);
+  RatingChart(
+      {Key? key,
+      required this.sportsFacility,
+      required this.stardata,
+      required this.total})
+      : super(key: key);
   final Map stardata;
   final int total;
   SportsFacility sportsFacility;
-  final chartColors={
+  final chartColors = {
     1: charts.ColorUtil.fromDartColor(Colors.redAccent),
     2: charts.ColorUtil.fromDartColor(Colors.orangeAccent),
     3: charts.ColorUtil.fromDartColor(Colors.blueAccent),
@@ -36,7 +41,7 @@ class RatingChart extends StatelessWidget {
   };
   @override
   Widget build(BuildContext context) {
-    List<StarSeries> data=[];
+    List<StarSeries> data = [];
     for (int rating in stardata.keys) {
       data.add(StarSeries(
           star: "${rating} star",
@@ -54,6 +59,7 @@ class RatingChart extends StatelessWidget {
     ];
 
     double avgRating = calcAvgRating(data, total);
+
     /// container with the bar chart, average rating, total number of ratings and facility name
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -153,7 +159,7 @@ double calcAvgRating(List<StarSeries> data, int total) {
   int sumRating = 0;
 
   for (int i = 0; i < data.length; i++) {
-    sumRating += (data[i].score*data[i].count);
+    sumRating += (data[i].score * data[i].count);
   }
 
   double average = (sumRating / total);
@@ -161,7 +167,7 @@ double calcAvgRating(List<StarSeries> data, int total) {
 }
 
 /// helper function to format the average rating to specified number of decimal places
-double dp(double val, int places){
+double dp(double val, int places) {
   num mod = pow(10.0, places);
   return ((val * mod).round().toDouble() / mod);
 }

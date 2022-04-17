@@ -6,6 +6,8 @@ import 'package:my_app/widgets/bouncing_button.dart';
 import 'login_page.dart';
 import 'register_page.dart';
 
+///The very first page that users see upon installing the app.
+///Brings user to either Registration or Login page upon click of button (Create Account / Login)
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
 
@@ -22,6 +24,7 @@ class _WelcomePageState extends State<WelcomePage> {
         body: Container(
           child: Stack(
             children: [
+              //Overlapping layers of images to create the background image
               BackgroundImage(imagePath: 'assets/images/background.png'),
               BackgroundImage(imagePath: 'assets/images/welcome-player1.png'),
               BackgroundImage(imagePath: 'assets/images/welcome-player2.png'),
