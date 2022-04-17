@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/chat/chatDb.dart';
 import 'package:my_app/user_profile/data/user.dart';
-import 'package:my_app/widgets/background.dart';
 
 import 'messagetile.dart';
 
+/// A page where [user]s who have joined the same event can send messages
 class ChatPage extends StatefulWidget {
   final String eventId;
   final UserData user;
@@ -22,7 +21,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   Stream<QuerySnapshot>? _chats;
   late UserData user;
-  TextEditingController messageEditingController = new TextEditingController();
+  TextEditingController messageEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -34,6 +33,7 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  /// Streams messages sent by other [user]s in the chat
   Widget _chatMessages() {
     return StreamBuilder(
       stream: _chats,
@@ -58,6 +58,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  /// Sends current [user]'s message to the chat
   _sendMessage() {
     if (messageEditingController.text.isNotEmpty) {
       Map<String, dynamic> chatMessageMap = {
@@ -95,8 +96,8 @@ class _ChatPageState extends State<ChatPage> {
         elevation: 0.0,
       ),
       body: Container(
-        decoration: BoxDecoration(
-          image: const DecorationImage(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
             image: AssetImage('assets/images/view-event-tennis.png'),
             fit: BoxFit.fitWidth,
             alignment: Alignment.bottomCenter,
@@ -105,8 +106,6 @@ class _ChatPageState extends State<ChatPage> {
         child: Stack(
           children: <Widget>[
             _chatMessages(),
-            // Container(),
-
             Container(
               alignment: Alignment.bottomCenter,
               width: MediaQuery.of(context).size.width,
@@ -118,8 +117,8 @@ class _ChatPageState extends State<ChatPage> {
                     Expanded(
                       child: TextField(
                         controller: messageEditingController,
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
                             hintText: "Send a message ...",
                             hintStyle: TextStyle(
                               color: Colors.white,
