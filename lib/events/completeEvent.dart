@@ -33,7 +33,7 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
 
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
-    final facildata = await sportsfacildatasource.someFunction();
+    final facildata = await sportsfacildatasource.getSportsFacilities();
     await Future.delayed(const Duration(seconds: 3));
     setState(() {
       SportsFacilityList = facildata;

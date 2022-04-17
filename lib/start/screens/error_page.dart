@@ -2,8 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/start/screens/welcome_page.dart';
 
-class SmthWrong extends StatelessWidget {
-  const SmthWrong({Key? key}) : super(key: key);
+///A generic error page shown whenever something unexpected occurs in the app
+class ErrorPage extends StatelessWidget {
+  const ErrorPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

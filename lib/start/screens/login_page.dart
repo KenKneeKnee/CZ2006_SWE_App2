@@ -12,6 +12,8 @@ import 'package:my_app/widgets/bouncing_button.dart';
 import '../../user_profile/screens/profile_page.dart';
 import '../utils/validator.dart';
 
+///Log In Page which consists of the email and password fields
+///Also allows user to switch to the Registration page if they do not have an account yet upon click
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -103,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                   child: Wrap(
                     runAlignment: WrapAlignment.center,
                     runSpacing: 30,
-                    //crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       const Text('Welcome\nback!',
                           style: _titleStyle, textAlign: TextAlign.left),
@@ -119,9 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                           runSpacing: 40,
                           children: <Widget>[
                             _FormFieldContainer(_emailField),
-                            //const SizedBox(height: 28.0),
                             _FormFieldContainer(_pwField),
-                            //const SizedBox(height: 24.0),
                             _isProcessing
                                 ? const CircularProgressIndicator()
                                 : BouncingButton(
@@ -153,7 +152,6 @@ class _LoginPageState extends State<LoginPage> {
                                         if (user != null) {
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
-                                              //Can be changed for
                                               builder: (context) => Homepage(),
                                             ),
                                           );
@@ -161,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
                                               //Can be changed for
-                                              builder: (context) => SmthWrong(),
+                                              builder: (context) => ErrorPage(),
                                             ),
                                           );
                                         }
@@ -173,7 +171,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Center(
                         child: RichText(
-                          //textAlign: TextAlign.justify,
                           text: TextSpan(
                             children: <TextSpan>[
                               const TextSpan(
@@ -205,8 +202,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-//helper functions / UI to keep the main code short
-
+////Container with UI style for the form field
 Container _FormFieldContainer(Widget containerChild) {
   return Container(
     child: containerChild,
@@ -238,7 +234,7 @@ const BoxDecoration _background = BoxDecoration(
   ),
 );
 
-//Text Styles
+//Text Styles----------------------
 const TextStyle _titleStyle = TextStyle(
     fontWeight: FontWeight.bold, fontSize: 45, color: Color(0xffE3663E));
 

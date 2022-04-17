@@ -1,11 +1,10 @@
-///Everything to do with storing and fetching the map data
-///
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:latlong2/latlong.dart';
 
+///A SportsFacility is a location where a SportsBud user can create and join events.
 class SportsFacility {
   SportsFacility(
       {required this.coordinates,
@@ -34,9 +33,9 @@ Future<Map<String, dynamic>> parseJsonFromAssets(String assetsPath) async {
       .then((jsonStr) => jsonDecode(jsonStr));
 }
 
-/// reads the json file (contianing 350 playgrounds, parks, etc) into a list of SportsFacility objects
+/// Function which reads the json file (contianing 350 playgrounds, parks, etc) into a list of SportsFacility objects
 /// each object consists of the location coordinates, name, facility type (playground/park) & address description
-///
+/// This list of SportsFacilities returned is used in the getSportsFacilities() function of the SportsFacilDataSource class
 ///
 Future fetchFromJsonAssets() async {
   String _path = 'assets/images/parks-geojson.json';
@@ -80,15 +79,11 @@ Future fetchFromJsonAssets() async {
               markerImgPath: _FindMarkerImage(_facilityType),
               hoverImgPath: _FindHoverImage(_facilityType));
           _markers.add(_temp);
-          // print(
-          //     'fetched ${_name} with coordinates ${_longitude.toString()} : ${_latitude.toString()}');
         },
       );
     },
   );
   if (_markers.length > 0) {
-    // print(
-    //     'Hello fetched ${_markers.length} playgrounds/parksfrom _fetchPlaygroundParks');
     return _markers;
   } else {
     print('smth went wrong in fetching the playgrounds/parks');
@@ -96,6 +91,7 @@ Future fetchFromJsonAssets() async {
   return _markers;
 }
 
+///Additional 30 markers that is not found in the json file. This list contains facilities such as Gyms, Swimming Complexes, Tennis Courts etc.
 const res = [
   [
     '1.35436736684635,103.94077231704',
@@ -275,6 +271,9 @@ const res = [
   ]
 ];
 
+/// Helper function which converts the list res into a list of SportsFacilities.
+/// The result is used in the getSportsFacilities() from SportsFaciliDataSource
+/// If one location has more than one type of facility, this function also creates multiple SportsFacilities for each facility type
 List<SportsFacility> fetchFromList() {
   List<SportsFacility> markers = <SportsFacility>[];
   int count = 0;
@@ -338,13 +337,16 @@ List<SportsFacility> fetchFromList() {
 }
 
 class SportsFacilDataSource {
-  Future someFunction() async {
-    print("trying to get some data..");
+  /// Function to fetch the SportsFacilities from the json file as well as the list named res.
+  /// Returns the complete list of SportsFacilities to be used in the FacilitiesMap.
+  Future getSportsFacilities() async {
     List<SportsFacility> someList = await fetchFromJsonAssets();
     List<SportsFacility> anotherList = fetchFromList();
     List<SportsFacility> finalList = someList + anotherList;
     return finalList;
   }
+
+  /// Function to fetch the name of SportsFacilities from the json file as well as the list named res.
 
   Future getNames() async {
     List<String> someList = await fetchNamesFromJsonAssets();

@@ -62,7 +62,7 @@ class _FriendPageState extends State<Friend_Page> {
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return SmthWrong();
+              return ErrorPage();
             }
             if (!snapshot.hasData) {
               return const CircularProgressIndicator();

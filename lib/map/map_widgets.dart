@@ -1,12 +1,11 @@
-//----------------------------------------------------
-// UI widgets for the alert dialog of event creation
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:my_app/map/facil_map.dart';
-import 'package:my_app/widgets/bouncing_button.dart';
+
 import 'package:my_app/widgets/hovering_image.dart';
 
+///This is a marker that represents the user's current location.
+///The marker is a yellow circle with a pulsing animation.
 class myLocationMarker extends AnimatedWidget {
   const myLocationMarker(
     Animation<double> animation, {
@@ -46,7 +45,7 @@ class myLocationMarker extends AnimatedWidget {
   }
 }
 
-/// (custom) MapMarker consists of location marker image with dynamic size
+/// (custom-made) MapMarker consists of location marker image with dynamic size
 /// Function holding function to trigger corrsponding details is in the Marker class (flutter)
 class MapMarker extends StatelessWidget {
   const MapMarker({Key? key, required this.selected, required this.imagePath})
@@ -75,6 +74,7 @@ class MapMarker extends StatelessWidget {
 }
 
 ///Header holding location details about a sports facility (Place name, Facility Type, Address)
+///Used in a MapMarkerInfoSheet (Pop-up shown when user clicks on a SportsFacility on the FacilitiesMap)
 class MapMarkerInfoHeader extends StatelessWidget {
   late String Title; //place name eg. Sun Park
   late String
@@ -161,179 +161,8 @@ final _paraStyle = TextStyle(
   //fontWeight: FontWeight.bold,
 );
 
-class OkButton extends StatelessWidget {
-  const OkButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BouncingButton(
-      bgColor: Colors.white,
-      textColor: const Color(0xffD56F2F),
-      borderColor: const Color(0xffD56F2F),
-      buttonText: "Got it!",
-      onClick: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FacilitiesMap()), //return to map
-        );
-      },
-    );
-  }
-}
-
-class SuccessDialog extends StatelessWidget {
-  SuccessDialog(
-      {Key? key,
-      required this.bgDeco,
-      required this.paragraph,
-      required this.title})
-      : super(key: key);
-  String paragraph;
-  String title;
-  BoxDecoration bgDeco;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-        contentPadding: EdgeInsets.zero,
-        content: Container(
-          height: 350,
-          decoration: bgDeco,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-                  Text(
-                    title,
-                    style: dialogTitleStyle,
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    paragraph,
-                    style: dialogParaStyleBold,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          const OkButton(),
-        ]);
-  }
-}
-
-class FailDialog extends StatelessWidget {
-  FailDialog(
-      {Key? key,
-      required this.bgDeco,
-      required this.paragraph,
-      required this.title})
-      : super(key: key);
-  String paragraph;
-  String title;
-  BoxDecoration bgDeco;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-        contentPadding: EdgeInsets.zero,
-        content: Container(
-          height: 240,
-          decoration: bgDeco,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-              Text(
-                title,
-                style: dialogTitleStyle,
-              ),
-              const SizedBox(height: 15),
-              Text(
-                paragraph,
-                style: dialogParaStyleBold,
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          const OkButton(),
-        ]);
-  }
-}
-
-class OvernightDialog extends StatelessWidget {
-  OvernightDialog(
-      {Key? key,
-      required this.bgDeco,
-      required this.paragraph,
-      required this.title})
-      : super(key: key);
-  String paragraph;
-  String title;
-  BoxDecoration bgDeco;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-        contentPadding: EdgeInsets.zero,
-        content: Container(
-          height: 350,
-          decoration: bgDeco,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.22),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 45,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                              color: Colors.black87,
-                              offset: Offset(7.5, 7.5),
-                              blurRadius: 15)
-                        ]),
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    paragraph,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                              color: Colors.black87,
-                              offset: Offset(2.5, 2.5),
-                              blurRadius: 15)
-                        ]),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          const OkButton(),
-        ]);
-  }
-}
-
+///A UI class which contians BoxDecoration styles which can be used in Containers.
+///These are specifically used in Dialog Pop-ups.
 class DialogBoxDecoration {
   static const BoxDecoration redeemedBg = BoxDecoration(
     color: Colors.white,
