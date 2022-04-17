@@ -1,3 +1,5 @@
+/// Facility repository class that links to 'facilities' collection on Cloud Firestore
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Review.dart';
@@ -13,7 +15,7 @@ class FacilRepository {
     return collection.snapshots();
   }
 
-  // 3
+  /// adds a facility document to the facilities collection, if one does not already exist
   void addFacil(String placeId) async{
     Map<String,Object> facil= {};
     facil["facility"]=placeId;
@@ -26,6 +28,7 @@ class FacilRepository {
     }
   }
 
+  /// adds a review document to the reviews collection nested within each facility document
   Future<DocumentReference> addReviewFor(String placeId, Review review) {
     Map<String, Object> revjson=review.toJson();
     return collection.doc(placeId).collection("reviews").add(revjson);
@@ -35,18 +38,19 @@ class FacilRepository {
   //
   // }
 
+  /// fetch reviews for a facility
   Future<QuerySnapshot> getReviewsFor(String placeId) async{
     CollectionReference facilReviewsRef = collection.doc(placeId).collection("reviews");
     return facilReviewsRef.get();
   }
 
 
-  // 4
+  /// updates a facility document
   void updateFacil(String placeId, Map<String,Object> facil) async {
     await collection.doc(placeId).update(facil);
   }
 
-  // 5
+  /// deletes a facility document
   void deleteFacil(String placeId) async {
     await collection.doc(placeId).delete();
   }

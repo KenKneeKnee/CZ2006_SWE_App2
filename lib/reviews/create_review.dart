@@ -1,3 +1,5 @@
+/// Create review form used to get user input when creating a review for a facility
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,7 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
     ratingController.text = "3.0";
   }
 
+  /// create review form UI that progresses based on 'steps' the user has taken
   final formKey = GlobalKey<FormState>();
   String reviewTitle = '';
   List<Step> getSteps() => [
@@ -120,6 +123,7 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
             state: _currentStep > 2 ? StepState.complete : StepState.indexed)
       ];
 
+  /// helper function to add the review to the facilities database
   void postReview(String title, int rating, String desc, String user,
       XFile? imageFile) async {
     Review r = Review(title, rating, desc, user);
@@ -134,15 +138,7 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
   Widget build(BuildContext context) {
     final isLastStep = _currentStep == getSteps().length - 1;
     return Container(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   leading: BackButton(
-      //       color: Colors.white,
-      //       onPressed: () {
-      //         Navigator.of(context).pop();
-      //       }),
-      // ),
-      //body:
+
       child: ListView(
         shrinkWrap: true,
         children: [
@@ -152,6 +148,7 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
                 'assets/images/write-review.png',
               ),
               padding: EdgeInsets.all(8)),
+
           FutureBuilder<QuerySnapshot>(builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             return Stepper(
@@ -201,11 +198,6 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: controls.onStepContinue,
-                            //  (!isLastStep)
-                            //     ? controls.onStepContinue
-                            //     : () async {
-
-                            //     },
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xffE96B46),
                                 padding: EdgeInsets.symmetric(
@@ -244,7 +236,7 @@ class _CreateReviewFormState extends State<CreateReviewForm> {
     );
   }
 }
-
+/// title input widget to be built
 Widget buildTitle(title) => Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: TextFormField(
@@ -265,6 +257,7 @@ Widget buildTitle(title) => Container(
       ),
     );
 
+/// description input widget to be built
 Widget buildDesc(desc) => Flexible(
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 10),
