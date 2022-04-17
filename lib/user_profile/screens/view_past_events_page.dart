@@ -12,6 +12,7 @@ import 'package:my_app/start/screens/error_page.dart';
 
 final uid = FirebaseAuth.instance.currentUser!.email as String;
 
+/// A page where users can view past events they joined or created
 class ViewEventPage extends StatefulWidget {
   ViewEventPage({Key? key}) : super(key: key);
   _ViewEventPageState createState() => _ViewEventPageState();
@@ -39,6 +40,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
     });
   }
 
+  /// Fetches the location data of the events
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
     final facildata = await sportsfacildatasource.getSportsFacilities();
@@ -74,6 +76,8 @@ class _ViewEventPageState extends State<ViewEventPage> {
 
                     List<Widget> eventbuttons = [];
 
+                    // Appends all the inactive event of the current user
+                    // into pastEventIds
                     for (DocumentSnapshot doc in BookingList) {
                       if (doc['userId'] == uid) {
                         if (doc['active'] == false) {
@@ -92,6 +96,9 @@ class _ViewEventPageState extends State<ViewEventPage> {
                       }
                     }
 
+                    //Appends a card with details of the event
+                    //for every event in pastEventIds
+                    //into eventbutton
                     for (String eventid in pastEventIds) {
                       SportEvent currentevent =
                           PastEventMap[eventid] as SportEvent;
@@ -184,6 +191,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
                                   ]))));
                     }
 
+                    /// Area where elements of this page is built
                     return SafeArea(
                         child: Scaffold(
                             backgroundColor: Colors.white,
@@ -231,6 +239,6 @@ class _ViewEventPageState extends State<ViewEventPage> {
                                     }))));
                   });
             })
-        : CircularProgressIndicator();
+        : const CircularProgressIndicator();
   }
 }

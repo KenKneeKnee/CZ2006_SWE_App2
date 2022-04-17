@@ -57,6 +57,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
     });
   }
 
+  /// Fetches the location data of the events
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
     final facildata = await sportsfacildatasource.getSportsFacilities();
@@ -120,7 +121,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
 
                     activeEventIds = tempEventIdlist;
 
-                    //Appends a card for every event in activeEventIds
+                    //Appends a card with details of the event
+                    //for every event in activeEventIds
                     //into eventbuttons
                     for (String eventid in activeEventIds) {
                       SportEvent currentevent =
