@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:lottie/lottie.dart' hide Marker;
-import 'package:my_app/calendar/grrrrrrr.dart';
-import 'package:my_app/events/create_event.dart';
+import 'package:my_app/calendar/sportsbudcalendar.dart';
 import 'package:my_app/loading_lotties/loading_lotties.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_sheet.dart';
@@ -26,11 +25,16 @@ const MARKERSIZE_SHRINKED = 50.0;
 LatLng _startingPoint =
     LatLng(1.35436736684635, 103.94077231704); //points at Singapore
 
+///The Map Page shown where users can browse SportsFacilities
+///Provides following funcitonalities:
+///1. Displays user's current location and sets Map's starting point as so using helper function getUserLocation()
+///2. Displays markers for each SportsFacility using helper funciton _buildMapMapMarkers()
+///3. Allows users to search for a SportsFacility based on its name
+/// MapData is fetched from local geojson file and map background is from MapBoxAPI
 class FacilitiesMap extends StatefulWidget {
   FacilitiesMap({Key? key}) : super(key: key);
 
   final User? user = FirebaseAuth.instance.currentUser;
-  //TODO: Put user's profile pic for the location marker icon
 
   @override
   _FacilitiesMapState createState() => _FacilitiesMapState();
@@ -71,8 +75,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
     super.dispose();
   }
 
-  ///Fetches User's location
-  ///
+  ///Fetches User's location and sets the Map's starting point to the fetched location
   Future getUserLocation() async {
     final _userLocationData = await checkLocation();
     setState(() {
@@ -94,7 +97,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
 
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
-    final facildata = await sportsfacildatasource.someFunction();
+    final facildata = await sportsfacildatasource.getSportsFacilities();
     await Future.delayed(const Duration(seconds: 3));
     setState(() {
       SportsFacilityList = facildata;
@@ -131,6 +134,7 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                   children: [
                     IconButton(
                         onPressed: () {
+                          ///Allows the user to search for SportsFacility based on its name
                           List<SportsFacility> searchedList = [];
 
                           for (SportsFacility place in SportsFacilityList) {
@@ -171,12 +175,8 @@ class _FacilitiesMapState extends State<FacilitiesMap>
                 maxZoom: 20,
                 zoom: 15,
                 center: _startingPoint,
-                // onMapCreated: (c) {
-                //   mapController = c;
-                // }),
               ),
               mapController: mapController,
-              children: [],
               nonRotatedLayers: [
                 TileLayerOptions(urlTemplate: MAPBOX_URL, additionalOptions: {
                   'accessToken': MAPBOX_TOKEN,
@@ -203,6 +203,8 @@ class _FacilitiesMapState extends State<FacilitiesMap>
     );
   }
 
+  ///Pop-up showing the results of a user's search for a SportsFacility (by name)
+  ///Also facilitates adjustment of the map to the selected SportsFacility upon click
   Widget setupAlertDialoadContainer(
       List<SportsFacility> sflist, MapController mapController) {
     return Container(
@@ -228,11 +230,9 @@ class _FacilitiesMapState extends State<FacilitiesMap>
     );
   }
 
+  ///Helper Function to build the markers for SportsFacilities on the map
   List<Marker> _buildMapMapMarkers() {
     final _markerList = <Marker>[]; //list to be returned from this function
-
-    // print(
-    //     '${SportsFacilityList.length} facilities have been fetched into the SportsFacilityList');
 
     for (int i = 0; i < SportsFacilityList.length; i++) {
       final _sportsFacil = SportsFacilityList[i];
@@ -288,9 +288,9 @@ class _FacilitiesMapState extends State<FacilitiesMap>
   }
 }
 
+///Helper function that returns a user's location to the function getUserLocation() if user's location found
 Future checkLocation() async {
   Location location = new Location();
-
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
   LocationData _locationData;
