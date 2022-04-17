@@ -18,6 +18,11 @@ import '../map/facil_map.dart';
 
 final uid = FirebaseAuth.instance.currentUser?.email as String;
 
+///ViewEventPopUp is the Pop Up displaying a SportEvent and its details.
+/// Helper Functions include:
+///1. _FindBackgroundImage which fetches the corresponding background image depending on the facility type
+///2. renderButton which decides which buttons to be displayed. Button examples include but are not limited to : Join Event/Leave Event/Complete Event/Event Full
+///Event details include date of event, time of event, event type, current cacpacity/max capacity, title of event, address of facility
 class ViewEventPopUp extends StatefulWidget {
   ViewEventPopUp(
       {Key? key,
@@ -60,7 +65,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return SmthWrong();
+                  return ErrorPage();
                 }
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();
@@ -135,7 +140,8 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
         });
   }
 
-  ///Checks in Bookings DB if user has a clashing event
+  ///Helper Function which checks the Database(Bookings) if user has a clashing event
+  ///The result is used in the JoinLeaveCheck function
   ///Returns 0 if there is no clash
   ///Returns 1 if there is a clash
   Future<int> hasActiveEvent(String uid, RetrievedEvent e) async {
@@ -164,11 +170,20 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
     return 0;
   }
 
+  ///Helper Function of ViewEventPopUp which returns result to Helper Function JoinLeaveCheck.
+  ///Returns a string reprsenting the status of whether user can complete the event.
+  ///Possible statuses:
+  ///1. Not at location (cannot complete -- user cannot be at the event based on mismatch of location)
+  ///2. Completed (cannot complete -- user has already completed event)
+  ///3. Can Complete
+  ///4. Event expired (cannot complete -- event has already ended)
+  ///5. Future event (cannot complete -- event has yet to start )
   Future<String> canCompleteEvent(String uid, RetrievedEvent curEvent) async {
     LocationData userLocation = await checkLocation();
     BookingRepository booking = BookingRepository();
     var sportsfacildatasource = SportsFacilDataSource();
-    List<SportsFacility> objects = await sportsfacildatasource.someFunction();
+    List<SportsFacility> objects =
+        await sportsfacildatasource.getSportsFacilities();
     DateTime? curTime = DateTime.now();
     SportsFacility obj = objects[265]; // aljunied swimming complex
     var lat2 = obj.coordinates.latitude;
@@ -201,7 +216,7 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
             if (eid == curEvent.eventId) {
               bool active = await doc.get('active');
               found = true;
-              print("booking repo status: ${active}");
+              //print("booking repo status: ${active}");
               if (active) {
                 completeStatus = "can complete";
               }
@@ -217,16 +232,17 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
       } else if (curTime.isBefore(curEvent.start)) {
         completeStatus = "future event"; //checked
       } else {
-        completeStatus = "invalid timing"; // probably wont reach here? i think?
+        completeStatus = "invalid timing";
       }
     }
-    print("canComplete check: ${completeStatus}");
+    //print("canComplete check: ${completeStatus}");
     return completeStatus;
   }
 
+  /// Helper Function of ViewEventPopUp to check whether button shown is "Join Event" / "Leave Event"
   Future JoinLeaveCheck(RetrievedEvent curEvent) async {
     String _newStatus;
-    String _completeStatus = "yooooo";
+    String _completeStatus = "unchecked";
 
     int hasBooking = await booking.checkUser(uid, curEvent.eventId);
     if (hasBooking == -1) {
@@ -251,13 +267,15 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
       }
     }
     setState(() {
-      print("join status ${_newStatus}");
+      // print("join status ${_newStatus}");
       status = _newStatus;
       completeStatus = _completeStatus;
     });
   }
 
-  ///Function to decide what button should be shown
+  ///Helper Function of ViewEventPopUp to decide what buttons should be shown
+  ///by checking whether the user can join the event or not
+  ///and if so, whether the user can complete the event or not
   Widget renderButton(RetrievedEvent _curEvent) {
     if (status != "unchecked") {
       if (status == "not logged in") {
@@ -361,7 +379,8 @@ class _ViewEventPopUpState extends State<ViewEventPopUp> {
   }
 }
 
-/// Find Marker image path according to the facility Type
+/// Helper Fucntion to Find background image path according to the facility Type
+/// Returns a string for the image path to ViewEventPopUp
 String _FindBackgroundImage(String facilityType) {
   if (facilityType.contains("Gym")) {
     return ('assets/images/view-event-gym.png');
@@ -381,6 +400,8 @@ String _FindBackgroundImage(String facilityType) {
   return ('assets/images/view-event-soccer.png');
 }
 
+///Helper Function to check whether the user is in the vicinity of the event
+///Result is returned to canCompleteEvent function
 double calculateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;
   var c = cos;

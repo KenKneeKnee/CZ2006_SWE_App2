@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/create-event/multiform.dart';
-import 'package:my_app/events/create_event.dart';
+import 'package:my_app/create-event/create-event-form.dart';
 import 'package:my_app/map/map_data.dart';
 import 'package:my_app/map/map_widgets.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/reviews/review_page.dart';
 
+/// PopUp shown for a SportsFacility
+/// 1. Displays the facility name, facility type, address description
+/// 2. Displays a hovering image depending on the SportsFacility Type
+/// 3. Includes buttons to view the calendar(including create event form) and review page for this SportsFacility
 class MapMarkerInfoSheet extends StatelessWidget {
   MapMarkerInfoSheet({Key? key, required this.SportsFacil, required this.index})
       : super(key: key);
@@ -34,8 +37,8 @@ class MapMarkerInfoSheet extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ReviewPage(
-                          placeId: placeId,
-                          sportsFacility: SportsFacil,
+                        placeId: placeId,
+                        sportsFacility: SportsFacil,
                       ),
                     ),
                   );
@@ -52,7 +55,7 @@ class MapMarkerInfoSheet extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EventStepForm(
+                        builder: (context) => CreateEventForm(
                           placeId: placeId,
                           sportsFacility: SportsFacil,
                         ),

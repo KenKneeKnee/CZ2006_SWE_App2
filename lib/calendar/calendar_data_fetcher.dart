@@ -7,14 +7,6 @@ final repository = EventRepository();
 final Map<DateTime, List<RetrievedEvent>> realEventSource = {};
 List<RetrievedEvent> realTodaySource = [];
 
-// List<DateTime> daysInRange(DateTime first, DateTime last) {
-//   final dayCount = last.difference(first).inDays + 1;
-//   return List.generate(
-//     dayCount, //length of list -- ie. number of days in range
-//     (index) => DateTime.utc(first.year, first.month, first.day + index),
-//   );
-// }
-
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3,
     kToday.day); //Sets first day to be 3 months earler
@@ -22,6 +14,9 @@ final kLastDay = DateTime(kToday.year, kToday.month + 3,
     kToday.day); //Sets last day to be 3 months later
 
 class EventDataFetcher {
+  ///Returns a list of SportEvents for a specific date and SportsFacility
+  ///Used in SportsBudCalendar
+  ///Fetches the data from the database (from the EventRepository)
   Future fetchDayEvent(DateTime day, String place) async {
     DateTime curDay = DateTime(day.year, day.month, day.day);
     DateTime nextDay =
@@ -44,19 +39,25 @@ class EventDataFetcher {
       DateTime _start = _startTS.toDate();
       Timestamp _endTS = event.get("end");
       DateTime _end = _endTS.toDate();
-      RetrievedEvent re = RetrievedEvent(event.get("name"), _start, _end,
-          event.get("maxCap"), event.get("curCap"), event.get("placeId"), event.get("type"), event.get("active"), event.id);
+      RetrievedEvent re = RetrievedEvent(
+          event.get("name"),
+          _start,
+          _end,
+          event.get("maxCap"),
+          event.get("curCap"),
+          event.get("placeId"),
+          event.get("type"),
+          event.get("active"),
+          event.id);
       gamelist.add(re);
     }
-
-    // print(
-    //     'fetchDayEvent: fetched ${gamelist.length} events for ${place} from DB! C:');
     return gamelist;
   }
 
   Future fetchAllEvent(DateTime start, DateTime end, String place) async {
     realEventSource.clear();
-    Map<DateTime, List<RetrievedEvent>> grrMap = <DateTime, List<RetrievedEvent>>{};
+    Map<DateTime, List<RetrievedEvent>> dateToEventMap =
+        <DateTime, List<RetrievedEvent>>{};
     final dayCount = end.difference(start).inDays;
 
     DateTime curDay = start;
@@ -65,11 +66,10 @@ class EventDataFetcher {
     for (int i = 0; i <= dayCount; i++) {
       curDay = curDay.add(const Duration(days: 1));
       List<RetrievedEvent> dayEvents = await fetchDayEvent(curDay, place);
-      grrMap[curDay] = dayEvents;
+      dateToEventMap[curDay] = dayEvents;
       realEventSource[curDay] = dayEvents;
     }
-    //print('finished fetching ${realEventSource.length + 1} entries!');
 
-    return grrMap;
+    return dateToEventMap;
   }
 }

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+///UI Class which allows for the time to be picked.
+///Used as a form field to input time.
+///Upon click, triggers a pop-up displaying a clock, allowing user to click on the clock numbers or type in desired timing.
+///Upon close of pop-up, the text displays the selected time.
 class TimePicker extends StatefulWidget {
   TimePicker(
       {Key? key,
@@ -20,7 +24,7 @@ class TimePicker extends StatefulWidget {
 
 class _TimePickerState extends State<TimePicker> {
   TextEditingController timeinput = TextEditingController();
-  //text editing controller for text field
+  //text editing controller for text field to be displayed
 
   @override
   void initState() {

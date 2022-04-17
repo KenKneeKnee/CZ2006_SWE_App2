@@ -41,7 +41,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
 
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
-    final facildata = await sportsfacildatasource.someFunction();
+    final facildata = await sportsfacildatasource.getSportsFacilities();
     await Future.delayed(const Duration(seconds: 3));
     setState(() {
       SportsFacilityList = facildata;
@@ -51,7 +51,6 @@ class _ViewEventPageState extends State<ViewEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (!loading)
         ? StreamBuilder<QuerySnapshot>(
             stream: booking.getStream(),
@@ -61,7 +60,7 @@ class _ViewEventPageState extends State<ViewEventPage> {
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.hasError) {
-                      return SmthWrong();
+                      return ErrorPage();
                     }
                     if (!snapshot.hasData) {
                       return const CircularProgressIndicator();

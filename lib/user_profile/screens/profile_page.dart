@@ -56,7 +56,8 @@ class _ProfilePageState extends State<ProfilePage> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const SmthWrong();
+
+            return ErrorPage();
           }
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
@@ -153,8 +154,9 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         },
       );
-    } else {
-      return const SmthWrong();
+
+    else {
+      return ErrorPage();
     }
   }
 

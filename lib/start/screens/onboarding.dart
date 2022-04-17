@@ -9,6 +9,10 @@ import 'package:my_app/user_profile/screens/profile_page.dart';
 const Color _PrimaryColV1 = Color(0x33ffcc5c);
 const Color _SecondaryColV1 = Color(0xffE3663E);
 
+///Onboading class which is a list of Slides containing onboarding screens (4 screens)
+///Includes a row of buttons at the bottom of the page to allow user to navigate between screens
+///Buttons allow user to navigate left, right or skip to the end.
+///Brings user to HomePage when the last slide / onboarding screen is reached.
 class Onboarding extends StatefulWidget {
   const Onboarding({Key? key, required this.user}) : super(key: key);
   final User user;
@@ -23,6 +27,7 @@ class _OnboardingState extends State<Onboarding> {
   void initState() {
     super.initState();
 
+    //Slide creation. Refer to helper function _createSlide().
     slides.add(_createSlide(
         "BROWSE GAMES NEAR YOU EASILY",
         "Use your fingers to navigate the map to check out nearby events. It’s as simple as that!",
@@ -44,7 +49,7 @@ class _OnboardingState extends State<Onboarding> {
     );
   }
 
-  //helper function to create Slide
+  ///Helper function to create one Slide. Requires title, description and image path to the background image.
   Slide _createSlide(
       String _title, String _description, String _backgroundImage) {
     return Slide(
@@ -58,13 +63,7 @@ class _OnboardingState extends State<Onboarding> {
     );
   }
 
-  void onTabChangeCompleted(index) {
-    // Index of current tab is focused
-    //print(index);
-  }
-
   void onDonePress() {
-    // Do what you want
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => Homepage(),
@@ -121,6 +120,7 @@ class _OnboardingState extends State<Onboarding> {
     );
   }
 
+  ///Helper function to create a list of Widgets which makes use of the properties of the Slides created
   List<Widget> renderListCustomTabs() {
     List<Widget> tabs = [];
     for (int i = 0; i < slides.length; i++) {
@@ -128,6 +128,7 @@ class _OnboardingState extends State<Onboarding> {
 
       tabs.add(
         Container(
+            //background image
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(currentSlide.backgroundImage ??=
@@ -145,6 +146,7 @@ class _OnboardingState extends State<Onboarding> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: MediaQuery.of(context).size.height * 0.7),
+                    //title; 'Missing title' if unable to get from the corresponding slide
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
@@ -154,6 +156,7 @@ class _OnboardingState extends State<Onboarding> {
                       ),
                     ),
                     SizedBox(height: 20),
+                    //description; 'missing description' if unable to get from the corresponding slide
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 40),
                       child: Text(
@@ -204,9 +207,6 @@ class _OnboardingState extends State<Onboarding> {
 
         // Show or hide status bar
         hideStatusBar: true,
-
-        // On tab change completed
-        onTabChangeCompleted: this.onTabChangeCompleted,
       ),
     );
   }

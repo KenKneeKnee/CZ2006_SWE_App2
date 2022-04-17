@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_app/calendar/grrrrrrr.dart';
+import 'package:my_app/calendar/sportsbudcalendar.dart';
 import 'package:my_app/events/booking_repository.dart';
 import 'package:my_app/events/event_repository.dart';
 import 'package:my_app/events/event_widgets.dart';
@@ -13,12 +13,25 @@ import 'package:my_app/start/screens/error_page.dart';
 import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/widgets/time_picker.dart';
 
-class EventStepForm extends StatefulWidget {
-  EventStepForm({Key? key, required this.placeId, required this.sportsFacility})
+/// Multi-step form displayed when user clicks on 'View Calendar' from a SportsFacility Pop Up
+/// Consists of three steps :
+/// 1. Calendar which displays the list of events scheduled for the SportsFacility for each date.
+/// This is also used to select the date for the event to be created
+/// 2. Event details form where users can input the event title (with helper function BuildName()),
+/// maximum capacity (with helper function buildMaxCap()),
+/// time of event (with widgets StartPicker and End Picker),
+/// event type (with helper function buildDropDown())
+/// 3. Confirmation of event to be created
+///
+/// Also includes the use of a BookingRepository and EventRepository to facilitate the creation of event in the database
+/// Event can only be created if conditions are fulfilled.
+class CreateEventForm extends StatefulWidget {
+  CreateEventForm(
+      {Key? key, required this.placeId, required this.sportsFacility})
       : super(key: key);
   final String placeId;
   final SportsFacility sportsFacility;
-  late Grr grrCalendar;
+  late SportsBudCalendar facilityCalendar;
 
   TimePicker startPicker = TimePicker(
       labelText: "Start Time", selectedDate: DateTime.now(), initialise: true);
@@ -26,10 +39,10 @@ class EventStepForm extends StatefulWidget {
       labelText: "End Time", selectedDate: DateTime.now(), initialise: true);
 
   @override
-  State<EventStepForm> createState() => _EventStepFormState();
+  State<CreateEventForm> createState() => _CreateEventFormState();
 }
 
-class _EventStepFormState extends State<EventStepForm> {
+class _CreateEventFormState extends State<CreateEventForm> {
   int _currentStep = 0;
   bool isCompleted = false;
   DateTime date = DateTime.now();
@@ -47,15 +60,15 @@ class _EventStepFormState extends State<EventStepForm> {
   @override
   void initState() {
     super.initState();
-    widget.grrCalendar =
-        Grr(placeId: widget.placeId, sportsFacility: widget.sportsFacility);
+    widget.facilityCalendar = SportsBudCalendar(
+        placeId: widget.placeId, sportsFacility: widget.sportsFacility);
     print(uid);
   }
 
   List<Step> getSteps() => [
         Step(
             title: Text('Date'),
-            content: widget.grrCalendar,
+            content: widget.facilityCalendar,
             isActive: _currentStep >= 0,
             state: _currentStep > 0 ? StepState.complete : StepState.indexed),
         Step(
@@ -65,7 +78,6 @@ class _EventStepFormState extends State<EventStepForm> {
               child: Form(
                 key: formKey,
                 child: Column(
-                  //mainAxisSize: MainAxisSize.min,
                   children: [
                     buildName(),
                     buildMaxCap(),
@@ -108,7 +120,7 @@ class _EventStepFormState extends State<EventStepForm> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return SmthWrong();
+            return ErrorPage();
           }
           if (!snapshot.hasData) {
             return Container(color: Colors.black);
@@ -128,7 +140,6 @@ class _EventStepFormState extends State<EventStepForm> {
                         onStepContinue: () {
                           if (isLastStep) {
                             Navigator.pop(context);
-
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -149,17 +160,17 @@ class _EventStepFormState extends State<EventStepForm> {
                             setState(() {
                               if (_currentStep == 0) {
                                 setState(() {
-                                  date = widget.grrCalendar.submittedDate;
+                                  date = widget.facilityCalendar.submittedDate;
                                   widget.startPicker = TimePicker(
                                       labelText: "Start Time",
                                       selectedDate:
-                                          widget.grrCalendar.submittedDate,
+                                          widget.facilityCalendar.submittedDate,
                                       initialise: true);
 
                                   widget.endPicker = TimePicker(
                                       labelText: "End Time",
                                       selectedDate:
-                                          widget.grrCalendar.submittedDate,
+                                          widget.facilityCalendar.submittedDate,
                                       initialise: true);
 
                                   print(date);
@@ -179,8 +190,6 @@ class _EventStepFormState extends State<EventStepForm> {
                                         hours: today.hour,
                                         minutes: today.minute));
                                   }
-                                  print(startTime);
-                                  print(endTime);
 
                                   final isValid =
                                       formKey.currentState?.validate();
@@ -201,9 +210,6 @@ class _EventStepFormState extends State<EventStepForm> {
                             });
                           }
                         },
-                        // onStepTapped: (step) => setState(() {
-                        //       _currentStep = step;
-                        //     }),
                         controlsBuilder:
                             (BuildContext context, ControlsDetails controls) {
                           return Padding(
@@ -286,6 +292,7 @@ class _EventStepFormState extends State<EventStepForm> {
         });
   }
 
+  ///Helper function of CreateEventForm which builds a widget for the user to input the event title
   Widget buildName() => Container(
         padding: EdgeInsets.symmetric(vertical: 10),
         child: TextFormField(
@@ -294,7 +301,6 @@ class _EventStepFormState extends State<EventStepForm> {
             prefixIcon: Icon(Icons.sports_basketball_outlined),
             border: OutlineInputBorder(),
           ),
-
           validator: (value) {
             if (value != null && value.length < 4) {
               return 'Enter at least 4 characters';
@@ -302,13 +308,12 @@ class _EventStepFormState extends State<EventStepForm> {
               return null;
             }
           },
-          //maxLength: 100,
-          //maxLines: 3,
           onSaved: (value) =>
               setState(() => eventTitle = value ??= 'missing event name'),
         ),
       );
 
+  ///Helper function of CreateEventForm which builds a widget for the user to input the maximum capacity
   Widget buildMaxCap() => Container(
         padding: EdgeInsets.symmetric(vertical: 20),
         child: TextFormField(
@@ -338,6 +343,7 @@ class _EventStepFormState extends State<EventStepForm> {
         ),
       );
 
+  ///Helper function of CreateEventForm which builds a widget for the user to input the event type
   Widget buildDropdown() => Container(
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black45),

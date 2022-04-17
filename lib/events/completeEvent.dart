@@ -1,3 +1,6 @@
+/// complete event page that is displayed after a user completes an event
+/// contains event recommendations for the user based on event similarity
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/events/cluster_repository.dart';
@@ -24,6 +27,7 @@ class CompleteEventPage extends StatefulWidget {
   State<CompleteEventPage> createState() => _CompleteEventPageState();
 }
 
+/// complete event page to be constructed containing individual recommendation widgets
 class _CompleteEventPageState extends State<CompleteEventPage> {
   final ClusterRepository clusterRepo = ClusterRepository();
   final EventRepository repository = EventRepository();
@@ -31,9 +35,11 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
   late List<SportsFacility> SportsFacilityList;
   late bool loading;
 
+  /// helper function to get location data of SportsFacilities
+  /// used to provide location details of recommended events
   Future getData() async {
     var sportsfacildatasource = SportsFacilDataSource();
-    final facildata = await sportsfacildatasource.someFunction();
+    final facildata = await sportsfacildatasource.getSportsFacilities();
     await Future.delayed(const Duration(seconds: 3));
     setState(() {
       SportsFacilityList = facildata;
@@ -64,43 +70,42 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
     List<Widget> recevents = [];
     final Size size = MediaQuery.of(context).size;
 
-    // Future<QuerySnapshot> recommendations = clusterRepo.retrieveSameLabel(
-    //     widget.event_id);
+    /// future builder that fetches a list of recommendations
+    /// in the same cluster as the completed event
+    return (loading==false)? FutureBuilder<QuerySnapshot>(
+        future: clusterRepo.retrieveSameLabel(widget.event_id),
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot_rec) {
+          if (!snapshot_rec.hasData) {
+            print("whhhhhaht 1");
+            //return Text("nodata");
+          } else {
+            if (snapshot_rec.connectionState == ConnectionState.waiting) {
+              print("whhhhhah 2t");
+              //return CircularProgressIndicator();
+            } else if (snapshot_rec.connectionState == ConnectionState.done) {
+              if (snapshot_rec.hasError) {
+                print("whhhhhah 3t");
+                //return const Text('Error');
+              } else if (snapshot_rec.hasData) {
+                snapshot_rec.data!.docs.forEach((element) {
+                  recommendedEventIds.add(element['eventId']);
+                });
 
-    return (loading == false)
-        ? FutureBuilder<QuerySnapshot>(
-            future: clusterRepo.retrieveSameLabel(widget.event_id),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot> snapshot_rec) {
-              if (!snapshot_rec.hasData) {
-                print("whhhhhaht 1");
-                //return Text("nodata");
-              } else {
-                if (snapshot_rec.connectionState == ConnectionState.waiting) {
-                  print("whhhhhah 2t");
-                  //return CircularProgressIndicator();
-                } else if (snapshot_rec.connectionState ==
-                    ConnectionState.done) {
-                  if (snapshot_rec.hasError) {
-                    print("whhhhhah 3t");
-                    //return const Text('Error');
-                  } else if (snapshot_rec.hasData) {
-                    snapshot_rec.data!.docs.forEach((element) {
-                      recommendedEventIds.add(element['eventId']);
-                    });
-
-                    return StreamBuilder(
-                        stream: repository.getStream(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snapshote) {
-                          if (!snapshote.hasData) {
-                            return const CircularProgressIndicator();
-                          }
-                          for (DocumentSnapshot docss in snapshote.data!.docs) {
-                            if (recommendedEventIds.contains(docss.id)) {
-                              selist.add(SportEvent.fromSnapshot(docss));
-                            }
-                          }
+                /// stream builder that fetches stream of event data
+                /// used in providing event details of the recommended events
+                return StreamBuilder(
+                    stream: repository.getStream(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshote) {
+                      if (!snapshote.hasData) {
+                        return const CircularProgressIndicator();
+                      }
+                      for (DocumentSnapshot docss in snapshote.data!.docs) {
+                        if (recommendedEventIds.contains(docss.id)) {
+                          selist.add(SportEvent.fromSnapshot(docss));
+                        }
+                      }
 
                           for (SportEvent i in selist) {
                             // add ui
@@ -205,6 +210,8 @@ class _CompleteEventPageState extends State<CompleteEventPage> {
   }
 }
 
+/// recommendation widget to be constructed and displayed
+/// contains information on the recommended event and the facility it is located at
 class RecWidget extends StatelessWidget {
   RecWidget({
     Key? key,

@@ -24,9 +24,10 @@ TextStyle myBodyStyle() {
   );
 }
 
+///UI Page shown after a user registers to notify user of successful registration
+///Brings the user to their corresponding homepage or onboarding screens depending on the button clicked
 class RegisterSuccess extends StatefulWidget {
   final User user;
-
   const RegisterSuccess({required this.user});
 
   @override
@@ -40,6 +41,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
       body: Container(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
+        //background image
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.contain,
@@ -49,6 +51,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
         padding: EdgeInsets.symmetric(horizontal: 50),
         child: Stack(
           children: [
+            //a hovering animation for UI purposes
             _hoveringBackground(),
             SizedBox(
               child: Column(
@@ -67,6 +70,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                     style: myBodyStyle(),
                   ),
                   SizedBox(height: 50),
+                  //button which brings user to onboarding screens
                   BouncingButton(
                       bgColor: Color(0xffE3663E),
                       borderColor: Color(0xffE3663E),
@@ -82,6 +86,7 @@ class _RegisterSuccessState extends State<RegisterSuccess> {
                         );
                       }),
                   SizedBox(height: 20),
+                  //button which brings user to homepage
                   BouncingButton(
                     bgColor: Color(0xffffffff),
                     borderColor: Color(0xffffffff),

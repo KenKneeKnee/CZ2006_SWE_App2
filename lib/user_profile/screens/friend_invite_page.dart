@@ -63,7 +63,7 @@ class _FriendInvitePageState extends State<Friend_Invite_Page> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return const SmthWrong();
+            return ErrorPage();
           }
           if (!snapshot.hasData) {
             return const CircularProgressIndicator();
