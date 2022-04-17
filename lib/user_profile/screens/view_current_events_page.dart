@@ -15,7 +15,7 @@ import 'package:my_app/user_profile/data/userDbManager.dart';
 
 final uid = FirebaseAuth.instance.currentUser!.email as String;
 
-/// A page where users can view the events they have joined or created
+/// A page where users can view the active events they have joined or created
 class ViewCurrentEventPage extends StatefulWidget {
   ViewCurrentEventPage({Key? key}) : super(key: key);
   _ViewCurrentEventPageState createState() => _ViewCurrentEventPageState();
@@ -31,8 +31,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
   ScrollController controller = ScrollController();
   double topContainer = 0;
 
-  /// List of event ids of evnets that the user has joined or
-  /// created and are still yet to happen
+  /// List of event ids of events that the user has joined or
+  /// created and have active status
   List activeEventIds = [];
 
   /// Sets current user
@@ -93,6 +93,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
 
                     List tempEventIdlist = [];
 
+                    // Appends all the active event of the current user
+                    // into activeEventIds
                     for (DocumentSnapshot doc in BookingList) {
                       if (doc['userId'] == uid) {
                         if (doc['active'] == true) {
@@ -105,7 +107,6 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                       for (DocumentSnapshot doc in EventList) {
                         if (doc.id == eid) {
                           SportEvent e = SportEvent.fromSnapshot(doc);
-                          DateTime start = e.start;
                           DateTime end = e.end;
 
                           DateTime? curTime = DateTime.now();
@@ -119,7 +120,8 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
 
                     activeEventIds = tempEventIdlist;
 
-                    //card for active event
+                    //Appends a card for every event in activeEventIds
+                    //into eventbuttons
                     for (String eventid in activeEventIds) {
                       SportEvent currentevent =
                           ActiveEventMap[eventid] as SportEvent;
@@ -289,6 +291,7 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                               ))));
                     }
 
+                    /// Area where elements of this page are built
                     return Scaffold(
                         backgroundColor: Colors.white,
                         body: Column(
@@ -351,6 +354,6 @@ class _ViewCurrentEventPageState extends State<ViewCurrentEventPage> {
                         ));
                   });
             })
-        : CircularProgressIndicator();
+        : const CircularProgressIndicator();
   }
 }
