@@ -1,3 +1,6 @@
+/// Review page that displays all reviews tagged to a selected facility
+/// and a button that allows users to write a review for said facility
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,7 @@ class ReviewPage extends StatefulWidget {
   State<ReviewPage> createState() => _ReviewPageState();
 }
 
+/// review page to be built, that contains rating bar chart and individual review widgets
 class _ReviewPageState extends State<ReviewPage> {
   final FacilRepository facils = FacilRepository();
   String rating = "Rate this facility";
@@ -47,6 +51,10 @@ class _ReviewPageState extends State<ReviewPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
+
+      /// future builder that fetches 2 futures
+      /// 1. list of reviews for the selected facility
+      /// 2. list of all users, will be used to fetch usernames and profile pictures of review creators
       body: FutureBuilder(
         future: Future.wait([
           facils.getReviewsFor(widget.placeId),
@@ -106,6 +114,8 @@ class _ReviewPageState extends State<ReviewPage> {
               reviewlist.add(ReviewWidget(
                   review: retrieved, imageid: imageid, user: user));
             }
+
+            /// container that displays the rating chart, average rating and write review button
             return Container(
               color: Colors.white,
               child: SingleChildScrollView(
@@ -180,125 +190,25 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
-  void postReview(String title, int rating, String desc, String user,
-      XFile? imageFile) async {
-    Review r = Review(title, rating, desc, user);
-    DocumentReference docref = await facils.addReviewFor(widget.placeId, r);
-    if (imageFile != null) {
-      await storage.uploadFile(imageFile.path,
-          docref.id); // image is uploaded with same doc id as review
-    }
-  }
 
+  /// button widget that the user clicks to write a review, launches create review form
   Widget postButton(String text) => BouncingButton(
       bgColor: Colors.black,
       borderColor: Colors.black,
       buttonText: text,
       textColor: Colors.white,
       onClick: () {
-        final title = TextEditingController();
-        final desc = TextEditingController();
-        XFile? imageFile;
         showDialog(
             context: context,
             builder: (BuildContext context) {
               return Dialog(child: CreateReviewForm(placeId: widget.placeId));
             });
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (context) => CreateReviewForm(
-        //             placeId: widget.placeId,
-        //           )),
-        // );
       });
-
-  Widget buildTitle(title) => Flexible(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: TextFormField(
-            controller: title,
-            decoration: const InputDecoration(
-              labelText: 'Review title',
-              prefixIcon: Icon(Icons.sports_basketball_outlined),
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value != null && value.length < 4 ||
-                  value != null && value.length > 50) {
-                return 'Enter between 4-50 characters';
-              } else {
-                return null;
-              }
-            },
-          ),
-        ),
-      );
-
-  Widget buildRating(rating) => Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: Colors.black45),
-            borderRadius: BorderRadius.circular(4)),
-        padding: EdgeInsets.all(10),
-        child: DropdownButtonFormField<String>(
-          value: rating,
-          validator: (value) {
-            if (value == "Select a rating") {
-              return 'Please select a rating for this facility';
-            } else {
-              return null;
-            }
-          },
-          isExpanded: true,
-          icon: const Icon(Icons.sports_football_outlined),
-          elevation: 16,
-          style: const TextStyle(color: Colors.black),
-          onChanged: (String? newValue) {
-            setState(() {
-              rating = newValue!;
-            });
-          },
-          items: <String>[
-            "Rate this facility",
-            "1 star",
-            '2 star',
-            '3 star',
-            '4 star',
-            '5 star',
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Text(value),
-              ),
-            );
-          }).toList(),
-        ),
-      );
-
-  Widget buildDesc(desc) => Flexible(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: TextFormField(
-            controller: desc,
-            decoration: const InputDecoration(
-              labelText: 'Describe your time here!',
-              prefixIcon: Icon(Icons.sports_basketball_outlined),
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value != null && value.length > 300) {
-                return 'Please keep to a character limit of 300.';
-              } else {
-                return null;
-              }
-            },
-          ),
-        ),
-      );
 }
 
+/// review widget to be constructed and displayed, containing review information
+/// and profile picture and username of the user who created the review
+/// each review may or may not contain an image that had been uploaded as part of the review content
 class ReviewWidget extends StatelessWidget {
   ReviewWidget({
     Key? key,
@@ -313,9 +223,13 @@ class ReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// future builder that attempts to fetch the image from storage
+    /// that had been uploaded as part of the review
     return FutureBuilder(
         future: storage.downloadURL(imageid),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+
+          /// if no image is found for this review
           if (!snapshot.hasData) {
             return Container(
                 padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
@@ -363,7 +277,9 @@ class ReviewWidget extends StatelessWidget {
                             ),
                           ]))
                 ])));
-          } else {
+          }
+          /// if an image is found for this review
+          else {
             return Container(
                 padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                 child: Expanded(
