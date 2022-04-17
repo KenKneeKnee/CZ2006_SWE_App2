@@ -8,6 +8,8 @@ const String _eventLottie =
 const String _mapLottie =
     'https://assets6.lottiefiles.com/packages/lf20_qjeqt7ez.json';
 
+/// UI Lottie Animation to be displayed when the app is fetching recommendations upon user completing an event
+/// Used in the CompleteEventPage
 class LottieRecommend extends StatefulWidget {
   const LottieRecommend({Key? key}) : super(key: key);
 
@@ -38,6 +40,7 @@ class _LottieRecommendState extends State<LottieRecommend> {
   }
 }
 
+///UI Lottie animation displayed when the map is fetching data and converting the data into SportsFacilities to be displayed as markers on the Facilities Map
 class LottieMap extends StatefulWidget {
   const LottieMap({Key? key}) : super(key: key);
 
@@ -68,6 +71,7 @@ class _LottieMapState extends State<LottieMap> {
   }
 }
 
+/// UI text animation used in LottieRecommend
 Widget _wavyRecommend() {
   return DefaultTextStyle(
     style: const TextStyle(
@@ -86,6 +90,7 @@ Widget _wavyRecommend() {
   );
 }
 
+/// UI text animation used in LottieMap
 Widget _wavy() {
   return DefaultTextStyle(
     style: const TextStyle(
@@ -113,16 +118,4 @@ Widget _lottie(String url) {
     animate: true,
     frameRate: FrameRate.max,
   );
-}
-
-class LottieEvent extends StatelessWidget {
-  const LottieEvent({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: _lottie(_eventLottie));
-  }
 }

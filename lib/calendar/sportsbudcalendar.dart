@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:my_app/calendar/temp_event.dart';
-import 'package:my_app/events/create_event.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
@@ -18,20 +17,19 @@ int getHashCode(DateTime key) {
 
 var _kEventSource = realEventSource..addAll({kToday: realTodaySource});
 
-class Grr extends StatefulWidget {
-  Grr({Key? key, required this.placeId, required this.sportsFacility})
+class SportsBudCalendar extends StatefulWidget {
+  SportsBudCalendar(
+      {Key? key, required this.placeId, required this.sportsFacility})
       : super(key: key);
   final String placeId;
   final SportsFacility sportsFacility;
   DateTime submittedDate = DateTime.now();
   @override
-  _GrrState createState() => _GrrState();
+  _SportsBudCalendarState createState() => _SportsBudCalendarState();
 }
 
-class _GrrState extends State<Grr> {
+class _SportsBudCalendarState extends State<SportsBudCalendar> {
   late bool loading;
-  // late Map<DateTime, List<SportEvent>> grrMap;
-  // late List<SportEvent> grrToday;
   Map<DateTime, List<RetrievedEvent>> kEvents = {};
 
   late final ValueNotifier<List<RetrievedEvent>> _selectedEvents;
