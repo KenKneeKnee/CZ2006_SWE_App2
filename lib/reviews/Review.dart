@@ -1,3 +1,5 @@
+/// Review class that contains information about reviews
+
 class Review {
   // assume no image
   final String title;
@@ -18,6 +20,7 @@ class Review {
 
 }
 
+/// function to create Review object from Json fetched from database
 Review ReviewFromJson(Map<String, dynamic> json) {
   return Review(
     json['title'] as String,
