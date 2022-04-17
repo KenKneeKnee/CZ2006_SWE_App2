@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Persistent data surrounding chat messages
 class DatabaseService {
   // Collection reference
   final CollectionReference EventCollection =
