@@ -10,6 +10,8 @@ class Category {
   Category(this.icon, this.label);
 }
 
+///Header icon for rewards page
+
 class CategoriesList extends StatelessWidget {
   const CategoriesList({Key? key}) : super(key: key);
   @override

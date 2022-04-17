@@ -14,6 +14,7 @@ import 'package:my_app/rewards_page/utils/summary_chart.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 
+///Main rewards page UI, displays the items that can be redeemed
 class Menu {
   final IconData icon;
   final String title;

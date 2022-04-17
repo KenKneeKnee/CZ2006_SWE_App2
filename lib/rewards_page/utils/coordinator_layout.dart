@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'header.dart';
 
+////widget for layout
 class CoordinatorLayout extends StatefulWidget {
   CoordinatorLayout({
     Key? key,

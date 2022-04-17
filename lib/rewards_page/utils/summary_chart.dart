@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+//use to plot graph of user points on rewards page
 ThemeData createTheme([Brightness? brightness]) {
   return ThemeData(
     brightness: brightness,

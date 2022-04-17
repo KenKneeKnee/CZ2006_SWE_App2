@@ -4,6 +4,7 @@ import 'package:my_app/map/map_widgets.dart';
 
 import '../../widgets/bouncing_button.dart';
 
+//Contains the entities of items for products
 class Item {
   final String image;
   final String label;

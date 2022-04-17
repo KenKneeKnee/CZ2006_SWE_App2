@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+///header for reward page layout
 typedef CollpaseWidgetBuilder = Widget Function(
     BuildContext context, double offset);
 

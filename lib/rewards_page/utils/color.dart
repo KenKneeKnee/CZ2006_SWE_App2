@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///allows for color theme change
 class ColorHelper {
   static Color keepOrWhite(Color textColor, Color backgroundColor,
       [Color? alternateColor]) {
