@@ -13,6 +13,8 @@ import 'package:my_app/widgets/bouncing_button.dart';
 import 'package:my_app/user_profile/data/user.dart';
 import 'package:my_app/user_profile/data/userDbManager.dart';
 
+/// This is a pressable button that allows user to cancel their current action.
+/// It will bring the user back to their previous page.
 TextButton CancelTextButton(BuildContext context) {
   return TextButton(
     onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -20,6 +22,9 @@ TextButton CancelTextButton(BuildContext context) {
   );
 }
 
+/// This is a pressable button that will be shown when users join an event.
+/// It will show a JoinedEventDialog that tells users they have joined an event
+/// on pressed.
 class GreenButton extends StatelessWidget {
   GreenButton(
       {Key? key,
@@ -54,6 +59,10 @@ class GreenButton extends StatelessWidget {
   }
 }
 
+/// This is a button that will be shown when users can complete an event.
+/// It will direct users to a CompleteEventPage on pressed
+/// where users will see their points earned from the event
+/// and a list of recommendations.
 class CompleteEventButton extends StatelessWidget {
   CompleteEventButton(
       {Key? key,
@@ -128,6 +137,9 @@ class CompleteEventButton extends StatelessWidget {
   }
 }
 
+/// This is a pressable button that will be shown when users can leave an event.
+/// It will show a LeftEventDialog that tells users they have left an event
+/// on pressed.
 class LeaveButton extends StatelessWidget {
   LeaveButton({Key? key, required this.curEvent, required this.leaveFunction})
       : super(key: key);
@@ -160,6 +172,8 @@ class LeaveButton extends StatelessWidget {
   }
 }
 
+/// This is a button that will be shown when event capacity is full.
+/// It does nothing if pressed.
 class FullEventButton extends StatelessWidget {
   FullEventButton({Key? key}) : super(key: key);
 
@@ -183,6 +197,9 @@ class FullEventButton extends StatelessWidget {
   }
 }
 
+/// This is a button that will be shown when there is a timing schedule clash
+/// for the user.
+/// It does nothing if pressed.
 class ClashingSchedButton extends StatelessWidget {
   ClashingSchedButton({Key? key}) : super(key: key);
 
@@ -206,6 +223,8 @@ class ClashingSchedButton extends StatelessWidget {
   }
 }
 
+/// This is a button that will be shown when user is not logged in.
+/// It does nothing if pressed.
 class NotLoggedInButton extends StatelessWidget {
   NotLoggedInButton({Key? key}) : super(key: key);
 
@@ -229,6 +248,8 @@ class NotLoggedInButton extends StatelessWidget {
   }
 }
 
+///A UI class which contains BoxDecoration styles which can be used in Containers.
+///These are specifically used in Dialog Pop-ups.
 BoxDecoration baseContainer = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(20),
@@ -242,6 +263,7 @@ BoxDecoration baseContainer = BoxDecoration(
   ],
 );
 
+///Containers used in building the UI for the view_event Page.
 Container calendarIcon = Container(
   color: Colors.transparent,
   margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
@@ -252,6 +274,7 @@ Container calendarIcon = Container(
 Icon capIcon = const Icon(Icons.person);
 Icon timeIcon = const Icon(Icons.timer);
 
+/// Containers used in building the UI for the view_event Page.
 Container TextWithIcon(String text, Icon icon) {
   return Container(
     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 2),
@@ -275,7 +298,7 @@ Container TextWithIcon(String text, Icon icon) {
     ),
   );
 }
-
+/// Containers used in building the UI for the view_event Page.
 Expanded TextContainer(String text, BuildContext context) {
   return Expanded(
     child: Container(
@@ -297,6 +320,7 @@ Expanded TextContainer(String text, BuildContext context) {
   );
 }
 
+///UI class used for text styles used in SportEvents
 class SportEventTextWidget {
   static Padding Title(String text) {
     return Padding(
@@ -363,6 +387,7 @@ class ReturnToMapButton extends StatelessWidget {
   }
 }
 
+/// Button to direct user to login page
 class GoToLoginButton extends StatelessWidget {
   const GoToLoginButton({Key? key}) : super(key: key);
 
@@ -381,6 +406,7 @@ class GoToLoginButton extends StatelessWidget {
   }
 }
 
+/// Dialog used for JoinedEvent
 class JoinedEventDialog extends StatelessWidget {
   JoinedEventDialog(
       {Key? key,
@@ -428,6 +454,7 @@ class JoinedEventDialog extends StatelessWidget {
   }
 }
 
+/// Dialog used for LeftEvent
 class LeftEventDialog extends StatelessWidget {
   LeftEventDialog(
       {Key? key,
@@ -502,6 +529,7 @@ class DoNothingDialog extends StatelessWidget {
   }
 }
 
+/// Dialog used for NotLoggedIn
 class NotLoggedInDialog extends StatelessWidget {
   NotLoggedInDialog(
       {Key? key,
@@ -549,7 +577,7 @@ class NotLoggedInDialog extends StatelessWidget {
   }
 }
 
-//Text Styles
+///Text Styles
 const TextStyle _dialogTitleStyle = TextStyle(
     fontWeight: FontWeight.bold, fontSize: 45, color: Color(0xffE3663E));
 
