@@ -31,7 +31,7 @@ class CreateEventForm extends StatefulWidget {
       : super(key: key);
   final String placeId;
   final SportsFacility sportsFacility;
-  late SportsBudCalendar grrCalendar;
+  late SportsBudCalendar facilityCalendar;
 
   TimePicker startPicker = TimePicker(
       labelText: "Start Time", selectedDate: DateTime.now(), initialise: true);
@@ -60,7 +60,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
   @override
   void initState() {
     super.initState();
-    widget.grrCalendar = SportsBudCalendar(
+    widget.facilityCalendar = SportsBudCalendar(
         placeId: widget.placeId, sportsFacility: widget.sportsFacility);
     print(uid);
   }
@@ -68,7 +68,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
   List<Step> getSteps() => [
         Step(
             title: Text('Date'),
-            content: widget.grrCalendar,
+            content: widget.facilityCalendar,
             isActive: _currentStep >= 0,
             state: _currentStep > 0 ? StepState.complete : StepState.indexed),
         Step(
@@ -140,7 +140,6 @@ class _CreateEventFormState extends State<CreateEventForm> {
                         onStepContinue: () {
                           if (isLastStep) {
                             Navigator.pop(context);
-
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -161,17 +160,17 @@ class _CreateEventFormState extends State<CreateEventForm> {
                             setState(() {
                               if (_currentStep == 0) {
                                 setState(() {
-                                  date = widget.grrCalendar.submittedDate;
+                                  date = widget.facilityCalendar.submittedDate;
                                   widget.startPicker = TimePicker(
                                       labelText: "Start Time",
                                       selectedDate:
-                                          widget.grrCalendar.submittedDate,
+                                          widget.facilityCalendar.submittedDate,
                                       initialise: true);
 
                                   widget.endPicker = TimePicker(
                                       labelText: "End Time",
                                       selectedDate:
-                                          widget.grrCalendar.submittedDate,
+                                          widget.facilityCalendar.submittedDate,
                                       initialise: true);
 
                                   print(date);

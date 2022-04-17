@@ -53,7 +53,6 @@ class _ViewEventPageState extends State<ViewEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return (!loading)
         ? StreamBuilder<QuerySnapshot>(
             stream: booking.getStream(),

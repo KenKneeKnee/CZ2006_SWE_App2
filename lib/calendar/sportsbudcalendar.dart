@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:my_app/calendar/temp_event.dart';
+import 'package:my_app/calendar/calendar_data_fetcher.dart';
 import 'package:my_app/events/retrievedevent.dart';
 import 'package:my_app/events/view_event.dart';
 import 'package:my_app/map/map_data.dart';
@@ -16,6 +16,10 @@ int getHashCode(DateTime key) {
 }
 
 var _kEventSource = realEventSource..addAll({kToday: realTodaySource});
+
+/// The calendar generated for a specific SportsFacility
+/// Displayed in the CreateEventForm
+/// Utilises the CalendarDataFetcher to get the data about the SportEvents scheduled for a SportsFacility
 
 class SportsBudCalendar extends StatefulWidget {
   SportsBudCalendar(
@@ -46,26 +50,20 @@ class _SportsBudCalendarState extends State<SportsBudCalendar> {
     super.initState();
 
     loading = true;
-    grrGetData();
+    getCalendarData();
 
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
-  Future grrGetData() async {
+  Future getCalendarData() async {
     var eventdatasource = EventDataFetcher();
-    // final todayData =
-    //     await eventdatasource.fetchDayEvent(DateTime.now(), widget.placeId);
-    // final eventdata = await eventdatasource.fetchAllEvent(DateTime.now(),
-    //     DateTime.now().add(const Duration(days: 7)), widget.placeId);
+
     await eventdatasource.fetchDayEvent(kToday, widget.placeId);
     await eventdatasource.fetchAllEvent(
         kToday, kToday.add(const Duration(days: 7)), widget.placeId);
-    //await Future.delayed(const Duration(seconds: 3), () {});
 
     setState(() {
-      // grrMap = eventdata;
-      // grrToday = todayData;
       loading = false;
       _kEventSource = realEventSource
         ..addAll({DateTime.now(): realTodaySource});
@@ -75,10 +73,6 @@ class _SportsBudCalendarState extends State<SportsBudCalendar> {
         hashCode: getHashCode,
       )..addAll(_kEventSource);
     });
-
-    // print('real event source has ${realEventSource.entries}');
-    // print('real today has ${realTodaySource}');
-    // print('kEvents has ${kEvents.entries}');
   }
 
   @override
@@ -111,9 +105,9 @@ class _SportsBudCalendarState extends State<SportsBudCalendar> {
     return (!loading)
         ? Container(
             color: Colors.transparent,
-            //margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
             child: Column(
               children: [
+                //Calendar where user can click on different dates
                 TableCalendar<RetrievedEvent>(
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
@@ -142,6 +136,7 @@ class _SportsBudCalendarState extends State<SportsBudCalendar> {
                     _focusedDay = focusedDay;
                   },
                 ),
+                //List of SportEvents displayed for a specific date
                 Container(
                   padding: EdgeInsets.fromLTRB(0, 35, 0, 0),
                   child: ValueListenableBuilder<List<RetrievedEvent>>(
@@ -200,19 +195,6 @@ class _SportsBudCalendarState extends State<SportsBudCalendar> {
                                             event: value[index],
                                             SportsFacil: widget.sportsFacility,
                                           );
-
-                                          // Dialog(
-                                          //   backgroundColor: Color(0xffE5E8E8),
-                                          //   child: ViewEventPopUp(
-                                          //     placeIndex: index,
-                                          //     event: value[index],
-                                          //     SportsFacil:
-                                          //         widget.sportsFacility,
-                                          //   ),
-                                          //   shape: RoundedRectangleBorder(
-                                          //       borderRadius: BorderRadius.all(
-                                          //           Radius.circular(20.0))),
-                                          //);
                                         },
                                       );
                                     },

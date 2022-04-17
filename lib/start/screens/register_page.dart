@@ -10,6 +10,9 @@ import '../../widgets/bouncing_button.dart';
 import '../utils/fire_auth.dart';
 import '../utils/validator.dart';
 
+///Registration page which contains a form. Form fields include name, email and password.
+///If registration is successful, user is brought to the RegistrationSuccessful page
+///New user account will also be created in the database
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -31,7 +34,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final CollectionReference userdb = UserDbManager().collection;
 
   bool _isProcessing = false;
-  bool _isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -115,12 +117,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //header
                     Text('Hello there!', style: _titleStyle),
                     SizedBox(height: 20),
                     const Text(
                         'You\'re one step away from a world of games, friends, and no fuss!',
                         style: _subheadingStyle),
                     SizedBox(height: 50),
+                    //form fields
                     Form(
                       key: _registerFormKey,
                       child: Wrap(
@@ -149,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         email: _emailTextController.text,
                                         password: _passwordTextController.text,
                                       );
-
+                                      //image paths to the default profile pictures
                                       List<String> pictures = [
                                         "assets/images/1573252249390.jpeg",
                                         "assets/images/celerystick.jpg"
@@ -182,7 +186,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 RegisterSuccess(
                                               user: user,
                                             ),
-                                            //ProfilePage(widget.user),
                                           ),
                                           ModalRoute.withName('/'),
                                         );
