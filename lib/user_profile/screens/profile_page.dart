@@ -56,7 +56,6 @@ class _ProfilePageState extends State<ProfilePage> {
         stream: repository.getStream(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-
             return ErrorPage();
           }
           if (!snapshot.hasData) {
@@ -154,8 +153,7 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         },
       );
-
-    else {
+    } else {
       return ErrorPage();
     }
   }
